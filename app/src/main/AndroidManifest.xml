@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sap.school">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/banner"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/banner"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".HomeScreenActivity" />
+        <activity android:name=".SelectClassActivity" />
+        <activity android:name=".RoutinScreenActivity" />
+        <activity android:name=".StudentScreenActivity" />
+        <activity android:name=".AttendenceScreenActivity" />
+        <activity android:name=".ClassPlanActivity" />
+        <activity android:name=".FeedBackActivity" />
+        <activity android:name=".FeedbackMessageActivity" />
+        <activity android:name=".MarkAttendenceActivity" />
+        <activity android:name=".NoticeScreenActivity" />
+        <activity android:name=".SubjectClassPlanActivity"> </activity>
+        <activity android:name=".TeacherDashBoardActivity"> </activity>
+        <activity android:name=".StudentDashboardActivity"> </activity>
+        <activity android:name=".ParentDashBoardActivity"> </activity>
+
+    </application>
+
+</manifest>
