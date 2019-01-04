@@ -34,6 +34,7 @@
         <activity android:name=".TeacherDashBoardActivity"> </activity>
         <activity android:name=".StudentDashboardActivity"> </activity>
         <activity android:name=".ParentDashBoardActivity"> </activity>
+        <activity android:name=".ClassPlanRelatedToSubjectScreenActivity"> </activity>
 
     </application>
 
