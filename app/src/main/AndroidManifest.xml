@@ -15,7 +15,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,7 +34,6 @@
         <activity android:name=".TeacherDashBoardActivity"> </activity>
         <activity android:name=".StudentDashboardActivity"> </activity>
         <activity android:name=".ParentDashBoardActivity"> </activity>
-        <activity android:name=".ClassPlanRelatedToSubjectScreenActivity"> </activity>
 
     </application>
 
