@@ -84,7 +84,7 @@
                         android:textSize="16dp" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:id="@+id/gameAndSportsNavigationButton"
+                    android:id="@+id/myProfile"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:visibility="visible">

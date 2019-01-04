@@ -37,7 +37,10 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
     ArrayList<ClassRoutinePojoClass>classRoutinePojoClassArrayList;
     private DrawerLayout drawer;
     RelativeLayout toggleButton;
-    RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton;
+    RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,myProfile,eventsNavigationButton,
+            coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,
+            questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,
+            feedbackNavigationButton,logOutNavigationButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,7 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
         toggleButton.setOnClickListener(this);
         attendenceNavigationButton.setOnClickListener(this);
         healthInfoNavigationButton.setOnClickListener(this);
-        gameAndSportsNavigationButton.setOnClickListener(this);
+        myProfile.setOnClickListener(this);
         eventsNavigationButton.setOnClickListener(this);
         coCurricularNavigationButton.setOnClickListener(this);
         classPlanNavigationButton.setOnClickListener(this);
@@ -120,7 +123,7 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
 
         attendenceNavigationButton=(RelativeLayout)findViewById(R.id.attendenceNavigationButton);
         healthInfoNavigationButton=(RelativeLayout)findViewById(R.id.healthInfoNavigationButton);
-        gameAndSportsNavigationButton=(RelativeLayout)findViewById(R.id.gameAndSportsNavigationButton);
+        myProfile=(RelativeLayout)findViewById(R.id.myProfile);
         eventsNavigationButton=(RelativeLayout)findViewById(R.id.eventsNavigationButton);
         coCurricularNavigationButton=(RelativeLayout)findViewById(R.id.coCurricularNavigationButton);
         classPlanNavigationButton=(RelativeLayout)findViewById(R.id.classPlanNavigationButton);
@@ -150,7 +153,8 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
 
                 closeDrawer();
                 break;
-            case R.id.gameAndSportsNavigationButton:
+            case R.id.myProfile:
+                startActivity(new Intent(getApplicationContext(),MyProfileActivity.class));
                 closeDrawer();
                 break;
             case R.id.eventsNavigationButton:
