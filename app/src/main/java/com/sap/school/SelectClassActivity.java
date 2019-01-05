@@ -25,7 +25,7 @@ public class SelectClassActivity extends AppCompatActivity implements View.OnCli
     SelectInfoReyclerViewAdapter selectInfoReyclerViewAdapter;
     RelativeLayout backButton;
     ArrayList<SelectPojoClass>selectPojoClassArrayList;
-    String page;
+    String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class SelectClassActivity extends AppCompatActivity implements View.OnCli
         backButton=(RelativeLayout)findViewById(R.id.backButton);
         selectPojoClassArrayList=new ArrayList<SelectPojoClass>();
 
-        page = getIntent().getStringExtra("page");
+        type = getIntent().getStringExtra("type");
     }
 
     @Override
@@ -87,17 +87,25 @@ public class SelectClassActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SelectInfoReyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
+        public void onBindViewHolder(@NonNull SelectInfoReyclerViewAdapter.MyViewHolderClass myViewHolderClass, final int i) {
             myViewHolderClass.classInfoTextView.setText(selectPojoClassArrayList.get(i).getTitle());
             myViewHolderClass.classTextView.setText(selectPojoClassArrayList.get(i).getClassInfo());
 
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(page.equals("1")) {
-                        startActivity(new Intent(getApplicationContext(), StudentScreenActivity.class));
-                    }else if(page.equals("2")){
-                        startActivity(new Intent(getApplicationContext(), AttendenceScreenActivity.class));
+                    if(type.equals("Student"))
+                    {
+                        if(i==0)
+                        {
+                            startActivity(new Intent(getApplication(),StudentScreenActivity.class));
+                        }
+                    }else if(type.equals("Attendence"))
+                    {
+                        if(i==0)
+                        {
+                            startActivity(new Intent(getApplication(),AttendenceScreenActivity.class));
+                        }
                     }
                 }
             });

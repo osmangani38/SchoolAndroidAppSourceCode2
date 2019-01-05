@@ -83,9 +83,16 @@ public class SubjectClassPlanActivity extends AppCompatActivity implements View.
             @Override
             public void onClick(View view) {
                 //finish();
-              startActivity(new Intent(getApplication(),HomeScreenActivity.class));
+              startActivity(new Intent(getApplication(),TeacherDashBoardActivity.class));
               finish();
 
+            }
+        });
+
+        makeOtherPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplication(),ClassPlanActivity.class));
             }
         });
 //        cancelButton.setOnClickListener(new View.OnClickListener() {

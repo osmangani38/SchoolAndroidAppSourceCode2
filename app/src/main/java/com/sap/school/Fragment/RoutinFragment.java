@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sap.school.HomeScreenActivity;
+
 import com.sap.school.PojoClass.ClassRoutinePojoClass;
 import com.sap.school.R;
 
