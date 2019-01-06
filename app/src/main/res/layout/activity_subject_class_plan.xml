@@ -57,8 +57,10 @@
                 android:layout_height="match_parent">
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="11dp"
+                    android:layout_marginTop="23dp"
+
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/education_first"/>
@@ -144,9 +146,10 @@
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
                             <CheckBox
+                                android:id="@+id/checkbox1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
+                                android:buttonTint="@color/checkbox"
                                 android:src="@drawable/check_box_active"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -190,9 +193,10 @@
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
                             <CheckBox
+                                android:id="@+id/checkbox2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
+                                android:buttonTint="@color/checkbox"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -242,7 +246,6 @@
         <LinearLayout
             android:id="@+id/levelOfOrganisationChildLinearLayout"
             android:orientation="vertical"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -274,9 +277,10 @@
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
                             <CheckBox
+                                android:id="@+id/checkbox3"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
+                                android:buttonTint="@color/checkbox"
                                 android:src="@drawable/check_box_active"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -320,9 +324,10 @@
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
                             <CheckBox
+                                android:id="@+id/checkbox4"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
+                                android:buttonTint="@color/checkbox"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -366,9 +371,10 @@
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
                             <CheckBox
+                                android:id="@+id/checkbox5"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
+                                android:buttonTint="@color/checkbox"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>

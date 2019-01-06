@@ -64,7 +64,10 @@ public class ClassPlanActivity extends AppCompatActivity implements View.OnClick
                 finish();
                 break;
             case R.id.makePlanButton:
-                startActivity(new Intent(getApplicationContext(),SubjectClassPlanActivity.class));
+                Intent goNext = new Intent(getApplication(), SubjectClassPlanActivity.class);
+                goNext.putExtra("type","Teacher");
+                startActivity(goNext);
+                //startActivity(new Intent(getApplicationContext(),SubjectClassPlanActivity.class));
                 break;
         }
 

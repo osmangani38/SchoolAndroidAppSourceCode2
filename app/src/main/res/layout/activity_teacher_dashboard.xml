@@ -44,24 +44,15 @@ android:scrollbarAlwaysDrawVerticalTrack="false">
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_alignParentRight="true">
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/educationText"
-                        android:textStyle="bold"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/whiteColor"
-                        android:textSize="13dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/isttext"
-                        android:textStyle="bold"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="1dp"
-                        android:textColor="@color/whiteColor"
-                        android:textSize="13dp"/>
+                        android:layout_marginRight="11dp"
+                        android:layout_marginTop="23dp"
+
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/education_first"/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

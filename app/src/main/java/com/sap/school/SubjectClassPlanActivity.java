@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class SubjectClassPlanActivity extends AppCompatActivity implements View.OnClickListener{
     RelativeLayout backButton,submitClassButton;
+    CheckBox checkBox1,checkBox2,checkBox3,checkBox4,checkBox5;
     LinearLayout diverasityLinearLayout,diverasityChildLinearLayout;
     LinearLayout levelOfOrganisationLinearLayout,levelOfOrganisationChildLinearLayout;
     @Override
@@ -29,7 +31,6 @@ public class SubjectClassPlanActivity extends AppCompatActivity implements View.
         diverasityLinearLayout.setOnClickListener(this);
         levelOfOrganisationLinearLayout.setOnClickListener(this);
         submitClassButton.setOnClickListener(this);
-        submitClassButton.setVisibility(View.INVISIBLE);
     }
 
     private void initView() {
@@ -39,6 +40,30 @@ public class SubjectClassPlanActivity extends AppCompatActivity implements View.
         levelOfOrganisationLinearLayout=(LinearLayout)findViewById(R.id.levelOfOrganisationLinearLayout);
         levelOfOrganisationChildLinearLayout=(LinearLayout)findViewById(R.id.levelOfOrganisationChildLinearLayout);
         submitClassButton=(RelativeLayout)findViewById(R.id.submitClassButton);
+        checkBox1=(CheckBox) findViewById(R.id.checkbox1);
+        checkBox2=(CheckBox) findViewById(R.id.checkbox2);
+        checkBox3=(CheckBox) findViewById(R.id.checkbox3);
+        checkBox4=(CheckBox) findViewById(R.id.checkbox4);
+        checkBox5=(CheckBox) findViewById(R.id.checkbox5);
+        Intent intent = getIntent();
+        String str = intent.getStringExtra("type");
+        if (str.equals("Teacher")) {
+            submitClassButton.setVisibility(View.VISIBLE);
+            checkBox1.setVisibility(View.VISIBLE);
+            checkBox2.setVisibility(View.VISIBLE);
+            checkBox3.setVisibility(View.VISIBLE);
+            checkBox4.setVisibility(View.VISIBLE);
+            checkBox5.setVisibility(View.VISIBLE);
+        }
+        else {
+            submitClassButton.setVisibility(View.INVISIBLE);
+            checkBox1.setVisibility(View.INVISIBLE);
+            checkBox2.setVisibility(View.INVISIBLE);
+            checkBox3.setVisibility(View.INVISIBLE);
+            checkBox4.setVisibility(View.INVISIBLE);
+            checkBox5.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override

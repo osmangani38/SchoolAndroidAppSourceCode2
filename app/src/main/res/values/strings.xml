@@ -23,12 +23,16 @@
     <string name="englishText">English</string>
     <string name="mathText">Mathematics</string>
     <string name="timeText">11am - 11:45am</string>
+    <string name="examTimeText">11am - 2:00pm</string>
+
     <string name="classText">Class - V | Section - B</string>
     <string name="classInfoText">Class</string>
     <string name="nameText">Amit Dutta</string>
     <string name="typeText">Teacher</string>
     <string name="dashBoard">Dashboard</string>board
     <string name="studentText">Student</string>
+    <string name="staticDate">02 February,2019</string>
+
     <string name="attendenceText">Attendance</string>
     <string name="healthInfoText">Health Information</string>
     <string name="gameText">Game &amp; Sports</string>
@@ -47,6 +51,8 @@
     <string name="sectionText">Sec - B</string>
     <string name="searchText">Search By students name</string>
     <string name="routineText">Routine</string>
+    <string name="examText">Exam Schedule</string>
+
     <string name="markAttendencetext">Mark Attendence</string>
     <string name="rollNoText">Roll No</string>
     <string name="studentName">Student Name</string>

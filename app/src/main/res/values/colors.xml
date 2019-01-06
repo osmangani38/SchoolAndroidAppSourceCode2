@@ -16,4 +16,6 @@
     <color name="silverColor">#d0d7db</color>
     <color name="emailTextColor">#babbbc</color>
     <color name="forgetColorText">#272727</color>
+    <color name="checkbox">#4AAFEF</color>
+
 </resources>

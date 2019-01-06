@@ -258,7 +258,12 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
                     {
                         Intent gonext=new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class);
                         startActivity(new Intent(gonext));
-                    }else if(position==4)
+                    }
+                    else if(position==3)
+                    {
+                        startActivity(new Intent(getApplication(),ExamScheduleScreenActivity.class));
+                    }
+                    else if(position==4)
                     {
                         startActivity(new Intent(getApplication(),RoutinScreenActivity.class));
                     }else if(position==5)

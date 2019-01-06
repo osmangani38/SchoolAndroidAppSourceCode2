@@ -123,6 +123,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
                         }
                         if (goToClassPlan) {
                             Intent goNext = new Intent(getApplication(), SubjectClassPlanActivity.class);
+                            goNext.putExtra("type","StudentOrParrent");
                             startActivity(goNext);
                         }
                     }

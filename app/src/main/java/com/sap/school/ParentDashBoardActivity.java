@@ -251,7 +251,12 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
                     }else if(position==2)
                     {
                         startActivity(new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class));
-                    }else if(position==4)
+                    }
+                    else if(position==3)
+                    {
+                        startActivity(new Intent(getApplication(),ExamScheduleScreenActivity.class));
+                    }
+                    else if(position==4)
                     {
                         startActivity(new Intent(getApplication(),RoutinScreenActivity.class));
                     }else if(position==5)
