@@ -89,14 +89,14 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
     }
 
     private void Information() {
-        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.student_ic,"Home Task"));
+        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
         infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.attendenceText)));
         infoPojoClassArrayList.add(new InfoPojoClass("03",R.drawable.create_plan_ic_dashboard,getResources().getString(R.string.classPlanText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.class_log_dashboard,"Exam Schdule"));
+        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Schdule"));
         infoPojoClassArrayList.add(new InfoPojoClass("05",R.drawable.class_routine,getResources().getString(R.string.classRoutineText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.create_plan_ic_dashboard,"Notice"));
-        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.student_ic,"Apply Leave"));
-        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.create_plan_ic_dashboard,"FeedBack"));
+        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,"Notice"));
+        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.leave_apply_ic_new,"Apply Leave"));
+        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"FeedBack"));
         infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.events_ic_dashboard,getResources().getString(R.string.event)));
         infoRecyclerViewAdapter = new InfoRecyclerViewAdapter(getApplication(), infoPojoClassArrayList);
         infoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
@@ -227,11 +227,11 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
             }else if(position==5) {
                 holder.linearLayout.setBackgroundColor(Color.parseColor("#bf209f"));
             }else if(position==6) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#20bf6b"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#364050"));
             }else if(position==7) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#e74c3c"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#19896d"));
             }else if(position==8) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#0593db"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#e73e63"));
             }
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,6 +241,7 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
                         //startActivity(new Intent(getApplication(),StudentScreenActivity.class));
                         Intent gonext=new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class);
                         gonext.putExtra("type","Student");
+                        gonext.putExtra("isHomeTask", "Yes");
                         startActivity(new Intent(gonext));
                     }else if(position==1)
                     {

@@ -29,6 +29,7 @@ public class SubjectClassPlanActivity extends AppCompatActivity implements View.
         diverasityLinearLayout.setOnClickListener(this);
         levelOfOrganisationLinearLayout.setOnClickListener(this);
         submitClassButton.setOnClickListener(this);
+        submitClassButton.setVisibility(View.INVISIBLE);
     }
 
     private void initView() {

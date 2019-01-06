@@ -93,14 +93,14 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
     }
 
     private void Information() {
-        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.student_ic,"Home Task"));
+        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
         infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.attendenceText)));
         infoPojoClassArrayList.add(new InfoPojoClass("03",R.drawable.create_plan_ic_dashboard,getResources().getString(R.string.classPlanText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.class_log_dashboard,"Exam Shedule"));
+        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Shedule"));
         infoPojoClassArrayList.add(new InfoPojoClass("05",R.drawable.class_routine,getResources().getString(R.string.classRoutineText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.noticeText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.create_plan_ic_dashboard,"Question Bank"));
-        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.class_log_dashboard,"Feedback"));
+        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,getResources().getString(R.string.noticeText)));
+        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.question_bank_ic_new,"Question Bank"));
+        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"Feedback"));
         infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.events_ic_dashboard,"Events"));
         infoRecyclerViewAdapter = new InfoRecyclerViewAdapter(getApplication(), infoPojoClassArrayList);
         infoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
@@ -233,11 +233,11 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
             }else if(position==5) {
                 holder.linearLayout.setBackgroundColor(Color.parseColor("#bf209f"));
             }else if(position==6) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#8854d0"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#364050"));
             }else if(position==7) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#8854d0"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#5b9c84"));
             }else if(position==8) {
-                holder.linearLayout.setBackgroundColor(Color.parseColor("#0593db"));
+                holder.linearLayout.setBackgroundColor(Color.parseColor("#df3d60"));
             }
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -246,6 +246,8 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
                     {
                         //startActivity(new Intent(getApplication(),StudentScreenActivity.class));
                         Intent gonext=new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class);
+                        gonext.putExtra("isHomeTask", "Yes");
+
                         startActivity(new Intent(gonext));
                     }else if(position==1)
                     {

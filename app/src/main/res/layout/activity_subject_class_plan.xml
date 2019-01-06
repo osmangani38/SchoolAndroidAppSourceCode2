@@ -143,9 +143,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
-                            <ImageView
+                            <CheckBox
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:visibility="gone"
                                 android:src="@drawable/check_box_active"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -188,9 +189,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
-                            <ImageView
+                            <CheckBox
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:visibility="gone"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -271,9 +273,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
-                            <ImageView
+                            <CheckBox
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:visibility="gone"
                                 android:src="@drawable/check_box_active"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -316,9 +319,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
-                            <ImageView
+                            <CheckBox
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:visibility="gone"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>
@@ -361,9 +365,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="18dp"
                             android:layout_alignParentRight="true">
-                            <ImageView
+                            <CheckBox
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:visibility="gone"
                                 android:src="@drawable/check_box_inactive"/>
                         </RelativeLayout>
                     </RelativeLayout>

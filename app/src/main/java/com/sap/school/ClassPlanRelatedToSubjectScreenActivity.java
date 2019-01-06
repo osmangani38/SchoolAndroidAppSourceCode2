@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity implements View.OnClickListener{
     RecyclerView classPlanRecyclerview;
     RelativeLayout backButton;
+    TextView headerText;
     ClassPlassSubjectRecyclerViewAdapter classPlassSubjectRecyclerViewAdapter;
     ArrayList<ClassPlanSubjectPojoClass>classPlanSubjectPojoClassArrayList;
     @Override
@@ -54,9 +55,26 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
     }
 
     private void initView() {
+        headerText = (TextView) findViewById(R.id.headerText);
         backButton=(RelativeLayout)findViewById(R.id.backButton);
         classPlanRecyclerview=(RecyclerView)findViewById(R.id.classPlanRecyclerview);
         classPlanSubjectPojoClassArrayList=new ArrayList<ClassPlanSubjectPojoClass>();
+        Intent intent = getIntent();
+        String str = intent.getStringExtra("isHomeTask");
+        if(isNullOrEmpty(str)){
+
+        }
+        else {
+            if (str.equals("Yes")) {
+                headerText.setText("Home Task");
+            }
+        }
+
+    }
+    public static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
     }
 
     @Override
@@ -91,8 +109,22 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
                 public void onClick(View v) {
                     if(i==3)
                     {
-                        Intent goNext=new Intent(getApplication(),SubjectClassPlanActivity.class);
-                        startActivity(goNext);
+                        Intent intent = getIntent();
+                        String str = intent.getStringExtra("isHomeTask");
+                        Boolean goToClassPlan = true;
+                        if(isNullOrEmpty(str)){
+
+                        }
+                        else {
+                            if (str.equals("Yes")) {
+                                goToClassPlan = false;
+                                headerText.setText("Home Task");
+                            }
+                        }
+                        if (goToClassPlan) {
+                            Intent goNext = new Intent(getApplication(), SubjectClassPlanActivity.class);
+                            startActivity(goNext);
+                        }
                     }
                 }
             });
