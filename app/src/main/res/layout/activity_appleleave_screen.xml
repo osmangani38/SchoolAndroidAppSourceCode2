@@ -86,9 +86,11 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_white_rec"
-            android:gravity="left|center_vertical"
+            android:gravity="start|top"
             android:hint="Describe leave reason"
-            android:paddingLeft="20dp"
+            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
             android:textColor="@color/blackColor"
             tools:text="  Describe leave reason" />
     </LinearLayout>
@@ -101,7 +103,7 @@
         android:layout_height="wrap_content"
         android:gravity="bottom">
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btnApplyLeave"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
@@ -111,7 +113,7 @@
         android:layout_marginBottom="10dp"
         android:background="@color/allAppColor"
         android:gravity="center"
-        android:text="Apple for leave"
+        android:text="Apply for Leave"
         android:textColor="@color/whiteColor" />
     </RelativeLayout>
 
