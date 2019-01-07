@@ -33,11 +33,11 @@ public class NoticeScreenActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void noticeInfo() {
-        noticePojoClassArrayList.add(new NoticePojoClass("01","26 Jan 20119","new information is coming relted to subject..."));
-        noticePojoClassArrayList.add(new NoticePojoClass("01","27 Jan 20119","new information is coming relted to subject..."));
-        noticePojoClassArrayList.add(new NoticePojoClass("01","28 Jan 20119","new information is coming relted to subject..."));
-        noticePojoClassArrayList.add(new NoticePojoClass("01","29 Jan 20119","new information is coming relted to subject..."));
-        noticePojoClassArrayList.add(new NoticePojoClass("01","29 Jan 20119","new information is coming relted to subject..."));
+        noticePojoClassArrayList.add(new NoticePojoClass("01","26 January,2019","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        noticePojoClassArrayList.add(new NoticePojoClass("01","27 January,2019","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        noticePojoClassArrayList.add(new NoticePojoClass("01","28 January,2019","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        noticePojoClassArrayList.add(new NoticePojoClass("01","29 January,2019","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+        noticePojoClassArrayList.add(new NoticePojoClass("01","29 January,2019","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
         noticeAdapter = new NoticeAdapter(getApplication(), noticePojoClassArrayList);
         noticeRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         noticeRecyclerView.setItemAnimator(new DefaultItemAnimator());

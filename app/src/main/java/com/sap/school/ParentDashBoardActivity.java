@@ -262,7 +262,12 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
                     }else if(position==5)
                     {
                         startActivity(new Intent(getApplication(),NoticeScreenActivity.class));
-                    }else if(position==7)
+                    }
+                    else if(position==6)
+                    {
+                        startActivity(new Intent(getApplication(),AppleLeaveScreenActivity.class));
+                    }
+                    else if(position==7)
                     {
                         startActivity(new Intent(getApplication(),FeedBackActivity.class));
                     }

@@ -34,7 +34,6 @@ public class ExamScheduleScreenActivity extends AppCompatActivity implements Vie
     private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
     List<ListItem> consolidatedList = new ArrayList<>();
 
-
     private ExamScheduleAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +71,12 @@ public class ExamScheduleScreenActivity extends AppCompatActivity implements Vie
             DateItem dateItem = new DateItem();
             dateItem.setDate(date);
             consolidatedList.add(dateItem);
-
-
             for (ExamSchedulePOJO examSchedulePOJO : groupedHashMap.get(date)) {
                 GeneralItem generalItem = new GeneralItem();
                 generalItem.setExamSchedulePOJO(examSchedulePOJO);//setBookingDataTabs(bookingDataTabs);
                 consolidatedList.add(generalItem);
             }
         }
-
-
         adapter = new ExamScheduleAdapter(this, consolidatedList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -119,8 +114,6 @@ public class ExamScheduleScreenActivity extends AppCompatActivity implements Vie
                 groupedHashMap.put(hashMapKey, list);
             }
         }
-
-
         return groupedHashMap;
     }
 
