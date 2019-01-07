@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NoticeScreenActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/leaveBgColor"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/allAppColor"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/backButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical">
+            <Button
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="17dp"
+                android:layout_marginLeft="17dp"
+                android:background="@drawable/back_btn"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/banglar_siksha" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="23dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/education_first"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@color/allAppColor">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/whiteColor"
+            android:layout_gravity="center_vertical"
+            android:textSize="18dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/applicatioLeave"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSelectDate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="left|center_vertical"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_white_rec"
+        android:text="Select Date"
+        android:paddingLeft="20dp"
+        android:textColor="@color/emailTextColor" />
+
+        <EditText
+            android:id="@+id/textReason"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_white_rec"
+            android:gravity="left|center_vertical"
+            android:hint="Describe leave reason"
+            android:paddingLeft="20dp"
+            android:textColor="@color/blackColor"
+            tools:text="  Describe leave reason" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:background="@color/leaveBgColor"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+    <Button
+        android:id="@+id/btn"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/allAppColor"
+        android:gravity="center"
+        android:text="Apple for leave"
+        android:textColor="@color/whiteColor" />
+    </RelativeLayout>
+
+</LinearLayout>
