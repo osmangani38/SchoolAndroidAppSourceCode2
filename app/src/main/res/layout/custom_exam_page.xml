@@ -15,30 +15,6 @@
         android:layout_height="wrap_content"
         android:background="@color/whiteColor"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/colorAccent"
-                android:layout_marginLeft="27dp" />
-            <TextView
-                android:id="@+id/examDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/staticDate"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="17dp"
-                android:textColor="@android:color/black"
-                android:layout_alignParentRight="true"
-                android:textStyle="bold"
-                android:textSize="14dp"/>
-        </LinearLayout>
-
 
         <LinearLayout
         android:id="@+id/linearLayout"
@@ -65,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/mathText"
-                    android:layout_marginTop="17dp"
+                    android:layout_marginTop="23dp"
                     android:layout_marginLeft="10dp"
                     android:textColor="#222222"
                     android:layout_alignParentRight="true"

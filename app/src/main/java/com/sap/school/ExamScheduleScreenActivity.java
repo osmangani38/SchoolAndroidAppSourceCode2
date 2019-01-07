@@ -1,28 +1,47 @@
 package com.sap.school;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.sap.school.Fragment.ExamScheduleFragment;
 
-public class ExamScheduleScreenActivity extends AppCompatActivity implements View.OnClickListener{
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    ViewPagerAdapter viewPagerAdapter;
-    FragmentManager manager;
+import com.sap.school.PojoClass.DateItem;
+import com.sap.school.common.ExamScheduleAdapter;
+import com.sap.school.PojoClass.ExamSchedulePOJO;
+import com.sap.school.PojoClass.GeneralItem;
+import com.sap.school.PojoClass.ListItem;
+import com.sap.school.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+
+
+public class ExamScheduleScreenActivity extends AppCompatActivity implements View.OnClickListener {
+    
+    RecyclerView routinRecyclerView;
     RelativeLayout backButton;
+    ArrayList<ExamSchedulePOJO> classRoutinePojoClassArrayList;
+    private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
+    List<ListItem> consolidatedList = new ArrayList<>();
+
+
+    private ExamScheduleAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examschedule_screen);
         initView();
+        croutinInfo();
         setListner();
     }
 
@@ -30,21 +49,6 @@ public class ExamScheduleScreenActivity extends AppCompatActivity implements Vie
         backButton.setOnClickListener(this);
     }
 
-    private void initView() {
-        backButton=(RelativeLayout)findViewById(R.id.backButton);
-        viewPager=(ViewPager)findViewById(R.id.viewPager);
-        tabLayout=(TabLayout) findViewById(R.id.tabLayout);
-        // Fragment manager to add fragment in viewpager we will pass object of Fragment manager to adpater class.
-        manager=getSupportFragmentManager();
-        //object of PagerAdapter passing fragment manager object as a parameter of constructor of PagerAdapter class.
-        viewPagerAdapter=new ViewPagerAdapter(manager);
-        //This code is used to visible title
-        //set Adapter to view pager
-        viewPager.setAdapter(viewPagerAdapter);
-        //set tablayout with viewpager
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setupWithViewPager( viewPager);
-    }
 
     @Override
     public void onClick(View v) {
@@ -56,69 +60,69 @@ public class ExamScheduleScreenActivity extends AppCompatActivity implements Vie
         }
     }
 
-    public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
 
-        @Override
-        public Fragment getItem(int position) {
-            Fragment frag=null;
-            switch (position){
-                case 0:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 1:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 2:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 3:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 4:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 5:
-                    frag=new ExamScheduleFragment();
-                    break;
-                case 6:
-                    frag=new ExamScheduleFragment();
-                    break;
+    private void croutinInfo() {
+        myOptions.add(new ExamSchedulePOJO("Mathematics","Class - V | Section - B","11 am - 2.00 pm", "02 February, 2019"));
+        myOptions.add(new ExamSchedulePOJO("Hindi","Class - V | Section - B","11 am - 2.00 pm", "02 February, 2019"));
+        myOptions.add(new ExamSchedulePOJO("English","Class - V | Section - B","11 am - 2.00 pm", "04 February, 2019"));
+        myOptions.add(new ExamSchedulePOJO("Life Science","Class - V | Section - B","11 am - 2.00 pm", "04 February, 2019"));
+        HashMap<String, List<ExamSchedulePOJO>> groupedHashMap = groupDataIntoHashMap(myOptions);
+
+        for (String date : groupedHashMap.keySet()) {
+            DateItem dateItem = new DateItem();
+            dateItem.setDate(date);
+            consolidatedList.add(dateItem);
+
+
+            for (ExamSchedulePOJO examSchedulePOJO : groupedHashMap.get(date)) {
+                GeneralItem generalItem = new GeneralItem();
+                generalItem.setExamSchedulePOJO(examSchedulePOJO);//setBookingDataTabs(bookingDataTabs);
+                consolidatedList.add(generalItem);
             }
-            return frag;
         }
 
-        @Override
-        public int getCount() {
-            return 7;
-        }
-        @Override
-        public CharSequence getPageTitle(int position) {
-            String title=" ";
-            switch (position){
-                case 0:
-                    title="Today";
-                    break;
-                case 1:
-                    title="Tueday";
-                    break;
-                case 2:
-                    title="Wednesday";
-                    break;
-                case 3:
-                    title="Thursday";
-                    break;
-                case 4:
-                    title="Friday";
-                    break;
-                case 5:
-                    title="Saturday";
-                    break;
-            }
 
-            return title;
-        }
+        adapter = new ExamScheduleAdapter(this, consolidatedList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        routinRecyclerView.setLayoutManager(layoutManager);
+        routinRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        routinRecyclerView.setAdapter(adapter);
+
     }
+
+    private void initView() {
+        backButton=(RelativeLayout)findViewById(R.id.backButton);
+        routinRecyclerView=(RecyclerView)findViewById(R.id.examRecyclerView);
+        classRoutinePojoClassArrayList=new ArrayList<>();
+        routinRecyclerView.setHasFixedSize(true);
+
+    }
+
+
+    private HashMap<String, List<ExamSchedulePOJO>> groupDataIntoHashMap(List<ExamSchedulePOJO> listOfPojosOfJsonArray) {
+
+        HashMap<String, List<ExamSchedulePOJO>> groupedHashMap = new HashMap<>();
+
+        for (ExamSchedulePOJO examSchedulePOJO : listOfPojosOfJsonArray) {
+
+            String hashMapKey = examSchedulePOJO.getExamdate();
+
+            if (groupedHashMap.containsKey(hashMapKey)) {
+                // The key is already in the HashMap; add the pojo object
+                // against the existing key.
+                groupedHashMap.get(hashMapKey).add(examSchedulePOJO);
+            } else {
+                // The key is not there in the HashMap; create a new key-value pair
+                List<ExamSchedulePOJO> list = new ArrayList<>();
+                list.add(examSchedulePOJO);
+                groupedHashMap.put(hashMapKey, list);
+            }
+        }
+
+
+        return groupedHashMap;
+    }
+
+
 }
