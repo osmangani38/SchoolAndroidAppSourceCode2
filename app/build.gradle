@@ -19,6 +19,10 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.8.5'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.mobsandgeeks:android-saripaar:2.0.3'
     implementation 'com.blankj:utilcode:1.23.0'
     implementation 'com.github.open-android:RetrofitUtils:0.1.9'
     implementation 'com.alibaba:fastjson:1.2.54'

@@ -85,6 +85,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/student6" />
                         <TextView
+                            android:id="@+id/fullName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -92,6 +93,7 @@
                             android:textColor="@color/whiteColor"
                             android:text="@string/nameText"/>
                         <TextView
+                            android:id="@+id/userType"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -119,6 +121,7 @@
                         android:textSize="16dp" />
 
                     <TextView
+                        android:id="@+id/dobText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
@@ -149,6 +152,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/classDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -179,6 +183,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/genderDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -209,6 +214,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/languageDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -240,6 +246,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/religionDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -270,6 +277,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/guardianName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -300,6 +308,7 @@
                     android:textSize="16dp" />
 
                 <TextView
+                    android:id="@+id/guardianAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"

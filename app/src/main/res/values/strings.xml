@@ -6,6 +6,8 @@
     <string name="teacherText">Teacher</string>
     <string name="parentText">Parent</string>
     <string name="emailText">Email</string>
+    <string name="userName">UserName</string>
+    <string name="userId">userId</string>
     <string name="passwordText">Password</string>
     <string name="loginText">Login</string>
     <string name="forgetPasswordText">Forget Password?</string>

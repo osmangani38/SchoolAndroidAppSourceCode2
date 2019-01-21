@@ -37,7 +37,7 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
     ArrayList<ClassRoutinePojoClass>classRoutinePojoClassArrayList;
     private DrawerLayout drawer;
     RelativeLayout toggleButton;
-    RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton;
+    RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,myProfile,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
         toggleButton.setOnClickListener(this);
         attendenceNavigationButton.setOnClickListener(this);
         healthInfoNavigationButton.setOnClickListener(this);
+        myProfile.setOnClickListener(this);
         gameAndSportsNavigationButton.setOnClickListener(this);
         eventsNavigationButton.setOnClickListener(this);
         coCurricularNavigationButton.setOnClickListener(this);
@@ -117,6 +118,9 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
 
         attendenceNavigationButton=(RelativeLayout)findViewById(R.id.attendenceNavigationButton);
         healthInfoNavigationButton=(RelativeLayout)findViewById(R.id.healthInfoNavigationButton);
+
+        myProfile=(RelativeLayout)findViewById(R.id.myProfile);
+
         gameAndSportsNavigationButton=(RelativeLayout)findViewById(R.id.gameAndSportsNavigationButton);
         eventsNavigationButton=(RelativeLayout)findViewById(R.id.eventsNavigationButton);
         coCurricularNavigationButton=(RelativeLayout)findViewById(R.id.coCurricularNavigationButton);
@@ -146,6 +150,10 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
                 closeDrawer();
                 break;
             case R.id.healthInfoNavigationButton:
+                closeDrawer();
+                break;
+            case R.id.myProfile:
+                startActivity(new Intent(getApplicationContext(),MyProfileActivity.class));
                 closeDrawer();
                 break;
             case R.id.gameAndSportsNavigationButton:

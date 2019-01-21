@@ -1,5 +1,7 @@
 package com.sap.handler;
 
+import com.blankj.utilcode.util.SPUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,12 +22,12 @@ public class ResponseStatus {
     {
         try {
             jsonObject = new JSONObject(jsonResponse);
-            if(jsonObject.has("success")) {
-                message_code = jsonObject.getBoolean("success");
+            if(jsonObject.has("status")) {
+                message_code = jsonObject.getBoolean("status");
             }
 
-            if(jsonObject.has("msg")) {
-                response_message = jsonObject.getString("msg");
+            if(jsonObject.has("message")) {
+                response_message = jsonObject.getString("message");
             }
 
         }catch (Exception ex)
@@ -37,12 +39,12 @@ public class ResponseStatus {
 
     public JSONObject getJsonObject() throws Exception
     {
-        return jsonObject.getJSONObject("student_list");
+        return jsonObject.getJSONObject("result");
     }
 
     public JSONObject getFirstJsonObject() throws Exception
     {
-        JSONArray jsonArray = jsonObject.getJSONArray("student_list");
+        JSONArray jsonArray = jsonObject.getJSONArray("result");
         if(jsonArray.length() > 0){
             return jsonArray.getJSONObject(0);
         }
@@ -71,8 +73,96 @@ public class ResponseStatus {
     public String parseUserId()
     {
         try {
-            if(jsonObject.has("userid")) {
-                return jsonObject.getString("userid");
+            JSONObject jsonResult = getFirstJsonObject();
+            if(jsonResult.has("user_id")) {
+                SPUtils.getInstance().put("user_id",jsonResult.getString("user_id"));
+                return jsonResult.getString("user_id");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+    //parseRollId
+    public String parseRollId()
+    {
+        try {
+            JSONObject jsonResult = getFirstJsonObject();
+
+            if(jsonResult.has("role_id")) {
+                SPUtils.getInstance().put("role_id",jsonResult.getString("role_id"));
+                return jsonResult.getString("role_id");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+    public String parseUserType()
+    {
+        try {
+            JSONObject jsonResult = getFirstJsonObject();
+
+            if(jsonResult.has("designation")) {
+                SPUtils.getInstance().put("designation",jsonResult.getString("designation"));
+                return jsonResult.getString("designation");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+    public String parseName()
+    {
+        try {
+            JSONObject jsonResult = getFirstJsonObject();
+
+            if(jsonResult.has("name")) {
+                SPUtils.getInstance().put("name",jsonResult.getString("name"));
+                return jsonResult.getString("name");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+    public String parseDOB()
+    {
+        try {
+            JSONObject jsonResult = getFirstJsonObject();
+
+            if(jsonResult.has("dob")) {
+                SPUtils.getInstance().put("dob",jsonResult.getString("dob"));
+                return jsonResult.getString("dob");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+    public String parseGender()
+    {
+        try {
+            JSONObject jsonResult = getFirstJsonObject();
+
+            if(jsonResult.has("gender")) {
+                SPUtils.getInstance().put("gender",jsonResult.getString("gender"));
+                return jsonResult.getString("gender");
             }
 
         }catch (Exception ex)
