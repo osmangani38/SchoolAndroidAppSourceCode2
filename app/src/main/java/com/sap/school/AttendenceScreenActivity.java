@@ -2,6 +2,8 @@ package com.sap.school;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AttendenceScreenActivity extends BaseActivity implements View.OnClickListener {
     RecyclerView attendenceRecyclerView;
+    String className,classId,sectionId;
     AttendenceRecyclerViewAdapter attendenceRecyclerViewAdapter;
     ArrayList<AttendancePogoClass> attendencePojoClasses;
     RelativeLayout backButton, attendenceButton;
@@ -50,7 +53,15 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         setListner();
         studentInfo();
         String user_id = SPUtils.getInstance().getString("user_id");
-        String roll_id = SPUtils.getInstance().getString("roll_id");
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( AttendenceScreenActivity.this);
+        roll_id = sharedPref.getString("roll_id", null); // getting String
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            className= getIntent().getStringExtra("className");
+            classId= getIntent().getStringExtra("classId");
+            sectionId= getIntent().getStringExtra("sectionId");
+        }
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";
         }
@@ -66,8 +77,8 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         try {
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", role_id);
-            loginJson.put("class_id", "8");
-            loginJson.put("section_id", "1");
+            loginJson.put("class_id", classId);
+            loginJson.put("section_id", sectionId);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -188,6 +199,8 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         public void onBindViewHolder(@NonNull AttendenceRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
             myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getId());
             myViewHolderClass.nameTextView.setText(attendencePojoClasses.get(i).getName());
+            myViewHolderClass.classTextView.setText("Class - "+className);
+
             myViewHolderClass.imageView.setTag(i);
             // myViewHolderClass.classTextView.setText(attendencePojoClasses.get(i).getId());
             Picasso.with(getApplication()).load(attendencePojoClasses.get(i).getStudent_image()).into(myViewHolderClass.cirleImageView);

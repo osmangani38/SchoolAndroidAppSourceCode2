@@ -1,6 +1,9 @@
 package com.sap.school;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -75,7 +78,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             //web method call
             JSONObject loginJson = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            String roll_id = SPUtils.getInstance().getString("roll_id");
+            String roll_id;
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MyProfileActivity.this);
+            roll_id = sharedPref.getString("roll_id", null); // getting String
+
             String user_id = SPUtils.getInstance().getString("user_id");
             try {
                 loginJson.put("role_id",roll_id );

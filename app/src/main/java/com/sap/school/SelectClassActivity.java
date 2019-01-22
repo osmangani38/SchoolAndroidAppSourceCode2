@@ -3,6 +3,8 @@ package com.sap.school;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,7 +48,9 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
         setListner();
         SelectClassInfo();
         String user_id = SPUtils.getInstance().getString("user_id");
-        String roll_id = SPUtils.getInstance().getString("roll_id");
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SelectClassActivity.this);
+        roll_id = sharedPref.getString("roll_id", null); // getting String
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";
         }
@@ -190,7 +194,7 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void onBindViewHolder(@NonNull SelectInfoReyclerViewAdapter.MyViewHolderClass myViewHolderClass, final int i) {
             myViewHolderClass.classInfoTextView.setText(selectPojoClassArrayList.get(i).getTitle());
-            String classAndSection = selectPojoClassArrayList.get(i).getClassInfo()+" ("+selectPojoClassArrayList.get(i).getSectionName()+ ")";
+            final String classAndSection = selectPojoClassArrayList.get(i).getClassInfo()+" ("+selectPojoClassArrayList.get(i).getSectionName()+ ")";
             myViewHolderClass.classTextView.setText(classAndSection);
 
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -198,15 +202,23 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
                 public void onClick(View v) {
                     if(type.equals("Student"))
                     {
-                        if(i==0)
+                        //if(i==0)
                         {
-                            startActivity(new Intent(getApplication(),StudentScreenActivity.class));
+                            Intent j = new Intent(SelectClassActivity.this, StudentScreenActivity.class);
+                            j.putExtra("className",classAndSection);
+                            j.putExtra("classId",selectPojoClassArrayList.get(i).getId());
+                            j.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
+                            startActivity(j);
                         }
                     }else if(type.equals("Attendence"))
                     {
-                        if(i==0)
+                       // if(i==0)
                         {
-                            startActivity(new Intent(getApplication(),AttendenceScreenActivity.class));
+                            Intent k = new Intent(SelectClassActivity.this, AttendenceScreenActivity.class);
+                            k.putExtra("className",classAndSection);
+                            k.putExtra("classId",selectPojoClassArrayList.get(i).getId());
+                            k.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
+                            startActivity(k);
                         }
                     }
                 }

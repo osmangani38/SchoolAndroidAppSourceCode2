@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -46,6 +49,7 @@ import okhttp3.RequestBody;
 
 public class StudentScreenActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView studentRecyclerView;
+    String className,classId,sectionId;
     @BindView(R.id.searchEditText) EditText searchEditText;
     RelativeLayout backButton;
     ArrayList<StudentInfoPojoClass>studentInfoPojoClassArrayList;
@@ -59,8 +63,17 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         ButterKnife.bind(this);
         setListner();
         StudentInfo();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            className= getIntent().getStringExtra("className");
+            classId= getIntent().getStringExtra("classId");
+            sectionId= getIntent().getStringExtra("sectionId");
+        }
         String user_id = SPUtils.getInstance().getString("user_id");
-        String roll_id = SPUtils.getInstance().getString("roll_id");
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(StudentScreenActivity.this);
+        roll_id = sharedPref.getString("roll_id", null); // getting String
+
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";
         }
@@ -179,8 +192,8 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         try {
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", role_id);
-            loginJson.put("class_id", "8");
-            loginJson.put("section_id", "1");
+            loginJson.put("class_id", classId);
+            loginJson.put("section_id", sectionId);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -209,7 +222,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                mArrayList.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),jsonObjItm.getString("name")/*jsonObjItm.getString("curclass"*/));
+                                mArrayList.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),className/*jsonObjItm.getString("curclass"*/));
                             }
                             StudentScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
@@ -311,7 +324,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         @Override
         public void onBindViewHolder(@NonNull StudentInfoRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
             myViewHolderClass.nameTextView.setText(studentInfoPojoClassArrayList.get(i).getName());
-            myViewHolderClass.classTextView.setText(studentInfoPojoClassArrayList.get(i).getClassInfo());
+            myViewHolderClass.classTextView.setText("Class - "+studentInfoPojoClassArrayList.get(i).getClassInfo());
             Picasso.with(getApplication()).load(studentInfoPojoClassArrayList.get(i).getTiltle()).into(myViewHolderClass.cirleImageView);
         }
         @Override

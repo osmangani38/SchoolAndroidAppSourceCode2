@@ -1,6 +1,9 @@
 package com.sap.school;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -156,6 +159,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             JSONObject jsonObjItm = jsonArray.getJSONObject(0);
                             user_id = responseStatus.parseUserId();
                             roll_id = responseStatus.parseRollId();
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("roll_id", roll_id);
+                            editor.commit();
+                            String roll = sharedPref.getString("roll_id", null); // getting String
 
                             Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                             LoginActivity.this.runOnUiThread(new Runnable() {
