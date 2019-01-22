@@ -203,7 +203,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 
             myViewHolderClass.imageView.setTag(i);
             // myViewHolderClass.classTextView.setText(attendencePojoClasses.get(i).getId());
-            Picasso.with(getApplication()).load(attendencePojoClasses.get(i).getStudent_image()).into(myViewHolderClass.cirleImageView);
+            Picasso.with(getApplication()).load(R.drawable.avatar_student).into(myViewHolderClass.cirleImageView);
             Picasso.with(getApplication()).load(attendencePojoClasses.get(i).getAttendence_info()).into(myViewHolderClass.imageView);
         }
 

@@ -325,7 +325,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         public void onBindViewHolder(@NonNull StudentInfoRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
             myViewHolderClass.nameTextView.setText(studentInfoPojoClassArrayList.get(i).getName());
             myViewHolderClass.classTextView.setText("Class - "+studentInfoPojoClassArrayList.get(i).getClassInfo());
-            Picasso.with(getApplication()).load(studentInfoPojoClassArrayList.get(i).getTiltle()).into(myViewHolderClass.cirleImageView);
+            Picasso.with(getApplication()).load(R.drawable.avatar_student).into(myViewHolderClass.cirleImageView);
         }
         @Override
         public int getItemCount() { return studentInfoPojoClassArrayList.size(); }

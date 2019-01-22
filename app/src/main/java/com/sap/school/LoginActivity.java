@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.itheima.retrofitutils.ItheimaHttp;
@@ -155,17 +156,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
-                            int count = jsonArray.length();
-                            JSONObject jsonObjItm = jsonArray.getJSONObject(0);
-                            user_id = responseStatus.parseUserId();
-                            roll_id = responseStatus.parseRollId();
-                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString("roll_id", roll_id);
-                            editor.commit();
-                            String roll = sharedPref.getString("roll_id", null); // getting String
+                             if (jsonArray != null) {
+                                 int count = jsonArray.length();
+                                 JSONObject jsonObjItm = jsonArray.getJSONObject(0);
+                                 user_id = responseStatus.parseUserId();
+                                 roll_id = responseStatus.parseRollId();
+                                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                 SharedPreferences.Editor editor = sharedPref.edit();
+                                 editor.putString("roll_id", roll_id);
+                                 editor.commit();
+                                 String roll = sharedPref.getString("roll_id", null); // getting String
 
-                            Log.d("Json is ","jsonObjItm is"+jsonObjItm);
+                                 Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
+                             }
                             LoginActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -174,10 +177,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 }
                             });
                         }
+                        ToastUtils.showShort(responseStatus.response_message);
                     }catch (Exception ex){ex.printStackTrace();}
 
 
                 }else{
+
                     Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
