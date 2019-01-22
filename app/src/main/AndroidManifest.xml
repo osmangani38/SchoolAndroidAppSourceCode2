@@ -23,8 +23,10 @@
         <activity android:name=".HomeScreenActivity" />
         <activity android:name=".SelectClassActivity" />
         <activity android:name=".RoutinScreenActivity" />
-        <activity android:name=".StudentScreenActivity" />
-        <activity android:name=".AttendenceScreenActivity" />
+        <activity android:name=".StudentScreenActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".AttendenceScreenActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".ClassPlanActivity" />
         <activity android:name=".FeedBackActivity" />
         <activity android:name=".FeedbackMessageActivity" />

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.sap.handler.IWSCallHandler;
+import com.sap.handler.ResponseStatus;
+import com.sap.handler.ServerComHandler;
 import com.sap.school.PojoClass.SelectPojoClass;
+import com.sap.school.PojoClass.StudentInfoPojoClass;
+import com.sap.utils.AppConstants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SelectClassActivity extends AppCompatActivity implements View.OnClickListener{
+public class SelectClassActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView selectInfoRecyclerView;
     SelectInfoReyclerViewAdapter selectInfoReyclerViewAdapter;
     RelativeLayout backButton;
@@ -33,21 +45,110 @@ public class SelectClassActivity extends AppCompatActivity implements View.OnCli
         initView();
         setListner();
         SelectClassInfo();
+        String user_id = SPUtils.getInstance().getString("user_id");
+        String roll_id = SPUtils.getInstance().getString("roll_id");
+        if (StringUtils.isEmpty(roll_id)){
+            roll_id = "2";
+        }
+        getClassAndSection(user_id,roll_id);
     }
 
     private void SelectClassInfo() {
-        selectPojoClassArrayList.add(new SelectPojoClass("01","V","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("02","VI","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("03","VII","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("04","VIII","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("05","IX","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("06","X","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("07","XI","Class"));
-        selectPojoClassArrayList.add(new SelectPojoClass("08","XII","Class"));
+        selectPojoClassArrayList.add(new SelectPojoClass("01","V","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("02","VI","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("03","VII","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("04","VIII","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("05","IX","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("06","X","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("07","XI","Class","01","A"));
+        selectPojoClassArrayList.add(new SelectPojoClass("08","XII","Class","01","A"));
         selectInfoReyclerViewAdapter = new SelectInfoReyclerViewAdapter(getApplication(), selectPojoClassArrayList);
         selectInfoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         selectInfoRecyclerView.setItemAnimator(new DefaultItemAnimator());
         selectInfoRecyclerView.setAdapter(selectInfoReyclerViewAdapter);
+
+    }
+    public void update(ArrayList<SelectPojoClass> data) {
+        selectPojoClassArrayList.clear();
+        selectPojoClassArrayList.addAll(data);
+        selectInfoRecyclerView.removeAllViews();
+        selectInfoRecyclerView.invalidate();
+    }
+
+    private void getClassAndSection(String user_id, String role_id)
+    {
+        showProgressUI(AppConstants.Loading);
+        String wsLink = AppConstants.BaseURL+"TeacherMasterList";
+        //web method call
+        JSONObject loginJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            loginJson.put("user_id", user_id);
+            loginJson.put("role_id", role_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(loginJson);
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray);
+            ws_dataObj.put("WS_CODE", "120");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+            @Override
+            public void responseStatus(final int status, final Object data) {
+                if (status == 200) {
+                    // List<NotificationItem> arrTmp = new ArrayList<>();
+                    try{
+                        ResponseStatus responseStatus = new ResponseStatus((String)data);
+                        if (responseStatus.isSuccess()) {
+                            dismissProgressUI();
+                            final ArrayList mArrayList=new ArrayList<>();
+                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                            int count = jsonArray.length();
+                            for (int i = 0; i < count; i++) {
+                                JSONObject jsonObjItm = jsonArray.getJSONObject(i);
+                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
+                                JSONArray jsonArraySection = jsonObjItm.getJSONArray("section");
+                                int countSection = jsonArraySection.length();
+                                //mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")/*jsonObjItm.getString("curclass"*/);
+//                            SelectPojoClass selectPojoClass = new SelectPojoClass();
+                                for (int j = 0; j < countSection; j++) {
+                                    JSONObject jsonObjItmSection = jsonArraySection.getJSONObject(j);
+                                    mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class",jsonObjItmSection.getString("section_id"),jsonObjItmSection.getString("section_name"))/*jsonObjItm.getString("curclass"*/);
+
+//                            SelectPojoClass selectPojoClass = new SelectPojoClass();
+
+                                }
+
+                            }
+                            SelectClassActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                    update(mArrayList);
+
+                                }
+                            });
+                            SelectClassActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                }
+                            });
+                        }
+                    }catch (Exception ex){ex.printStackTrace();}
+
+
+                }else{
+                    Log.d("Webservice","failed");
+                    dismissProgressUI();
+                }
+            }
+        });
 
     }
 
@@ -89,7 +190,8 @@ public class SelectClassActivity extends AppCompatActivity implements View.OnCli
         @Override
         public void onBindViewHolder(@NonNull SelectInfoReyclerViewAdapter.MyViewHolderClass myViewHolderClass, final int i) {
             myViewHolderClass.classInfoTextView.setText(selectPojoClassArrayList.get(i).getTitle());
-            myViewHolderClass.classTextView.setText(selectPojoClassArrayList.get(i).getClassInfo());
+            String classAndSection = selectPojoClassArrayList.get(i).getClassInfo()+" ("+selectPojoClassArrayList.get(i).getSectionName()+ ")";
+            myViewHolderClass.classTextView.setText(classAndSection);
 
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -65,57 +65,65 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_silver_dark_rec"
                     android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/classTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/whiteColor"
-                        android:layout_marginLeft="8dp"
                         android:layout_gravity="center"
-                        android:textSize="18dp"
-                        android:text="@string/classFiveText"/>
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/classFiveText"
+                        android:textColor="@color/whiteColor"
+                        android:textSize="18dp" />
+
                     <ImageView
                         android:id="@+id/sectionTextView"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/arrow_down_btn"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="8dp"
-                        android:layout_gravity="center"/>
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/arrow_down_btn" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_silver_dark_rec"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/whiteColor"
-                        android:layout_marginLeft="8dp"
                         android:layout_gravity="center"
-                        android:textSize="18dp"
-                        android:text="@string/sectionText"/>
+                        android:layout_marginLeft="8dp"
+                        android:text="@string/sectionText"
+                        android:textColor="@color/whiteColor"
+                        android:textSize="18dp" />
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/arrow_down_btn"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="8dp"
-                        android:layout_gravity="center"/>
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/arrow_down_btn" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -140,13 +148,15 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_vertical"/>
         </RelativeLayout>
+
         <EditText
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:defaultFocusHighlightEnabled="false"
             android:hint="@string/searchText"
-            android:paddingLeft="10dp"
-            android:background="@android:color/transparent"/>
+            android:paddingLeft="10dp" />
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"

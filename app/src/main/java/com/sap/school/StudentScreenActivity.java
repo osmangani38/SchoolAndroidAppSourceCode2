@@ -16,10 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.sap.handler.GenWSHandler;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
@@ -29,16 +33,20 @@ import com.sap.utils.AppConstants;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 public class StudentScreenActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView studentRecyclerView;
+    @BindView(R.id.searchEditText) EditText searchEditText;
     RelativeLayout backButton;
     ArrayList<StudentInfoPojoClass>studentInfoPojoClassArrayList;
     StudentInfoRecyclerViewAdapter studentInfoRecyclerViewAdapter;
@@ -48,9 +56,15 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_screen);
         initView();
+        ButterKnife.bind(this);
         setListner();
         StudentInfo();
-        //getAllStudents("");
+        String user_id = SPUtils.getInstance().getString("user_id");
+        String roll_id = SPUtils.getInstance().getString("roll_id");
+        if (StringUtils.isEmpty(roll_id)){
+            roll_id = "2";
+        }
+        getAllStudentsDetails(user_id,roll_id);
     }
     private void StudentInfo() {
         studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student1,"Rupankar Das","Class - V"));
@@ -107,7 +121,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         studentInfoPojoClassArrayList.clear();
         studentInfoPojoClassArrayList.addAll(data);
         studentRecyclerView.removeAllViews();
-        // updateData(studentInfoPojoClassArrayList);
+         updateData(studentInfoPojoClassArrayList);
         studentRecyclerView.invalidate();
     }
 
@@ -154,6 +168,74 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
                 }
             }
         });
+    }
+    private void getAllStudentsDetails(String user_id, String role_id)
+    {
+        showProgressUI(AppConstants.Loading);
+        String wsLink = AppConstants.BaseURL+"StudentList";
+        //web method call
+        JSONObject loginJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            loginJson.put("user_id", user_id);
+            loginJson.put("role_id", role_id);
+            loginJson.put("class_id", "8");
+            loginJson.put("section_id", "1");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(loginJson);
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray);
+            ws_dataObj.put("WS_CODE", "150");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+            @Override
+            public void responseStatus(final int status, final Object data) {
+                if (status == 200) {
+                    // List<NotificationItem> arrTmp = new ArrayList<>();
+                    try{
+                        ResponseStatus responseStatus = new ResponseStatus((String)data);
+                        if (responseStatus.isSuccess()) {
+                            dismissProgressUI();
+                            final ArrayList mArrayList=new ArrayList<>();
+                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                            int count = jsonArray.length();
+                            for (int i = 0; i < count; i++) {
+                                JSONObject jsonObjItm = jsonArray.getJSONObject(i);
+                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
+                                mArrayList.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),jsonObjItm.getString("name")/*jsonObjItm.getString("curclass"*/));
+                            }
+                            StudentScreenActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                    update(mArrayList);
+
+                                }
+                            });
+                            StudentScreenActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                }
+                            });
+                        }
+                    }catch (Exception ex){ex.printStackTrace();}
+
+
+                }else{
+                    Log.d("Webservice","failed");
+                    dismissProgressUI();
+                }
+            }
+        });
+
     }
 
     //getRequestMyBooking
