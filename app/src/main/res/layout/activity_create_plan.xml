@@ -76,14 +76,73 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView
             android:id="@+id/createPlanRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"/>-->
+
+        <EditText
+            android:id="@+id/edtSelectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Select Plan Date"
+            android:editable="false"
+            android:focusable="false"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/calender_ic"
+            android:drawablePadding="15dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"/>
+
+        <EditText
+            android:id="@+id/edtSelectClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="@string/selectClasstext"
+            android:editable="false"
+            android:focusable="false"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/teacher_ic_make_plan"
+            android:drawablePadding="15dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"/>
+
+        <EditText
+            android:id="@+id/edtSelectSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="@string/selectClassSection"
+            android:editable="false"
+            android:focusable="false"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/teacher_ic_make_plan"
+            android:drawablePadding="15dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"/>
+
+        <EditText
+            android:id="@+id/edtSelectSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="@string/selectSubject"
+            android:editable="false"
+            android:focusable="false"
+            android:background="@drawable/text_field"
+            android:drawableLeft="@drawable/subject_ic"
+            android:drawablePadding="15dp"
+            android:paddingStart="15dp"
+            android:paddingLeft="15dp"/>
+
+
+
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/makePlanButton"
