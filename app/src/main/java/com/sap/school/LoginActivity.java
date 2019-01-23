@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     EditText passwordTF;
     Validator validator;
     String valueType = "";
-    String user_id,roll_id;
+    String user_id,roll_id, designation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,6 +161,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                  JSONObject jsonObjItm = jsonArray.getJSONObject(0);
                                  user_id = responseStatus.parseUserId();
                                  roll_id = responseStatus.parseRollId();
+                                 designation = responseStatus.parseUserType();
                                  SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                  SharedPreferences.Editor editor = sharedPref.edit();
                                  editor.putString("roll_id", roll_id);

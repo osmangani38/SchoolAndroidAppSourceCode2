@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="@dimen/list_item_height"
+  android:background="@color/silverColor"
+  android:layout_marginBottom="1dp"
+  android:layout_marginTop="3dp">
+
+
+  <TextView
+      android:id="@+id/list_item_lesson_name"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginLeft="20dp"
+      android:layout_marginStart="20dp"
+      android:textColor="@color/blackColor"
+      android:gravity="center_vertical"
+      tools:text="Genre" />
+
+  <ImageView
+      android:id="@+id/list_item_lesson_arrow"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical|end"
+      android:layout_marginRight="@dimen/horizontal_margin"
+      android:src="@drawable/arrow_down_2" />
+
+</FrameLayout>
+

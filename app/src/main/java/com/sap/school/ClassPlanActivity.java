@@ -1,30 +1,18 @@
 package com.sap.school;
 
 import android.app.AlertDialog;
-import android.app.Application;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -35,10 +23,8 @@ import com.sap.school.Fragment.MyDatePickerFragment;
 import com.sap.school.PojoClass.CreatePlanPojoClass;
 import com.sap.school.PojoClass.PlanSectionPOJO;
 import com.sap.school.PojoClass.PlanSubjectPOJO;
-import com.sap.school.PojoClass.SelectPojoClass;
 import com.sap.utils.AppConstants;
 import com.sap.utils.JSONSharedPreferences;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +40,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
     ArrayList<PlanSectionPOJO> planSectionPOJOS;
     ArrayList<PlanSubjectPOJO> planSubjectPOJOS;
     JSONArray jsonArray = null;
+    String class_id, subject_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +145,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
 
                                 PlanSubjectPOJO obj = planSubjectPOJOS.get(which);
                                 edtSelectSubject.setText(obj.getSubject_name());
-
+                                subject_id = obj.getSubject_id();
                                 dialog.dismiss();
                             }
                         });
@@ -265,9 +252,16 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.makePlanButton:
-                Intent goNext = new Intent(getApplication(), SubjectClassPlanActivity.class);
-                goNext.putExtra("type","Teacher");
-                startActivity(goNext);
+                if (!edtSelectSubject.getText().toString().isEmpty()) {
+                    Intent goNext = new Intent(getApplication(), SubjectPlanDetailsActivity.class);
+                    goNext.putExtra("type","Teacher");
+                    goNext.putExtra("class_id", class_id);
+                    goNext.putExtra("subject_id", subject_id);
+                    startActivity(goNext);
+                }else{
+                    Toast.makeText(ClassPlanActivity.this,"Please Select Class and Subject", Toast.LENGTH_SHORT).show();
+                }
+
                 //startActivity(new Intent(getApplicationContext(),SubjectClassPlanActivity.class));
                 break;
         }
@@ -287,7 +281,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                         edtSelectSection.setText(""); edtSelectSubject.setText("");
                         CreatePlanPojoClass obj = createPlanPojoClasses.get(which);
                         view.setText("Class "+ obj.getClassname());
-
+                        class_id = obj.getClassid();
                         JSONArray sectionJSON = obj.getSection();
                         JSONArray subjectJSON = obj.getSubject();
                         try{
@@ -335,37 +329,5 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    /*private class CreatePlanRecyclerViewAdapter extends RecyclerView.Adapter<CreatePlanRecyclerViewAdapter.MyViewHolderClass>{
-        Context context;ArrayList<CreatePlanPojoClass> createPlanPojoClassArrayList;
-        public CreatePlanRecyclerViewAdapter(Context context, ArrayList<CreatePlanPojoClass> createPlanPojoClassArrayList) {
-         this.context=context;this.createPlanPojoClassArrayList=createPlanPojoClassArrayList;
-        }
 
-        @NonNull
-        @Override
-        public CreatePlanRecyclerViewAdapter.MyViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_create_class, parent, false);
-            return new CreatePlanRecyclerViewAdapter.MyViewHolderClass(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull CreatePlanRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
-            myViewHolderClass.titleTextView.setText(createPlanPojoClassArrayList.get(i).getTitle());
-            Picasso.with(getApplication()).load(createPlanPojoClassArrayList.get(i).getImage()).into(myViewHolderClass.imageView);
-        }
-        @Override
-        public int getItemCount() {
-            return createPlanPojoClassArrayList.size();
-        }
-
-        public class MyViewHolderClass extends RecyclerView.ViewHolder {
-            ImageView imageView;
-            TextView titleTextView;
-            public MyViewHolderClass(@NonNull View itemView) {
-                super(itemView);
-                imageView=(ImageView)itemView.findViewById(R.id.imageView);
-                titleTextView=(TextView)itemView.findViewById(R.id.titleTextView);
-            }
-        }
-    }*/
 }

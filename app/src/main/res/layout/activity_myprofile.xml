@@ -264,6 +264,7 @@
                 android:background="@color/silverColor"/>
 
             <LinearLayout
+                android:id="@+id/llguardnname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -289,12 +290,14 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rlLine6"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/silverColor"/>
 
             <LinearLayout
+                android:id="@+id/llguardnaddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -320,6 +323,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/rlLine7"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     @BindView(R.id.religionDetails) TextView religionDetails;
     @BindView(R.id.guardianName) TextView guardianName;
     @BindView(R.id.guardianAddress) TextView guardianAddress;
+    @BindView(R.id.llguardnname) LinearLayout llGuardnName;
+    @BindView(R.id.llguardnaddr) LinearLayout llGuardnAddrs;
+    @BindView(R.id.rlLine6) RelativeLayout rlLine6;
+    @BindView(R.id.rlLine7) RelativeLayout rlLine7;
     RelativeLayout backButton;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +74,13 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         religionDetails.setText("");
         guardianName.setText("");
         guardianAddress.setText("");
+
+        if(userTypeString.equals("Teacher")){
+            llGuardnName.setVisibility(View.GONE);
+            llGuardnAddrs.setVisibility(View.GONE);
+            rlLine6.setVisibility(View.GONE);
+            rlLine7.setVisibility(View.GONE);
+        }
 
     }
     private void getProfileData(){
@@ -141,7 +153,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private void updateUI(ProfilePojoClass profileData) {
         fullName.setText(profileData.getName());
         dobText.setText(profileData.getDob());
-        genderDetails.setText(profileData.getGender());
+        if(profileData.getGender().equals("M")){
+            genderDetails.setText("Male");
+        }
+
     }
 
     private void setListner() {

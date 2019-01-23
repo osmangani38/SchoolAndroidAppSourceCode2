@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -41,6 +41,7 @@
         <activity android:name=".MyProfileActivity"> </activity>
         <activity android:name=".ExamScheduleScreenActivity"> </activity>
         <activity android:name=".AppleLeaveScreenActivity"> </activity>
+        <activity android:name=".SubjectPlanDetailsActivity"> </activity>
 
     </application>
 
