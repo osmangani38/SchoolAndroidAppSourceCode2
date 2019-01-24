@@ -1,35 +1,94 @@
 package com.sap.school.PojoClass;
 
-import com.sap.school.R;
+import android.content.Context;
+import android.util.Log;
 
+import com.sap.school.ApplicationContextProvider;
+import com.sap.school.R;
+import com.sap.school.SubjectPlanDetailsActivity;
+import com.sap.utils.JSONSharedPreferences;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class LessonDataFactory {
+  private Context context;
 
 
 
   public static List<MultiCheckLesson> makeMultiCheckGenres() {
-    return Arrays.asList(makeMultiCheckRockGenre(),
-        makeMultiCheckJazzGenre(),
-        makeMultiCheckClassicGenre(),
-        makeMultiCheckSalsaGenre());
+     ArrayList<MultiCheckLesson> list = new ArrayList<MultiCheckLesson>();
+    JSONArray savedArray;
+     try{
+       savedArray = JSONSharedPreferences.loadJSONArray(ApplicationContextProvider.getContext(), "teacherJSON", "subjectChapters");
+       Log.d("","try'");
+    }
+     catch (Exception e) {
+       // This will catch any exception, because they are all descended from Exception
+       System.out.println("Error " + e.getMessage());
+       return null;
+     }
+    int count = savedArray.length();
+
+    for(int i =0; i<count; i++)
+
+    {
+      try{
+        JSONObject jsonObjItmSection = savedArray.getJSONObject(i);
+        Log.d("","try'");
+        JSONArray chapters = jsonObjItmSection.getJSONArray("topic");
+        list.add (new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+      }
+      catch (Exception e) {
+        // This will catch any exception, because they are all descended from Exception
+        System.out.println("Error " + e.getMessage());
+        return null;
+      }
+
+    }
+    return list;
+  }
+
+  public LessonDataFactory(Context context){
+    this.context=context;
   }
 
 
 
-  public static MultiCheckLesson makeMultiCheckRockGenre() {
-    return new MultiCheckLesson("Rock", makeRockArtists(), "1");
-  }
 
+  public static List<ChapterPOJO> makeRockArtists(JSONArray chapters) {
+    ArrayList<ChapterPOJO> list = new ArrayList<ChapterPOJO>();
 
-  public static List<ChapterPOJO> makeRockArtists() {
-    ChapterPOJO queen = new ChapterPOJO("1", "Queen");
-    ChapterPOJO styx = new ChapterPOJO("2", "Styx");
-    ChapterPOJO reoSpeedwagon = new ChapterPOJO("3", "SpeedWagon");
-    ChapterPOJO boston = new ChapterPOJO("4", "Boston");
+    int count = chapters.length();
 
-    return Arrays.asList(queen, styx, reoSpeedwagon, boston);
+    for(int i =0; i<count; i++)
+
+    {
+      try{
+        JSONObject jsonObjItmSection = chapters.getJSONObject(i);
+        Log.d("","try'");
+        ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+        list.add(queen);
+      }
+      catch (Exception e) {
+        // This will catch any exception, because they are all descended from Exception
+        System.out.println("Error " + e.getMessage());
+        return null;
+      }
+
+    }
+
+//    ChapterPOJO queen = new ChapterPOJO("1", "Queen");
+//    ChapterPOJO styx = new ChapterPOJO("2", "Styx");
+//    ChapterPOJO reoSpeedwagon = new ChapterPOJO("3", "SpeedWagon");
+//    ChapterPOJO boston = new ChapterPOJO("4", "Boston");
+
+    return (list);
   }
 
 

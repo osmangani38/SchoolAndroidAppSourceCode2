@@ -33,7 +33,7 @@ public class MultiCheckLessonAdapter extends
   public void onBindCheckChildViewHolder(MultiCheckChapterViewHolder holder, int position,
                                          CheckedExpandableGroup group, int childIndex) {
     final ChapterPOJO chapterPOJO = (ChapterPOJO) group.getItems().get(childIndex);
-    holder.setChapterName(chapterPOJO.getTopic_name());
+    holder.setChapterName(chapterPOJO.getTopic_name());// sub chapters name
   }
 
   @Override

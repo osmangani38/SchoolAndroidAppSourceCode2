@@ -56,7 +56,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         setListner();
         validator = new Validator(this);
         validator.setValidationListener(LoginActivity.this);
-
     }
 
     private void setListner() {
@@ -167,7 +166,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                  editor.putString("roll_id", roll_id);
                                  editor.commit();
                                  String roll = sharedPref.getString("roll_id", null); // getting String
-
                                  Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                              }
                             LoginActivity.this.runOnUiThread(new Runnable() {
@@ -178,7 +176,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 }
                             });
                         }
-                        ToastUtils.showShort(responseStatus.response_message);
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        LoginActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
                     }catch (Exception ex){ex.printStackTrace();}
 
 

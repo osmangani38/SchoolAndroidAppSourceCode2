@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -40,7 +41,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
     ArrayList<PlanSectionPOJO> planSectionPOJOS;
     ArrayList<PlanSubjectPOJO> planSubjectPOJOS;
     JSONArray jsonArray = null;
-    String class_id, subject_id;
+    String class_id, subject_id,subject_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +147,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                                 PlanSubjectPOJO obj = planSubjectPOJOS.get(which);
                                 edtSelectSubject.setText(obj.getSubject_name());
                                 subject_id = obj.getSubject_id();
+                                subject_name = obj.getSubject_name();
                                 dialog.dismiss();
                             }
                         });
@@ -232,6 +234,16 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                                 }
                             });
                         }
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        ClassPlanActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
                     }catch (Exception ex){ex.printStackTrace();}
 
 
@@ -251,12 +263,13 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
             case R.id.backButton:
                 finish();
                 break;
-            case R.id.makePlanButton:
+            case R.id.makePlanButton://Salman
                 if (!edtSelectSubject.getText().toString().isEmpty()) {
                     Intent goNext = new Intent(getApplication(), SubjectPlanDetailsActivity.class);
                     goNext.putExtra("type","Teacher");
                     goNext.putExtra("class_id", class_id);
                     goNext.putExtra("subject_id", subject_id);
+                    goNext.putExtra("subject_name", subject_name);
                     startActivity(goNext);
                 }else{
                     Toast.makeText(ClassPlanActivity.this,"Please Select Class and Subject", Toast.LENGTH_SHORT).show();

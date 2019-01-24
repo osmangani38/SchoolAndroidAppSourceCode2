@@ -73,6 +73,7 @@
         android:orientation="horizontal"
         android:background="@color/allAppColor">
       <TextView
+          android:id="@+id/subjectName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@color/whiteColor"

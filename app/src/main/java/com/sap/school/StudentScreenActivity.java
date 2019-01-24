@@ -27,6 +27,7 @@ import com.blankj.utilcode.util.IntentUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.sap.handler.GenWSHandler;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
@@ -80,11 +81,11 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         getAllStudentsDetails(user_id,roll_id);
     }
     private void StudentInfo() {
-        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student1,"Rupankar Das","Class - V"));
-        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student2,"Arpita Ghosh","Class - V"));
-        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student3,"Rudrajit Guha","Class - V"));
-        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student4,"Nivedita Roy","Class - V"));
-        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student6,"Sumit Kar","Class - V"));
+//        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student1,"Rupankar Das","Class - V"));
+//        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student2,"Arpita Ghosh","Class - V"));
+//        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student3,"Rudrajit Guha","Class - V"));
+//        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student4,"Nivedita Roy","Class - V"));
+//        studentInfoPojoClassArrayList.add(new StudentInfoPojoClass(R.drawable.student6,"Sumit Kar","Class - V"));
         studentInfoRecyclerViewAdapter = new StudentInfoRecyclerViewAdapter(getApplication(), studentInfoPojoClassArrayList);
         studentRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         studentRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -232,13 +233,17 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
 
                                 }
                             });
-                            StudentScreenActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissProgressUI();
-                                }
-                            });
                         }
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        StudentScreenActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
                     }catch (Exception ex){ex.printStackTrace();}
 
 

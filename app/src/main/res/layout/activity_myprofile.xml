@@ -85,7 +85,7 @@
                             android:layout_marginTop="15dp"
                             android:layout_marginBottom="6dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/student6" />
+                            android:src="@drawable/avatar_student" />
                         <TextView
                             android:id="@+id/fullName"
                             android:layout_width="wrap_content"

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
     AttendenceRecyclerViewAdapter attendenceRecyclerViewAdapter;
     ArrayList<AttendancePogoClass> attendencePojoClasses;
     RelativeLayout backButton, attendenceButton;
+    LinearLayout selectClassButton,selectSectionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,17 +115,23 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                                 @Override
                                 public void run() {
                                     dismissProgressUI();
+                                    attendenceButton.setVisibility(View.VISIBLE);
                                     update(mArrayList);
 
                                 }
                             });
-                            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissProgressUI();
-                                }
-                            });
                         }
+                        else {
+                            attendenceButton.setVisibility(View.GONE);
+                            dismissProgressUI();
+                            ToastUtils.showShort(responseStatus.response_message);
+                        }
+                        AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
                     }catch (Exception ex){ex.printStackTrace();}
 
 
@@ -142,12 +150,12 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         attendenceRecyclerView.invalidate();
     }
     private void studentInfo() {
-        attendencePojoClasses.add(new AttendancePogoClass("01", "Rupankar Das", R.drawable.student1, R.drawable.cross_btn));
-        attendencePojoClasses.add(new AttendancePogoClass("02", "Arpita Ghosh", R.drawable.student2, R.drawable.cross_btn));
-        attendencePojoClasses.add(new AttendancePogoClass("03", "Rudrajit Guha", R.drawable.student3, R.drawable.cross_btn));
-        attendencePojoClasses.add(new AttendancePogoClass("04", "Nivedita Roy", R.drawable.student4, R.drawable.cross_btn));
-        attendencePojoClasses.add(new AttendancePogoClass("05", "Sumit Kar", R.drawable.student6, R.drawable.cross_btn));
-        attendencePojoClasses.add(new AttendancePogoClass("06", "Arijit Ghosh", R.drawable.student3, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("01", "Rupankar Das", R.drawable.student1, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("02", "Arpita Ghosh", R.drawable.student2, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("03", "Rudrajit Guha", R.drawable.student3, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("04", "Nivedita Roy", R.drawable.student4, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("05", "Sumit Kar", R.drawable.student6, R.drawable.cross_btn));
+//        attendencePojoClasses.add(new AttendancePogoClass("06", "Arijit Ghosh", R.drawable.student3, R.drawable.cross_btn));
         attendenceRecyclerViewAdapter = new AttendenceRecyclerViewAdapter(getApplication(), attendencePojoClasses);
         attendenceRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         attendenceRecyclerView.setItemAnimator(new DefaultItemAnimator());

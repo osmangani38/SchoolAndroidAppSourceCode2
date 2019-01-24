@@ -22,6 +22,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -39,6 +40,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classV1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -57,6 +59,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classVII"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -74,6 +77,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classVIII"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -91,6 +95,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classIX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -109,6 +114,7 @@
         android:layout_height="47dp"
         android:orientation="horizontal">
         <RadioButton
+            android:id="@+id/classX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

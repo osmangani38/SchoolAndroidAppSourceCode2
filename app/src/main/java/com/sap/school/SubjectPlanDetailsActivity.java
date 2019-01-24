@@ -15,11 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -44,7 +46,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   RelativeLayout backButton,submitClassButton;
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
-  String classid="", subjectid="";
+  TextView subjectName;
+  String classid="", subjectid="",subject_name = "";
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -56,6 +59,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     String str = intent.getStringExtra("type");
     classid = intent.getStringExtra("class_id");
     subjectid = intent.getStringExtra("subject_id");
+    subject_name = intent.getStringExtra("subject_name");
+
 
     String user_id = SPUtils.getInstance().getString("user_id");
     String roll_id;
@@ -64,13 +69,17 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (StringUtils.isEmpty(roll_id)){
       roll_id = "2";
     }
-    //getClassAndSection(user_id,roll_id,classid, subjectid);
+    getClassAndSection(user_id,roll_id,classid, subjectid);
+    if (!StringUtils.isEmpty(subject_name)){
+        subjectName.setText("Subject :"+subject_name);
+    }
   }
 
   private void initView() {
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     backButton=(RelativeLayout)findViewById(R.id.backButton);
     submitClassButton=(RelativeLayout)findViewById(R.id.submitClassButton);
+    subjectName = (TextView)findViewById(R.id.subjectName);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(SubjectPlanDetailsActivity.this);
     adapter = new MultiCheckLessonAdapter(makeMultiCheckGenres());
@@ -153,7 +162,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               dismissProgressUI();
               final ArrayList<ChapterPOJO> mArrayList=new ArrayList<>();
               JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
-              //JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "classPlanList", jsonArray);
+              JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters", jsonArray);
+              JSONArray savedArray = JSONSharedPreferences.loadJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters");
+              Log.d("gg","aaa");
               /*int count = jsonArray.length();
               for (int i = 0; i < count; i++) {
                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
@@ -175,10 +186,29 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
                 @Override
                 public void run() {
                   dismissProgressUI();
+                  recyclerView.setAdapter(null);
+                  recyclerView.setLayoutManager(null);
+                  recyclerView.removeAllViewsInLayout();
+                  LinearLayoutManager layoutManager = new LinearLayoutManager(SubjectPlanDetailsActivity.this);
+                  adapter = new MultiCheckLessonAdapter(makeMultiCheckGenres());
+                  recyclerView.setLayoutManager(layoutManager);
+                  recyclerView.setAdapter(adapter);
+                  adapter.notifyDataSetChanged();
+
 
                 }
               });
             }
+            else {
+              ToastUtils.showShort(responseStatus.response_message);
+              dismissProgressUI();
+            }
+            SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                dismissProgressUI();
+              }
+            });
           }catch (Exception ex){ex.printStackTrace();}
 
 

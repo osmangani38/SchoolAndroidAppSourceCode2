@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -144,6 +145,17 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
                                 }
                             });
                         }
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        SelectClassActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
+
                     }catch (Exception ex){ex.printStackTrace();}
 
 
