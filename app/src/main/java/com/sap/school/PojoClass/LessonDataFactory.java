@@ -1,10 +1,14 @@
 package com.sap.school.PojoClass;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 
 import com.sap.school.ApplicationContextProvider;
 import com.sap.school.R;
+import com.sap.school.RoutinScreenActivity;
 import com.sap.school.SubjectPlanDetailsActivity;
 import com.sap.utils.JSONSharedPreferences;
 
@@ -40,9 +44,45 @@ public class LessonDataFactory {
     {
       try{
         JSONObject jsonObjItmSection = savedArray.getJSONObject(i);
+
         Log.d("","try'");
-        JSONArray chapters = jsonObjItmSection.getJSONArray("topic");
-        list.add (new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+        JSONArray chapters = new JSONArray() ;
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
+        roll_id = sharedPref.getString("roll_id", null); // getting String
+        String lesson;
+        if (roll_id.equals("2")) {
+           chapters = jsonObjItmSection.getJSONArray("topic");
+        }
+        else {
+          //chapters.put(jsonObjItmSection.getString("topic"));
+        }
+        if (roll_id.equals("2")) {
+          list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+        }
+        else {
+          ArrayList getArrayOfLessons = new ArrayList<>();
+
+          JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
+          for (int j = 0;j<lessonArray.length();j++){
+            JSONObject jsonObj = lessonArray.getJSONObject(j);
+
+            getArrayOfLessons.add(jsonObj.getString("name"));
+            String lesson_name = jsonObj.getString("name");
+
+            ArrayList getArrayOfChapters = new ArrayList<>();
+
+            JSONArray chaptersArray = jsonObj.getJSONArray("topic");
+            for (int q = 0;q<chaptersArray.length();q++){
+              JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
+
+              getArrayOfChapters.add(jsonObjCh.getString("name"));
+            }
+            JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
+            list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
+          }
+
+        }
       }
       catch (Exception e) {
         // This will catch any exception, because they are all descended from Exception
@@ -70,10 +110,25 @@ public class LessonDataFactory {
 
     {
       try{
-        JSONObject jsonObjItmSection = chapters.getJSONObject(i);
-        Log.d("","try'");
-        ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
-        list.add(queen);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
+       String roll_id = sharedPref.getString("roll_id", null); // getting String
+        String lesson;
+        if (roll_id.equals("2")) {
+          JSONObject jsonObjItmSection = chapters.getJSONObject(i);
+          Log.d("","try'");
+          ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+          list.add(queen);
+        }
+        else {
+          String  stringChapters = chapters.getString(i);
+          Log.d("","try'");
+         // ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+          ChapterPOJO queen = new ChapterPOJO("id", stringChapters);
+
+          list.add(queen);
+
+        }
+
       }
       catch (Exception e) {
         // This will catch any exception, because they are all descended from Exception

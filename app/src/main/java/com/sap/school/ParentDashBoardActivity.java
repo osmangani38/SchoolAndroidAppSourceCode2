@@ -190,7 +190,7 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
                 closeDrawer();
                 break;
             case R.id.logOutNavigationButton:
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 finish();
                 closeDrawer();
                 break;

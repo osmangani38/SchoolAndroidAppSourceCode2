@@ -40,6 +40,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/teacher_profile" />
                         <TextView
+                            android:id="@+id/fullName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

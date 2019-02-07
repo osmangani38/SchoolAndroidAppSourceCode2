@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f5f5f5"
+    tools:context=".RoutinScreenActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/allAppColor"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/backButton"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical">
+            <Button
+                android:layout_width="25dp"
+                android:layout_height="17dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/back_btn"/>
+        </RelativeLayout>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/banglar_siksha" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="23dp"
+
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/education_first"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@color/allAppColor">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/whiteColor"
+            android:layout_gravity="center_vertical"
+            android:textSize="18dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/todaysClassPlanText"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:padding="3dp"
+            android:textColor="#FFFFFF"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="0dp"
+
+            android:textAlignment="center"
+
+            android:layout_gravity="center"
+            android:textSize="25dp"
+            android:background="@color/allAppColor"
+            android:text="+"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnMore"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_margin="30dp"
+                android:layout_height="wrap_content"
+                android:text="View More Class Plan"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@color/allAppColor"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:textStyle="normal"
+                android:textSize="12dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/examRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/btnMore"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"/>
+
+        </LinearLayout>
+
+</LinearLayout>

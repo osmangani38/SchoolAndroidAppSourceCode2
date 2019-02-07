@@ -1,9 +1,12 @@
 package com.sap.school.common;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.CheckedTextView;
 
+import com.sap.school.ApplicationContextProvider;
 import com.sap.school.R;
 import com.thoughtbot.expandablecheckrecyclerview.viewholders.CheckableChildViewHolder;
 
@@ -16,6 +19,16 @@ public class MultiCheckChapterViewHolder extends CheckableChildViewHolder {
     super(itemView);
     childCheckedTextView =
         (CheckedTextView) itemView.findViewById(R.id.list_item_multicheck_chapter_name);
+    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
+
+    String roll_id = sharedPref.getString("roll_id", null); // getting String
+    String lesson;
+    if (roll_id.equals("2")) {
+      //childCheckedTextView.setVisibility(View.VISIBLE);
+    }
+    else{
+      childCheckedTextView.setCheckMarkDrawable(null);
+    }
   }
 
   @Override

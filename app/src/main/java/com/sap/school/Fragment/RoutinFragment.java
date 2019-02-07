@@ -95,8 +95,14 @@ public class RoutinFragment extends Fragment {
 
     private void getClassRoutine(String user_id, String role_id)
     {
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity());
+        roll_id = sharedPref.getString("roll_id", null); // getting String
         String wsLink = AppConstants.BaseURL+"TeacherRoutine";
         //web method call
+        if (role_id.equals("4")) {
+             wsLink = AppConstants.BaseURL+"ClassRoutine";
+        }
         showProgressUI("Loading...");
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -111,8 +117,10 @@ public class RoutinFragment extends Fragment {
         try {
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", role_id);
-            loginJson.put("class_id", "");
-            loginJson.put("section_id", "");
+            if (role_id.equals("2")) {
+                loginJson.put("class_id", "");
+                loginJson.put("section_id", "");
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -121,7 +129,7 @@ public class RoutinFragment extends Fragment {
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "130");
+            ws_dataObj.put("WS_CODE", "230");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,7 +153,7 @@ public class RoutinFragment extends Fragment {
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = SPUtils.getInstance().getString("day");
                                     if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
-                                        mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, "11am - 11:45am"));
+                                        mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
                                     }
                                 }
                             }

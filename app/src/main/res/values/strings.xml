@@ -22,6 +22,9 @@
     <string name="thirtyText">30 %</string>
     <string name="leassonplanText">Lesson plan completed</string>
     <string name="classFiveText">Class-V</string>
+    <string name="selectDate">Select Date</string>
+    <string name="btnGo">GO</string>
+
     <string name="englishText">English</string>
     <string name="mathText">Mathematics</string>
     <string name="timeText">11am - 11:45am</string>
@@ -54,6 +57,7 @@
     <string name="searchText">Search By students name</string>
     <string name="routineText">Routine</string>
     <string name="examText">Exam Schedule</string>
+    <string name="todaysClassPlanText">Todays Class Plan</string>
 
     <string name="markAttendencetext">Mark Attendence</string>
     <string name="rollNoText">Roll No</string>

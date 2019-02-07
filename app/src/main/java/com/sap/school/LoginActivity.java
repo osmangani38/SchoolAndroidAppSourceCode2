@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.blankj.utilcode.util.ObjectUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.gson.Gson;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.Request;
 import com.itheima.retrofitutils.listener.HttpResponseListener;
@@ -26,6 +28,7 @@ import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
 import com.sap.school.PojoClass.AttendancePogoClass;
+import com.sap.school.PojoClass.ProfilePojoClass;
 import com.sap.school.PojoClass.StudentInfoPojoClass;
 import com.sap.utils.AppConstants;
 
@@ -69,7 +72,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         passwordTF=(EditText) findViewById(R.id.password);
         closeButton=(Button)findViewById(R.id.closeButton);
         valueType=getIntent().getStringExtra("valueType");
-        emailTF.setText("300313");
+        emailTF.setText("282521");
+        //emailTF.setText("191701043131611169");
         passwordTF.setText("password");
     }
     private void navigate(){
@@ -123,6 +127,88 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         }
     }
+    private void getProfileData(){
+        {
+            //showProgressUI(AppConstants.Loading);
+            String wsLink = AppConstants.BaseURL+"Profile";
+            //web method call
+            JSONObject loginJson = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            String roll_id;
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            roll_id = sharedPref.getString("roll_id", null); // getting String
+
+            String user_id = SPUtils.getInstance().getString("user_id");
+            try {
+                loginJson.put("role_id",roll_id );
+                loginJson.put("user_id", user_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(loginJson);
+            JSONObject ws_dataObj = new JSONObject();
+            try {
+                ws_dataObj.put("WS_DATA", jsonArray);
+                ws_dataObj.put("WS_CODE", "110");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String json = ws_dataObj.toString();
+            ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+                @Override
+                public void responseStatus(final int status, final Object data) {
+                    if (status == 200) {
+                        // List<NotificationItem> arrTmp = new ArrayList<>();
+                        try{
+                            ResponseStatus responseStatus = new ResponseStatus((String)data);
+                            if (responseStatus.isSuccess()) {
+                                dismissProgressUI();
+                                JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                                JSONObject jsonObjItm = jsonArray.getJSONObject(0);
+                                Gson gson = new Gson();
+                                String userJson = gson.toJson(jsonObjItm);
+                                final ProfilePojoClass profileObject = new ProfilePojoClass();
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("username", responseStatus.parseName());
+                                editor.commit();
+                                profileObject.setName(responseStatus.parseName());
+                                profileObject.setDob(responseStatus.parseDOB());
+                                profileObject.setGender(responseStatus.parseGender());
+
+                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
+                                LoginActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismissProgressUI();
+                                        navigate();
+
+                                    }
+                                });
+                            }
+                            else {
+                                ToastUtils.showShort(responseStatus.response_message);
+                                dismissProgressUI();
+                            }
+                            LoginActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                }
+                            });
+                        }catch (Exception ex){ex.printStackTrace();}
+
+
+                    }else{
+                        Log.d("Webservice","failed");
+                        dismissProgressUI();
+                    }
+                }
+            });
+
+        }
+    }
+
     private void loginWS(String username, String password)
     {
         showProgressUI(AppConstants.Loading);
@@ -171,8 +257,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             LoginActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    dismissProgressUI();
-                                    navigate();
+                                   // dismissProgressUI();
+                                    getProfileData();
                                 }
                             });
                         }

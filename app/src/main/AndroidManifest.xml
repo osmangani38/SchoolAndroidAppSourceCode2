@@ -43,6 +43,8 @@
         <activity android:name=".ExamScheduleScreenActivity"> </activity>
         <activity android:name=".AppleLeaveScreenActivity"> </activity>
         <activity android:name=".SubjectPlanDetailsActivity"> </activity>
+        <activity android:name=".ViewTodaysClassPlan"> </activity>
+        <activity android:name=".ViewMoreClassPlan"> </activity>
 
     </application>
 

@@ -2,7 +2,9 @@ package com.sap.school;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.sap.school.Fragment.RoutinFragment;
+import com.sap.utils.AppConstants;
 
 public class RoutinScreenActivity extends BaseActivity implements View.OnClickListener{
     ViewPager viewPager;
@@ -232,6 +235,13 @@ public class RoutinScreenActivity extends BaseActivity implements View.OnClickLi
         selectSectionButton=(LinearLayout)findViewById(R.id.selectSectionButton);
         classTextView = (TextView) findViewById(R.id.classTextView);
         sectionTextView = (TextView) findViewById(R.id.sectionTextV);
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( RoutinScreenActivity.this);
+        roll_id = sharedPref.getString("roll_id", null); // getting String
+        if (roll_id.equals("4")) {
+            selectClassButton.setVisibility(View.GONE);
+            selectSectionButton.setVisibility(View.GONE);
+        }
     }
 
     @Override

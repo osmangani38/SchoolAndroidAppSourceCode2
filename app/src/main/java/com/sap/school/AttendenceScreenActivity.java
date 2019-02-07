@@ -122,9 +122,14 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                             });
                         }
                         else {
-                            attendenceButton.setVisibility(View.GONE);
-                            dismissProgressUI();
-                            ToastUtils.showShort(responseStatus.response_message);
+                            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    attendenceButton.setVisibility(View.GONE);
+                                    dismissProgressUI();
+                                    ToastUtils.showShort("Data Not Found.");                                }
+                            });
+
                         }
                         AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
                             @Override

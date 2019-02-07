@@ -1,9 +1,12 @@
 package com.sap.school.common;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sap.school.ApplicationContextProvider;
 import com.sap.school.PojoClass.LessonPOJO;
 import com.sap.school.PojoClass.MultiCheckLesson;
 import com.sap.school.PojoClass.ChapterPOJO;
@@ -26,6 +29,15 @@ public class MultiCheckLessonAdapter extends
   public MultiCheckChapterViewHolder onCreateCheckChildViewHolder(ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
         .inflate(R.layout.list_item_child, parent, false);
+    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
+
+    String roll_id = sharedPref.getString("roll_id", null); // getting String
+    String lesson;
+    if (roll_id.equals("2")) {
+
+    }
+    else{
+    }
     return new MultiCheckChapterViewHolder(view);
   }
 

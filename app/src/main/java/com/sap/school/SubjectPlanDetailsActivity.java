@@ -131,6 +131,12 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   {
     showProgressUI(AppConstants.Loading);
     String wsLink = AppConstants.BaseURL+"Syllabus";
+    String roll_id;
+    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( SubjectPlanDetailsActivity.this);
+    roll_id = sharedPref.getString("roll_id", null); // getting String
+    if (roll_id.equals("4")) {
+       wsLink = AppConstants.BaseURL+"ClassPlan";
+    }
     //web method call
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
@@ -146,8 +152,13 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject ws_dataObj = new JSONObject();
     try {
       ws_dataObj.put("WS_DATA", jsonArray);
-      ws_dataObj.put("WS_CODE", "10");
-    } catch (JSONException e) {
+      if (roll_id.equals("4")) {
+        ws_dataObj.put("WS_CODE", "260");
+      }
+      else {
+        ws_dataObj.put("WS_CODE", "10");
+      }
+      } catch (JSONException e) {
       e.printStackTrace();
     }
     String json = ws_dataObj.toString();
@@ -194,8 +205,6 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
                   recyclerView.setLayoutManager(layoutManager);
                   recyclerView.setAdapter(adapter);
                   adapter.notifyDataSetChanged();
-
-
                 }
               });
             }

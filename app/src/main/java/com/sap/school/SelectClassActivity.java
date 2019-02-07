@@ -59,14 +59,14 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void SelectClassInfo() {
-        selectPojoClassArrayList.add(new SelectPojoClass("01","V","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("02","VI","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("03","VII","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("04","VIII","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("05","IX","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("06","X","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("07","XI","Class","01","A"));
-        selectPojoClassArrayList.add(new SelectPojoClass("08","XII","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("01","V","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("02","VI","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("03","VII","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("04","VIII","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("05","IX","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("06","X","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("07","XI","Class","01","A"));
+//        selectPojoClassArrayList.add(new SelectPojoClass("08","XII","Class","01","A"));
         selectInfoReyclerViewAdapter = new SelectInfoReyclerViewAdapter(getApplication(), selectPojoClassArrayList);
         selectInfoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         selectInfoRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -212,7 +212,16 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(type.equals("Student"))
+                    if(type.equals("classPlan"))
+                    {
+                        Intent j = new Intent(SelectClassActivity.this, ViewMoreClassPlan.class);
+//                        j.putExtra("className",classAndSection);
+//                        j.putExtra("classId",selectPojoClassArrayList.get(i).getId());
+//                        j.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
+                        startActivity(j);
+
+                    }
+                    else if(type.equals("Student"))
                     {
                         //if(i==0)
                         {

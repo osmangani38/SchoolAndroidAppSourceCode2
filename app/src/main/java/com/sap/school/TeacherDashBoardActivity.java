@@ -2,7 +2,9 @@ package com.sap.school;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
     ArrayList<InfoPojoClass>infoPojoClassArrayList;
     ArrayList<ClassOverViewPojoClass>classOverViewPojoClassArrayList;
     ArrayList<ClassRoutinePojoClass>classRoutinePojoClassArrayList;
+    TextView fullName;
     private DrawerLayout drawer;
     RelativeLayout toggleButton;
     RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,myProfile,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton;
@@ -101,6 +104,9 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
         infoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         infoRecyclerView.setItemAnimator(new DefaultItemAnimator());
         infoRecyclerView.setAdapter(infoRecyclerViewAdapter);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( TeacherDashBoardActivity.this);
+        String name = sharedPref.getString("username", null); // getting String
+        fullName.setText(name);
     }
 
     private void initView() {
@@ -133,7 +139,7 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
         schemesNavigationButton=(RelativeLayout)findViewById(R.id.schemesNavigationButton);
         feedbackNavigationButton=(RelativeLayout)findViewById(R.id.feedbackNavigationButton);
         logOutNavigationButton=(RelativeLayout)findViewById(R.id.logOutNavigationButton);
-
+        fullName = (TextView) findViewById(R.id.fullName);
     }
 
     @Override
@@ -167,14 +173,16 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
                 closeDrawer();
                 break;
             case R.id.classPlanNavigationButton:
-                startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+              //  startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                startActivity(new Intent(getApplication(),ViewTodaysClassPlan.class));
                 closeDrawer();
                 break;
                 case R.id.markSheetEntryNavigationButton:
                 closeDrawer();
                 break;
             case R.id.classLogNavigationButton:
-                startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                //startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                startActivity(new Intent(getApplication(),ViewTodaysClassPlan.class));
                 closeDrawer();
                 break;
             case R.id.questionBankNavigationButton:
@@ -248,7 +256,9 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
                         //startActivity(new Intent(getApplication(),AttendenceScreenActivity.class));
                     }else if(position==2)
                     {
-                        startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                        startActivity(new Intent(getApplication(),ViewTodaysClassPlan.class));
+
+                       // startActivity(new Intent(getApplication(),ClassPlanActivity.class));
                     }else if(position==3)
                     {
                         startActivity(new Intent(getApplication(),ClassPlanActivity.class));
