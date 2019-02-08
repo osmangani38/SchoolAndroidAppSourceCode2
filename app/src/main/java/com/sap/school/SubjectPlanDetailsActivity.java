@@ -47,7 +47,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
   TextView subjectName;
-  String classid="", subjectid="",subject_name = "";
+  String classid="", subjectid="",subject_name = "",type = "",section_id = "0";
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -56,12 +56,12 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     setListner();
 
     Intent intent = getIntent();
-    String str = intent.getStringExtra("type");
+    type = intent.getStringExtra("type");
     classid = intent.getStringExtra("class_id");
     subjectid = intent.getStringExtra("subject_id");
+    section_id = intent.getStringExtra("section_id");
+
     subject_name = intent.getStringExtra("subject_name");
-
-
     String user_id = SPUtils.getInstance().getString("user_id");
     String roll_id;
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SubjectPlanDetailsActivity.this);
@@ -137,13 +137,17 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (roll_id.equals("4")) {
        wsLink = AppConstants.BaseURL+"ClassPlan";
     }
+    else if (roll_id.equals("2") && type.equals("ClassLog")){
+      wsLink = AppConstants.BaseURL+"ClassLog";
+    }
     //web method call
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
       loginJson.put("user_id", user_id);
       loginJson.put("role_id", role_id);
-      loginJson.put("class_id", class_id);
+      loginJson.put("class_id", classid);
+      loginJson.put("section_id", section_id);
       loginJson.put("subject_id", subject_id);
     } catch (JSONException e) {
       e.printStackTrace();
@@ -154,6 +158,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       ws_dataObj.put("WS_DATA", jsonArray);
       if (roll_id.equals("4")) {
         ws_dataObj.put("WS_CODE", "260");
+      }
+      else if (roll_id.equals("2") && type.equals("ClassLog")){
+        ws_dataObj.put("WS_CODE", "165");
       }
       else {
         ws_dataObj.put("WS_CODE", "10");

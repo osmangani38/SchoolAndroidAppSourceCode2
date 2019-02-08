@@ -44,7 +44,6 @@ public class LessonDataFactory {
     {
       try{
         JSONObject jsonObjItmSection = savedArray.getJSONObject(i);
-
         Log.d("","try'");
         JSONArray chapters = new JSONArray() ;
         String roll_id;
@@ -52,13 +51,16 @@ public class LessonDataFactory {
         roll_id = sharedPref.getString("roll_id", null); // getting String
         String lesson;
         if (roll_id.equals("2")) {
-           chapters = jsonObjItmSection.getJSONArray("topic");
+          if (jsonObjItmSection.has("topic")) {
+            chapters = jsonObjItmSection.getJSONArray("topic");
+          }
         }
         else {
           //chapters.put(jsonObjItmSection.getString("topic"));
         }
-        if (roll_id.equals("2")) {
-          list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+        if (roll_id.equals("2") && jsonObjItmSection.has("topic")) {
+            list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+
         }
         else {
           ArrayList getArrayOfLessons = new ArrayList<>();
@@ -113,7 +115,7 @@ public class LessonDataFactory {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
        String roll_id = sharedPref.getString("roll_id", null); // getting String
         String lesson;
-        if (roll_id.equals("2")) {
+        if (roll_id.equals("2") && chapters.length()>1) {
           JSONObject jsonObjItmSection = chapters.getJSONObject(i);
           Log.d("","try'");
           ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));

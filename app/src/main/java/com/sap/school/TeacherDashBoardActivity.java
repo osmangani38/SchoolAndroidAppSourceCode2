@@ -261,7 +261,10 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
                        // startActivity(new Intent(getApplication(),ClassPlanActivity.class));
                     }else if(position==3)
                     {
-                        startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                        Intent gonext=new Intent(getApplication(),SelectClassActivity.class);
+                        gonext.putExtra("type","ClassLog");
+                        startActivity(new Intent(gonext));
+
                     }else if(position==4)
                     {
                         startActivity(new Intent(getApplication(),RoutinScreenActivity.class));

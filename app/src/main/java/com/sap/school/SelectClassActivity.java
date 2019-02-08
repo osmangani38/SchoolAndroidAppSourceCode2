@@ -212,6 +212,18 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(type.equals("ClassLog"))
+                    {
+                        Intent j = new Intent(SelectClassActivity.this, SubjectPlanDetailsActivity.class);
+                       j.putExtra("type","ClassLog");
+                        j.putExtra("class_id",selectPojoClassArrayList.get(i).getId());
+                        j.putExtra("subject_id",selectPojoClassArrayList.get(i).getSectionId());
+
+//                        j.putExtra("classId",selectPojoClassArrayList.get(i).getId());
+//                        j.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
+                        startActivity(j);
+
+                    }
                     if(type.equals("classPlan"))
                     {
                         Intent j = new Intent(SelectClassActivity.this, ViewMoreClassPlan.class);
