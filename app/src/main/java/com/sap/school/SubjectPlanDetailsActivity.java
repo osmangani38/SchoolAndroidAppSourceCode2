@@ -47,7 +47,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
   TextView subjectName;
-  String classid="", subjectid="",subject_name = "",type = "",section_id = "0";
+  String user_id, roll_id, classid="", subjectid="",subject_name = "",type = "",section_id = "0", plan_date;
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -60,10 +60,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     classid = intent.getStringExtra("class_id");
     subjectid = intent.getStringExtra("subject_id");
     section_id = intent.getStringExtra("section_id");
-
+    plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
-    String user_id = SPUtils.getInstance().getString("user_id");
-    String roll_id;
+    user_id = SPUtils.getInstance().getString("user_id");
+
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SubjectPlanDetailsActivity.this);
     roll_id = sharedPref.getString("roll_id", null); // getting String
     if (StringUtils.isEmpty(roll_id)){
@@ -85,14 +85,6 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     adapter = new MultiCheckLessonAdapter(makeMultiCheckGenres());
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(adapter);
-
-    /*adapter.setOnGroupClickListener(new OnGroupClickListener() {
-      @Override
-      public boolean onGroupClick(int flatPos) {
-        Toast.makeText(SubjectPlanDetailsActivity.this, "Parent"+adapter.getGroups().get(flatPos).getTitle(), Toast.LENGTH_SHORT).show();
-        return false;
-      }
-    });*/
 
   }
 
@@ -246,28 +238,114 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   }
 
   private void SubmitInfo() {
-    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(SubjectPlanDetailsActivity.this);
-    LayoutInflater inflater = LayoutInflater.from(SubjectPlanDetailsActivity.this);
-    final View convertView = (View) inflater.inflate(R.layout.custom_submit_class_plan_page_popup_item, null);
-    Button goToDashBoardButton,makeOtherPlanButton;
-    alertDialog.setView(convertView);
-    final AlertDialog ad = alertDialog.show();
-    goToDashBoardButton=(Button)convertView.findViewById(R.id.goToDashBoardButton);
-    makeOtherPlanButton=(Button)convertView.findViewById(R.id.makeOtherPlanButton);
-    goToDashBoardButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        //finish();
-        startActivity(new Intent(getApplication(),TeacherDashBoardActivity.class));
-        finish();
 
-      }
-    });
+    String topic_id = AppConstants.GLOBAL_TOPIC_ID;
+    topic_id = topic_id.replaceAll(",$", "");
+    //ToastUtils.showShort(topic_id);
+    submitClassPlan(user_id, roll_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
 
-    makeOtherPlanButton.setOnClickListener(new View.OnClickListener() {
+
+
+  }
+
+  private void submitClassPlan(String user_id, String role_id, String plan_date, String class_id,
+                               String section_id, String subject_id, String topic_id, String remarks)
+  {
+    showProgressUI(AppConstants.Loading);
+    String wsLink = AppConstants.BaseURL+"SaveClassPlan";
+    //web method call
+    JSONObject loginJson = new JSONObject();
+    JSONArray jsonArray = new JSONArray();
+    try {
+      loginJson.put("user_id", user_id);
+      loginJson.put("role_id", role_id);
+      loginJson.put("plan_date", plan_date);
+      loginJson.put("class_id", class_id);
+      loginJson.put("section_id", section_id);
+      loginJson.put("subject_id", subject_id);
+      loginJson.put("topic_id", topic_id);
+      loginJson.put("remarks", remarks);
+
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    jsonArray.put(loginJson);
+    JSONObject ws_dataObj = new JSONObject();
+    try {
+      ws_dataObj.put("WS_DATA", jsonArray);
+      ws_dataObj.put("WS_CODE", "161");
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    String json = ws_dataObj.toString();
+    ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
       @Override
-      public void onClick(View v) {
-        startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+      public void responseStatus(final int status, final Object data) {
+        if (status == 200) {
+          // List<NotificationItem> arrTmp = new ArrayList<>();
+          try{
+            ResponseStatus responseStatus = new ResponseStatus((String)data);
+            if (responseStatus.isSuccess()) {
+              dismissProgressUI();
+              final ArrayList mArrayList=new ArrayList<>();
+              if(responseStatus.jsonObject.getBoolean("status")){
+
+                SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(SubjectPlanDetailsActivity.this);
+                    LayoutInflater inflater = LayoutInflater.from(SubjectPlanDetailsActivity.this);
+                    final View convertView = (View) inflater.inflate(R.layout.custom_submit_class_plan_page_popup_item, null);
+                    Button goToDashBoardButton,makeOtherPlanButton;
+                    alertDialog.setView(convertView);
+                    final AlertDialog ad = alertDialog.show();
+                    goToDashBoardButton=(Button)convertView.findViewById(R.id.goToDashBoardButton);
+                    makeOtherPlanButton=(Button)convertView.findViewById(R.id.makeOtherPlanButton);
+                    goToDashBoardButton.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View view) {
+                        //finish();
+                        startActivity(new Intent(getApplication(),TeacherDashBoardActivity.class));
+                        finish();
+
+                      }
+                    });
+
+                    makeOtherPlanButton.setOnClickListener(new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                        startActivity(new Intent(getApplication(),ClassPlanActivity.class));
+                      }
+                    });
+                  }
+                });
+
+              }
+              SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  dismissProgressUI();
+
+                }
+              });
+            }
+            else {
+              ToastUtils.showShort(responseStatus.response_message);
+              dismissProgressUI();
+            }
+            SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
+              @Override
+              public void run() {
+                dismissProgressUI();
+              }
+            });
+          }catch (Exception ex){ex.printStackTrace();}
+
+
+        }else{
+          Log.d("Webservice","failed");
+          dismissProgressUI();
+        }
       }
     });
 

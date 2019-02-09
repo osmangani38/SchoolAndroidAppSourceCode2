@@ -41,7 +41,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
     ArrayList<PlanSectionPOJO> planSectionPOJOS;
     ArrayList<PlanSubjectPOJO> planSubjectPOJOS;
     JSONArray jsonArray = null;
-    String class_id, subject_id,subject_name;
+    String class_id, subject_id,subject_name, section_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
 
                                 PlanSectionPOJO obj = planSectionPOJOS.get(which);
                                 edtSelectSection.setText("Section "+ obj.getSection_name());
-
+                                section_id = obj.getSection_id();
                                 dialog.dismiss();
                             }
                         });
@@ -270,6 +270,8 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                     goNext.putExtra("class_id", class_id);
                     goNext.putExtra("subject_id", subject_id);
                     goNext.putExtra("subject_name", subject_name);
+                    goNext.putExtra("plan_date", edtSelectDate.getText().toString());
+                    goNext.putExtra("section_id", section_id);
                     startActivity(goNext);
                 }else{
                     Toast.makeText(ClassPlanActivity.this,"Please Select Class and Subject", Toast.LENGTH_SHORT).show();

@@ -348,7 +348,7 @@ public class TeacherDashBoardActivity extends AppCompatActivity implements View.
         public MYViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_class_routine_page_item, parent, false);
             return new MYViewHolderClass(itemView);
-        }
+          }
 
         @Override
         public void onBindViewHolder(@NonNull MYViewHolderClass holder, int position) {

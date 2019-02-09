@@ -228,8 +228,8 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
                     {
                         Intent j = new Intent(SelectClassActivity.this, ViewMoreClassPlan.class);
 //                        j.putExtra("className",classAndSection);
-//                        j.putExtra("classId",selectPojoClassArrayList.get(i).getId());
-//                        j.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
+                        j.putExtra("classId",selectPojoClassArrayList.get(i).getId());
+                        j.putExtra("sectionId",selectPojoClassArrayList.get(i).getSectionId());
                         startActivity(j);
 
                     }

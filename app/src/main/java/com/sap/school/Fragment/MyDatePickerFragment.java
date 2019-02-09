@@ -29,7 +29,7 @@ public class MyDatePickerFragment extends DialogFragment {
             new DatePickerDialog.OnDateSetListener() {
                 public void onDateSet(DatePicker view, int year, int month, int day) {
                     EditText tv1= (EditText) getActivity().findViewById(R.id.edtSelectDate);
-                    tv1.setText(view.getDayOfMonth()+"/"+(view.getMonth()+1) +"/"+view.getYear());
+                    tv1.setText(view.getYear() +"-"+(view.getMonth()+1)+"-"+view.getDayOfMonth());
 
                 }
             };

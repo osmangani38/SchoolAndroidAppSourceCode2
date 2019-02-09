@@ -84,34 +84,37 @@
 
     </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnMore"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_margin="30dp"
-                android:layout_height="wrap_content"
-                android:text="View More Class Plan"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:background="@color/allAppColor"
-                android:textColor="#ffffff"
-                android:layout_alignParentRight="true"
-                android:textStyle="normal"
-                android:textSize="12dp"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/examRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/btnMore"
+                android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginBottom="15dp"/>
+                android:layout_above="@+id/btnMore"/>
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btnMore"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:text="View More Class Plan"
+                android:layout_alignParentBottom="true"
+                android:background="@color/allAppColor"
+                android:textColor="#ffffff"
+                android:textStyle="normal"
+                android:textSize="12dp"/>
+
+        </RelativeLayout>
 
 </LinearLayout>

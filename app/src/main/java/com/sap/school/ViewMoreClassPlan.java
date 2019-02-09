@@ -1,50 +1,79 @@
 package com.sap.school;
 
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.sap.handler.IWSCallHandler;
+import com.sap.handler.ResponseStatus;
+import com.sap.handler.ServerComHandler;
+import com.sap.school.Fragment.MyDatePickerFragment;
 import com.sap.school.PojoClass.DateItem;
+import com.sap.school.PojoClass.TodaysClassPlanPOJO;
 import com.sap.school.common.ExamScheduleAdapter;
 import com.sap.school.PojoClass.ExamSchedulePOJO;
 import com.sap.school.PojoClass.GeneralItem;
 import com.sap.school.PojoClass.ListItem;
 import com.sap.school.R;
 import com.sap.school.common.TodaysClassPlan;
+import com.sap.school.common.TodaysPlanRecyclerAdapter;
+import com.sap.utils.AppConstants;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
-
-public class ViewMoreClassPlan extends AppCompatActivity implements View.OnClickListener {
+public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListener {
     
     RecyclerView routinRecyclerView;
     RelativeLayout backButton;
-    Button btnAdd;
+    Button btnAdd, btnGo;
+    TextView fromTextView, toDateTV;
     ArrayList<ExamSchedulePOJO> classRoutinePojoClassArrayList;
     private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
     List<ListItem> consolidatedList = new ArrayList<>();
-
-    private TodaysClassPlan adapter;
+    String classId, sectionId;
+    private TodaysPlanRecyclerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_classplan_screen);
         initView();
-        croutinInfo();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            classId= getIntent().getStringExtra("classId");
+            sectionId= getIntent().getStringExtra("sectionId");
+        }
         setListner();
     }
 
@@ -52,6 +81,7 @@ public class ViewMoreClassPlan extends AppCompatActivity implements View.OnClick
         backButton.setOnClickListener(this);
        // btnMore.setOnClickListener(this);
         btnAdd.setOnClickListener(this);
+        btnGo.setOnClickListener(this);
     }
 
 
@@ -73,11 +103,23 @@ public class ViewMoreClassPlan extends AppCompatActivity implements View.OnClick
 //                i.putExtra("page", "1");
                 j.putExtra("type","classPlan");
                 startActivity(j);
+                break;
+            case R.id.btnGo:
+                String user_id = SPUtils.getInstance().getString("user_id");
+                String roll_id;
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ViewMoreClassPlan.this);
+                roll_id = sharedPref.getString("roll_id", null); // getting String
+                if (StringUtils.isEmpty(roll_id)){
+                    roll_id = "2";
+                }
+
+                croutinInfo("11", roll_id, "6", sectionId, fromTextView.getText().toString(), toDateTV.getText().toString());
+                break;
         }
     }
 
 
-    private void croutinInfo() {
+   /* private void croutinInfo() {
         myOptions.add(new ExamSchedulePOJO("Life Science","Class - V | Section - B","11 am - 2.00 pm", "02 February, 2019"));
         myOptions.add(new ExamSchedulePOJO("Hindi","Class - V | Section - B","11 am - 2.00 pm", "02 February, 2019"));
         myOptions.add(new ExamSchedulePOJO("English","Class - V | Section - B","11 am - 2.00 pm", "04 February, 2019"));
@@ -101,16 +143,176 @@ public class ViewMoreClassPlan extends AppCompatActivity implements View.OnClick
         routinRecyclerView.setItemAnimator(new DefaultItemAnimator());
         routinRecyclerView.setAdapter(adapter);
 
-    }
+    }*/
 
     private void initView() {
         backButton=(RelativeLayout)findViewById(R.id.backButton);
         routinRecyclerView = (RecyclerView)findViewById(R.id.examRecyclerView);
        // btnMore = (Button)findViewById(R.id.btnMore);
         btnAdd = (Button)findViewById(R.id.btnAdd);
+        btnGo = (Button) findViewById(R.id.btnGo);
+        fromTextView = (TextView)findViewById(R.id.fromTextView);
+        toDateTV = (TextView) findViewById(R.id.toDateTV);
         classRoutinePojoClassArrayList=new ArrayList<>();
         routinRecyclerView.setHasFixedSize(true);
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+                fromTextView.setText(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+
+        final DatePickerDialog.OnDateSetListener todate = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+                toDateTV.setText(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+        fromTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(ViewMoreClassPlan.this, fromdate, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        toDateTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(ViewMoreClassPlan.this, todate, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
     }
+
+    private void croutinInfo(String user_id, String role_id, String class_id, String section_id,
+                             String date_from, String date_to )
+    {
+        showProgressUI(AppConstants.Loading);
+        String wsLink = AppConstants.BaseURL+"ClassPlan";
+        //web method call
+        JSONObject loginJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            loginJson.put("user_id", user_id);
+            loginJson.put("role_id", role_id);
+            loginJson.put("class_id", class_id);
+            loginJson.put("section_id", section_id);
+            loginJson.put("date_from", date_from);
+            loginJson.put("date_to", date_to);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(loginJson);
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray);
+            ws_dataObj.put("WS_CODE", "160");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+            @Override
+            public void responseStatus(final int status, final Object data) {
+                if (status == 200) {
+                    // List<NotificationItem> arrTmp = new ArrayList<>();
+                    try{
+                        ResponseStatus responseStatus = new ResponseStatus((String)data);
+                        if (responseStatus.isSuccess()) {
+                            dismissProgressUI();
+                            final ArrayList<TodaysClassPlanPOJO> mArrayList=new ArrayList<>();
+                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                            int count = jsonArray.length();
+                            for (int i = 0; i < count; i++) {
+                                JSONObject jsonObjItm = jsonArray.getJSONObject(i);
+                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
+                                TodaysClassPlanPOJO todaysClassPlanPOJO = new TodaysClassPlanPOJO();
+
+                                todaysClassPlanPOJO.setClass_date(jsonObjItm.getString("date"));
+                                todaysClassPlanPOJO.setSubject(jsonObjItm.getString("subject"));
+                                todaysClassPlanPOJO.setRemarks(jsonObjItm.getString("remarks"));
+
+                                JSONArray jsonArraySection = jsonObjItm.getJSONArray("lesson");
+                                int countSection = jsonArraySection.length();
+                                String final_text = "";
+                                for (int j = 0; j < countSection; j++) {
+                                    JSONObject jsonObjItmSection = jsonArraySection.getJSONObject(j);
+                                    todaysClassPlanPOJO.setLesson_name(jsonObjItmSection.getString("name"));
+                                    JSONArray jsonObjItmSectionJSONArray = jsonObjItmSection.getJSONArray("topic");
+                                    for (int k = 0; k < jsonObjItmSectionJSONArray.length(); k++) {
+                                        JSONObject jsonArraySectionJSONObject = jsonObjItmSectionJSONArray.getJSONObject(k);
+                                        String topic_name = jsonArraySectionJSONObject.getString("name");
+                                        System.out.println("topic" +topic_name);
+
+                                        final_text = final_text + topic_name + ", ";
+
+                                    }
+                                    final_text = final_text.replaceAll(", $", "");
+                                    todaysClassPlanPOJO.setTopic_name(final_text);
+                                }
+
+                                mArrayList.add(todaysClassPlanPOJO);
+
+                            }
+
+                            ViewMoreClassPlan.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter = new TodaysPlanRecyclerAdapter(ViewMoreClassPlan.this, mArrayList);
+                                    LinearLayoutManager layoutManager = new LinearLayoutManager(ViewMoreClassPlan.this);
+                                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                    routinRecyclerView.setLayoutManager(layoutManager);
+                                    routinRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                    routinRecyclerView.setAdapter(adapter);
+                                }
+                            });
+                        }
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        ViewMoreClassPlan.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
+                    }catch (Exception ex){ex.printStackTrace();}
+
+
+                }else{
+                    Log.d("Webservice","failed");
+                    dismissProgressUI();
+                }
+            }
+        });
+
+    }
+
 
 
     private HashMap<String, List<ExamSchedulePOJO>> groupDataIntoHashMap(List<ExamSchedulePOJO> listOfPojosOfJsonArray) {
