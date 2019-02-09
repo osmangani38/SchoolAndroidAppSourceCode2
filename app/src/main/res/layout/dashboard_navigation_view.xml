@@ -101,7 +101,7 @@
                     android:id="@+id/healthInfoNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -116,24 +116,25 @@
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
         android:background="@color/silverColor"/>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:visibility="visible">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:text="@string/studentText"
-                        android:textColor="#019ae8"
-                        android:textSize="16dp" />
-                </RelativeLayout>
+                <!--<RelativeLayout-->
+                    <!--android:id="@+id/student2"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="45dp"-->
+                    <!--android:visibility="visible">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_marginLeft="20dp"-->
+                        <!--android:text="@string/studentText"-->
+                        <!--android:textColor="#019ae8"-->
+                        <!--android:textSize="16dp" />-->
+                <!--</RelativeLayout>-->
                 <RelativeLayout
                     android:id="@+id/gameAndSportsNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -147,7 +148,7 @@
                     android:id="@+id/eventsNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,7 +162,7 @@
                     android:id="@+id/coCurricularNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -176,19 +177,6 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/silverColor"/>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:visibility="visible">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:text="@string/acadamicText"
-                        android:textColor="#019ae8"
-                        android:textSize="16dp" />
-                </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/markSheetEntryNavigationButton"
                     android:layout_width="match_parent"
@@ -236,7 +224,7 @@
                     android:id="@+id/questionBankNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -255,7 +243,7 @@
                     android:id="@+id/reportIncidentNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -269,7 +257,7 @@
                     android:id="@+id/leaveOfAbsenseNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -283,7 +271,7 @@
                     android:id="@+id/schemesNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -297,7 +285,7 @@
                     android:id="@+id/feedbackNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

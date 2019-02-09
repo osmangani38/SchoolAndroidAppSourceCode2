@@ -103,6 +103,7 @@ android:scrollbarAlwaysDrawVerticalTrack="false">
                         android:layout_marginTop="15dp"
                         android:layout_marginLeft="10dp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         android:textColor="@color/blackColor"
                         android:text="@string/classOverflowText"/>
                     <android.support.v7.widget.RecyclerView

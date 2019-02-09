@@ -129,7 +129,12 @@ public class RoutinFragment extends Fragment {
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "230");
+            if (role_id.equals("4")) {
+                ws_dataObj.put("WS_CODE", "230");
+            }
+            else {
+                ws_dataObj.put("WS_CODE", "130");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -204,10 +209,10 @@ public class RoutinFragment extends Fragment {
     }
 
     private void croutinInfo() {
-        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Mathematics","Class - V | Section - B","11am - 11:45am"));
-        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Hindi","Class - V | Section - B","11am - 11:45am"));
-        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("English","Class - V | Section - B","11am - 11:45am"));
-        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Life Science","Class - V | Section - B","11am - 11:45am"));
+//        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Mathematics","Class - V | Section - B","11am - 11:45am"));
+//        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Hindi","Class - V | Section - B","11am - 11:45am"));
+//        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("English","Class - V | Section - B","11am - 11:45am"));
+//        classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("Life Science","Class - V | Section - B","11am - 11:45am"));
         routineRecyclerViewAdapter=new RoutineRecyclerViewAdapter(getActivity(),classRoutinePojoClassArrayList);
         routinRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         routinRecyclerView.setItemAnimator(new DefaultItemAnimator());

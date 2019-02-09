@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -39,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import static com.sap.school.PojoClass.LessonDataFactory.makeMultiCheckGenres;
 
@@ -47,6 +50,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
   TextView subjectName;
+  String stringSubjectName;
+  String fromDate;
+  String toDate;
   String user_id, roll_id, classid="", subjectid="",subject_name = "",type = "",section_id = "0", plan_date;
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +69,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
     user_id = SPUtils.getInstance().getString("user_id");
+    fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
+    toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
 
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SubjectPlanDetailsActivity.this);
     roll_id = sharedPref.getString("roll_id", null); // getting String
@@ -136,12 +144,24 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
-      loginJson.put("user_id", user_id);
+      //loginJson.put("user_id", user_id);
+           loginJson.put("user_id", "11");
+
       loginJson.put("role_id", role_id);
-      loginJson.put("class_id", classid);
-      loginJson.put("section_id", section_id);
-      loginJson.put("subject_id", subject_id);
-    } catch (JSONException e) {
+//      loginJson.put("class_id", classid);
+//      loginJson.put("section_id", section_id);
+      loginJson.put("class_id", "0");
+      loginJson.put("section_id", "0");
+      if (!StringUtils.isEmpty(subject_id)) {
+         loginJson.put("subject_id", subject_id);
+      }
+           if (roll_id.equals("2") && type.equals("ClassLog")) {
+//             loginJson.put("date_from", fromDate);
+//             loginJson.put("date_to", toDate);
+             loginJson.put("date_from", "2019-02-11");
+             loginJson.put("date_to", "2019-02-11");
+           }
+      } catch (JSONException e) {
       e.printStackTrace();
     }
     jsonArray.put(loginJson);
@@ -172,6 +192,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               dismissProgressUI();
               final ArrayList<ChapterPOJO> mArrayList=new ArrayList<>();
               JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+              JSONObject jsonObject = jsonArray.getJSONObject(0);
+              stringSubjectName = jsonObject.getString("subject");
               JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters", jsonArray);
               JSONArray savedArray = JSONSharedPreferences.loadJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters");
               Log.d("gg","aaa");
@@ -196,6 +218,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
                 @Override
                 public void run() {
                   dismissProgressUI();
+                  subjectName.setText(stringSubjectName);
                   recyclerView.setAdapter(null);
                   recyclerView.setLayoutManager(null);
                   recyclerView.removeAllViewsInLayout();
@@ -209,7 +232,14 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
             }
             else {
               ToastUtils.showShort(responseStatus.response_message);
-              dismissProgressUI();
+              SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                  dismissProgressUI();
+                  subjectName.setText("");
+                  recyclerView.setVisibility(View.GONE);
+                }
+              });
             }
             SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
               @Override

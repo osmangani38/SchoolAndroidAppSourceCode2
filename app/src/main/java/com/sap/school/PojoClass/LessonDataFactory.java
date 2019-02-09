@@ -116,10 +116,20 @@ public class LessonDataFactory {
        String roll_id = sharedPref.getString("roll_id", null); // getting String
         String lesson;
         if (roll_id.equals("2") && chapters.length()>1) {
-          JSONObject jsonObjItmSection = chapters.getJSONObject(i);
-          Log.d("","try'");
-          ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
-          list.add(queen);
+          Object intervention = chapters.get(i);
+     if (intervention instanceof JSONObject) {
+
+       JSONObject jsonObjItmSection = chapters.getJSONObject(i);
+       Log.d("", "try'");
+       ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+       list.add(queen);
+     }
+     else {
+       String id = String.valueOf(i);
+       String chapterName = chapters.getString(i);
+       ChapterPOJO queen = new ChapterPOJO(id, chapterName);
+       list.add(queen);
+     }
         }
         else {
           String  stringChapters = chapters.getString(i);

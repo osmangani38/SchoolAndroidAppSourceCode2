@@ -24,7 +24,8 @@ public class ResponseStatus {
     {
         try {
             jsonObject = new JSONObject(jsonResponse);
-            if(jsonObject.has("status")) {
+
+            if(jsonObject.has("status") && jsonObject.has("result") && !jsonObject.isNull("result")) {
                 message_code = jsonObject.getBoolean("status");
             }
 
