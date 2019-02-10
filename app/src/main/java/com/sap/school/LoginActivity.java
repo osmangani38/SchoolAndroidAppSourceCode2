@@ -72,19 +72,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         passwordTF=(EditText) findViewById(R.id.password);
         closeButton=(Button)findViewById(R.id.closeButton);
         valueType=getIntent().getStringExtra("valueType");
-        //emailTF.setText("282521");
-        //emailTF.setText("191701043131611169");
-        //passwordTF.setText("password");
+        emailTF.setText("282521");
+       // emailTF.setText("191701043131611169");
+        passwordTF.setText("password");
     }
     private void navigate(){
         if(StringUtils.equalsIgnoreCase(roll_id,"2"))
         {
             startActivity(new Intent(getApplicationContext(),TeacherDashBoardActivity.class));
-        }else if(StringUtils.equalsIgnoreCase(roll_id,"3"))
+        }else if(StringUtils.equalsIgnoreCase(roll_id,"4"))
 
         {
             startActivity(new Intent(getApplicationContext(),StudentDashboardActivity.class));
-        }else if(StringUtils.equalsIgnoreCase(roll_id,"4"))
+        }else if(StringUtils.equalsIgnoreCase(roll_id,"3"))
 
         {
             startActivity(new Intent(getApplicationContext(),ParentDashBoardActivity.class));

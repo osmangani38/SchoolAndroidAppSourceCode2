@@ -81,6 +81,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (!StringUtils.isEmpty(subject_name)){
         subjectName.setText("Subject :"+subject_name);
     }
+    if (roll_id.equals("4")){
+      submitClassButton.setVisibility(View.GONE);
+    }
   }
 
   private void initView() {
@@ -135,7 +138,12 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( SubjectPlanDetailsActivity.this);
     roll_id = sharedPref.getString("roll_id", null); // getting String
     if (roll_id.equals("4")) {
-       wsLink = AppConstants.BaseURL+"ClassPlan";
+      if (type.equals("StudentClassPlan")) {
+        wsLink = AppConstants.BaseURL + "ClassPlan";
+      } else if (type.equals("StudentClassLog"))
+        {
+        wsLink = AppConstants.BaseURL + "ClassLog";
+      }
     }
     else if (roll_id.equals("2") && type.equals("ClassLog")){
       wsLink = AppConstants.BaseURL+"ClassLog";
@@ -144,22 +152,24 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
-      //loginJson.put("user_id", user_id);
-           loginJson.put("user_id", "11");
+      loginJson.put("user_id", user_id);
+           //loginJson.put("user_id", "11");
 
       loginJson.put("role_id", role_id);
 //      loginJson.put("class_id", classid);
 //      loginJson.put("section_id", section_id);
-      loginJson.put("class_id", "0");
-      loginJson.put("section_id", "0");
+           if (roll_id.equals("2")) {
+        loginJson.put("class_id", "0");
+        loginJson.put("section_id", "0");
+      }
       if (!StringUtils.isEmpty(subject_id)) {
          loginJson.put("subject_id", subject_id);
       }
            if (roll_id.equals("2") && type.equals("ClassLog")) {
 //             loginJson.put("date_from", fromDate);
 //             loginJson.put("date_to", toDate);
-             loginJson.put("date_from", "2019-02-11");
-             loginJson.put("date_to", "2019-02-11");
+             loginJson.put("date_from", "2019-01-11");
+             loginJson.put("date_to", "2019-01-12");
            }
       } catch (JSONException e) {
       e.printStackTrace();
@@ -169,7 +179,16 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     try {
       ws_dataObj.put("WS_DATA", jsonArray);
       if (roll_id.equals("4")) {
-        ws_dataObj.put("WS_CODE", "260");
+        if (type.equals("StudentClassPlan")) {
+//             loginJson.put("date_from", fromDate);
+//             loginJson.put("date_to", toDate);
+          ws_dataObj.put("WS_CODE", "260");
+          loginJson.put("date_from", "2019-01-01");
+          loginJson.put("date_to", "2019-01-12");
+        }
+        else {
+          ws_dataObj.put("WS_CODE", "265");
+        }
       }
       else if (roll_id.equals("2") && type.equals("ClassLog")){
         ws_dataObj.put("WS_CODE", "165");

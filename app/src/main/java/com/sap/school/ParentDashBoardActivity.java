@@ -89,15 +89,15 @@ public class ParentDashBoardActivity extends AppCompatActivity implements View.O
     }
 
     private void Information() {
-        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
+      //  infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
         infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.attendenceText)));
         infoPojoClassArrayList.add(new InfoPojoClass("03",R.drawable.create_plan_ic_dashboard,getResources().getString(R.string.classPlanText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Schdule"));
+        //infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Schdule"));
         infoPojoClassArrayList.add(new InfoPojoClass("05",R.drawable.class_routine,getResources().getString(R.string.classRoutineText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,"Notice"));
-        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.leave_apply_ic_new,"Apply Leave"));
-        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"FeedBack"));
-        infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.events_ic_dashboard,getResources().getString(R.string.event)));
+       // infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,"Notice"));
+        //infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.leave_apply_ic_new,"Apply Leave"));
+       // infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"FeedBack"));
+       // infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.events_ic_dashboard,getResources().getString(R.string.event)));
         infoRecyclerViewAdapter = new InfoRecyclerViewAdapter(getApplication(), infoPojoClassArrayList);
         infoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         infoRecyclerView.setItemAnimator(new DefaultItemAnimator());

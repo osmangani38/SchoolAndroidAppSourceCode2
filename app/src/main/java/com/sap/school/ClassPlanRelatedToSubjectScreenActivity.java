@@ -25,6 +25,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
     RecyclerView classPlanRecyclerview;
     RelativeLayout backButton;
     TextView headerText;
+    String type;
     ClassPlassSubjectRecyclerViewAdapter classPlassSubjectRecyclerViewAdapter;
     ArrayList<ClassPlanSubjectPojoClass>classPlanSubjectPojoClassArrayList;
     @Override
@@ -61,6 +62,8 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
         classPlanSubjectPojoClassArrayList=new ArrayList<ClassPlanSubjectPojoClass>();
         Intent intent = getIntent();
         String str = intent.getStringExtra("isHomeTask");
+        type = intent.getStringExtra("type");
+
         if(isNullOrEmpty(str)){
 
         }
@@ -107,7 +110,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
             myViewHolderClass.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(i==3)
+                    //if(i==3)
                     {
                         Intent intent = getIntent();
                         String str = intent.getStringExtra("isHomeTask");
@@ -123,7 +126,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends AppCompatActivity i
                         }
                         if (goToClassPlan) {
                             Intent goNext = new Intent(getApplication(), SubjectPlanDetailsActivity.class);
-                            goNext.putExtra("type","StudentOrParrent");
+                            goNext.putExtra("type",type);
 
                             startActivity(goNext);
                         }

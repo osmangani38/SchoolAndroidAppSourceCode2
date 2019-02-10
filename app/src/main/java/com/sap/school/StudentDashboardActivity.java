@@ -2,7 +2,9 @@ package com.sap.school;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +23,28 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.sap.handler.IWSCallHandler;
+import com.sap.handler.ResponseStatus;
+import com.sap.handler.ServerComHandler;
 import com.sap.school.PojoClass.ClassOverViewPojoClass;
 import com.sap.school.PojoClass.ClassRoutinePojoClass;
 import com.sap.school.PojoClass.InfoPojoClass;
+import com.sap.utils.AppConstants;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class StudentDashboardActivity extends AppCompatActivity implements View.OnClickListener{
+public class StudentDashboardActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView infoRecyclerView,classOverviewRecyclerView,classRoutineRecyclerView;
     InfoRecyclerViewAdapter infoRecyclerViewAdapter;
+    TextView studentNameTV;
   ClassOverviewRecyclerviewAdapter classOverviewRecyclerviewAdapter;
    ClassRoutineRecyclerViewAdapter classRoutineRecyclerViewAdapter;
     ArrayList<InfoPojoClass> infoPojoClassArrayList;
@@ -40,7 +55,7 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
     RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,myProfile,eventsNavigationButton,
             coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,
             questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,
-            feedbackNavigationButton,logOutNavigationButton;
+            feedbackNavigationButton,logOutNavigationButton,dashBoard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +65,12 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
         Information();
         ClassOverView();
         ClassRoutinMethod();
+        getClassRoutine();
     }
 
     private void setListener() {
         toggleButton.setOnClickListener(this);
+        dashBoard.setOnClickListener(this);
         attendenceNavigationButton.setOnClickListener(this);
         healthInfoNavigationButton.setOnClickListener(this);
         myProfile.setOnClickListener(this);
@@ -82,30 +99,150 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
     }
 
     private void ClassOverView() {
-        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("30%","CLASS -V","ENGLISH"));
-        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("70%","CLASS -VI","HINDI"));
-        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("80%","CLASS -VII","ENGLISH"));
-        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("70%","CLASS -VI","HINDI"));
-        classOverviewRecyclerviewAdapter=new ClassOverviewRecyclerviewAdapter(getApplicationContext(),classOverViewPojoClassArrayList);
+//        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("30%","CLASS -V","ENGLISH"));
+//        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("70%","CLASS -VI","HINDI"));
+//        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("80%","CLASS -VII","ENGLISH"));
+//        classOverViewPojoClassArrayList.add(new ClassOverViewPojoClass("70%","CLASS -VI","HINDI"));
+//        classOverviewRecyclerviewAdapter=new ClassOverviewRecyclerviewAdapter(getApplicationContext(),classOverViewPojoClassArrayList);
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         classOverviewRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         classOverviewRecyclerView.setAdapter(classOverviewRecyclerviewAdapter);
     }
+    private void getClassRoutine()
+    {
+        String roll_id;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( StudentDashboardActivity.this);
+        roll_id = sharedPref.getString("roll_id", null); // getting String
+        String wsLink = AppConstants.BaseURL+"TeacherRoutine";
+        //web method call
+        if (roll_id.equals("4")) {
+            wsLink = AppConstants.BaseURL+"ClassRoutine";
+        }
+        String user_id = SPUtils.getInstance().getString("user_id");
 
+        showProgressUI("Loading...");
+        JSONObject loginJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        String classId = SPUtils.getInstance().getString("class");
+        String sectionId = SPUtils.getInstance().getString("section");
+        if (StringUtils.isEmpty(classId)) {
+            classId = "6";
+        }
+        if (StringUtils.isEmpty(sectionId)) {
+            sectionId = "2";
+        }
+        try {
+            loginJson.put("user_id", user_id);
+            loginJson.put("role_id", roll_id);
+            if (roll_id.equals("2")) {
+                loginJson.put("class_id", "");
+                loginJson.put("section_id", "");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(loginJson);
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray);
+            if (roll_id.equals("4")) {
+                ws_dataObj.put("WS_CODE", "230");
+            }
+            else {
+                ws_dataObj.put("WS_CODE", "130");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+            @Override
+            public void responseStatus(final int status, final Object data) {
+                if (status == 200) {
+                    // List<NotificationItem> arrTmp = new ArrayList<>();
+                    try{
+                        ResponseStatus responseStatus = new ResponseStatus((String)data);
+                        if (responseStatus.isSuccess()) {
+                            // dismissProgressUI();
+                            final ArrayList mArrayList=new ArrayList<>();
+                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                            int count = jsonArray.length();
+                            if (jsonArray !=null) {
+                                for (int i = 0; i < count; i++) {
+                                    JSONObject jsonObjItm = jsonArray.getJSONObject(i);
+                                    Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
+                                    String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
+                                    String day = SPUtils.getInstance().getString("day");
+                                    if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
+                                        //classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("MatheMatices","Class - V | Section - B","11am - 11:45am"));
+
+                                        mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
+                                    }
+                                }
+                            }
+                            else {
+                                ToastUtils.showShort("Data not found");
+                            }
+                            StudentDashboardActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                    update(mArrayList);
+                                }
+                            });
+                            StudentDashboardActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                }
+                            });
+                        }
+                        else {
+                            ToastUtils.showShort(responseStatus.response_message);
+                            dismissProgressUI();
+                        }
+                        StudentDashboardActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
+                    }catch (Exception ex){ex.printStackTrace();}
+
+
+                }else{
+                    Log.d("Webservice","failed");
+                    // dismissProgressUI();
+                }
+            }
+        });
+
+    }
+    public void update(ArrayList<ClassRoutinePojoClass> data) {
+        classRoutinePojoClassArrayList.clear();
+        classRoutinePojoClassArrayList.addAll(data);
+        classRoutineRecyclerView.removeAllViews();
+        classOverviewRecyclerView.invalidate();
+    }
     private void Information() {
-        infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
-        infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.attendenceText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("03",R.drawable.create_plan_ic_dashboard,getResources().getString(R.string.classPlanText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Shedule"));
-        infoPojoClassArrayList.add(new InfoPojoClass("05",R.drawable.class_routine,getResources().getString(R.string.classRoutineText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,getResources().getString(R.string.noticeText)));
-        infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.question_bank_ic_new,"Question Bank"));
-        infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"Feedback"));
-        infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.events_ic_dashboard,"Events"));
+       // infoPojoClassArrayList.add(new InfoPojoClass("01",R.drawable.home_task_ic_new,"Home Task"));
+        //infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.attendance_ic_dashboard,getResources().getString(R.string.attendenceText)));
+        infoPojoClassArrayList.add(new InfoPojoClass("02",R.drawable.create_plan_ic_dashboard,getResources().getString(R.string.classPlanText)));
+       // infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.exam_shedule_new,"Exam Shedule"));
+        infoPojoClassArrayList.add(new InfoPojoClass("04",R.drawable.class_routine,getResources().getString(R.string.classRoutineText)));
+       // infoPojoClassArrayList.add(new InfoPojoClass("06",R.drawable.notice_ic_new,getResources().getString(R.string.noticeText)));
+       // infoPojoClassArrayList.add(new InfoPojoClass("07",R.drawable.question_bank_ic_new,"Question Bank"));
+       // infoPojoClassArrayList.add(new InfoPojoClass("08",R.drawable.feedback_ic_new,"Feedback"));
+        infoPojoClassArrayList.add(new InfoPojoClass("09",R.drawable.class_log_dashboard,"Class Log"));
         infoRecyclerViewAdapter = new InfoRecyclerViewAdapter(getApplication(), infoPojoClassArrayList);
         infoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         infoRecyclerView.setItemAnimator(new DefaultItemAnimator());
         infoRecyclerView.setAdapter(infoRecyclerViewAdapter);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( StudentDashboardActivity.this);
+        String name = sharedPref.getString("username", null); // getting String
+        studentNameTV.setText(name);
+
     }
 
     private void initView() {
@@ -135,12 +272,18 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
         schemesNavigationButton=(RelativeLayout)findViewById(R.id.schemesNavigationButton);
         feedbackNavigationButton=(RelativeLayout)findViewById(R.id.feedbackNavigationButton);
         logOutNavigationButton=(RelativeLayout)findViewById(R.id.logOutNavigationButton);
+        studentNameTV =  (TextView) findViewById(R.id.studentNameTV);
+        dashBoard=(RelativeLayout)findViewById(R.id.dashBoard);
+
 
     }
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
+            case R.id.dashBoard:
+                closeDrawer();
+                break;
             case R.id.toggleButton:
                 openDrawer();
                 break;
@@ -196,7 +339,18 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
                 closeDrawer();
                 break;
             case R.id.logOutNavigationButton:
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                SharedPreferences spreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = spreferences.edit();
+                editor.clear();
+                editor.commit();
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
+                SharedPreferences.Editor editorpref = spreferences.edit();
+                editor.clear();
+                editor.commit();
+                SPUtils.getInstance().remove("user_id");
+                SPUtils.getInstance().remove("role_id");
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 finish();
                 closeDrawer();
                 break;
@@ -246,17 +400,18 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
                     {
                         //startActivity(new Intent(getApplication(),StudentScreenActivity.class));
                         Intent gonext=new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class);
-                        gonext.putExtra("isHomeTask", "Yes");
-
+                        gonext.putExtra("isHomeTask", "No");
+                        gonext.putExtra("type", "StudentClassPlan");
                         startActivity(new Intent(gonext));
                     }else if(position==1)
                     {
-                        Intent gonext=new Intent(getApplication(),MarkAttendenceActivity.class);
+                        Intent gonext=new Intent(getApplication(),RoutinScreenActivity.class);
                         startActivity(new Intent(gonext));
                         //startActivity(new Intent(getApplication(),AttendenceScreenActivity.class));
                     }else if(position==2)
                     {
                         Intent gonext=new Intent(getApplication(),ClassPlanRelatedToSubjectScreenActivity.class);
+                        gonext.putExtra("type", "StudentClassLog");
                         startActivity(new Intent(gonext));
                     }
                     else if(position==3)
@@ -269,9 +424,9 @@ public class StudentDashboardActivity extends AppCompatActivity implements View.
                     }else if(position==5)
                     {
                         startActivity(new Intent(getApplication(),NoticeScreenActivity.class));
-                    }else if(position==7)
+                    }else if(position==9)
                     {
-                        startActivity(new Intent(getApplication(),FeedBackActivity.class));
+                       // startActivity(new Intent(getApplication(),Clas.class));
                     }
 
                 }

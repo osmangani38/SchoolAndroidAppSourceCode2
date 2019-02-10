@@ -308,12 +308,13 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                                     Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = SPUtils.getInstance().getString("day");
-                                    if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
+                                    //if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
                                         //classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("MatheMatices","Class - V | Section - B","11am - 11:45am"));
 
                                         mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
-                                    }
+                                    //}
                                 }
+
                             }
                             else {
                                 ToastUtils.showShort("Data not found");
@@ -325,12 +326,7 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                                     update(mArrayList);
                                 }
                             });
-                            TeacherDashBoardActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dismissProgressUI();
-                                }
-                            });
+
                         }
                         else {
                             ToastUtils.showShort(responseStatus.response_message);
@@ -357,7 +353,7 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         classRoutinePojoClassArrayList.clear();
         classRoutinePojoClassArrayList.addAll(data);
         classRoutineRecyclerView.removeAllViews();
-        classOverviewRecyclerView.invalidate();
+        classRoutineRecyclerView.invalidate();
     }
 
     private class InfoRecyclerViewAdapter extends RecyclerView.Adapter<InfoRecyclerViewAdapter.MyViewHolderClass>{
