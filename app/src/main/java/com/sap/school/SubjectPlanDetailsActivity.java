@@ -54,7 +54,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   String stringSubjectName;
   String fromDate;
   String toDate;
-  String user_id, roll_id, classid="", subjectid="",subject_name = "",type = "",section_id = "0", plan_date;
+  String user_id, roll_id, classid="", subjectid="0",subject_name = "",type = "",section_id = "0",
+          plan_date, log_date, plan_id;
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -70,6 +71,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
     user_id = SPUtils.getInstance().getString("user_id");
+    plan_id = "62";
+    log_date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
 
@@ -157,7 +160,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
-      loginJson.put("user_id", user_id);
+      loginJson.put("user_id", "11");
            //loginJson.put("user_id", "11");
 
       loginJson.put("role_id", role_id);
@@ -167,14 +170,14 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
         loginJson.put("class_id", "0");
         loginJson.put("section_id", "0");
       }
-      if (!StringUtils.isEmpty(subject_id)) {
-         loginJson.put("subject_id", subject_id);
-      }
+      //if (!StringUtils.isEmpty(subject_id)) {
+         loginJson.put("subject_id", "0");
+      //}
            if (roll_id.equals("2") && type.equals("ClassLog")) {
 //             loginJson.put("date_from", fromDate);
 //             loginJson.put("date_to", toDate);
-             loginJson.put("date_from", "2019-01-11");
-             loginJson.put("date_to", "2019-01-12");
+             loginJson.put("date_from", "2019-02-11");
+             loginJson.put("date_to", "2019-02-11");
            }
       } catch (JSONException e) {
       e.printStackTrace();
@@ -296,27 +299,45 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     String topic_id = AppConstants.GLOBAL_TOPIC_ID;
     topic_id = topic_id.replaceAll(",$", "");
     //ToastUtils.showShort(topic_id);
-    submitClassPlan(user_id, roll_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
 
+    if(type.equals("ClassPlan")){
+      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
+    }else if(type.equals("ClassLog")){
+      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date,classid, section_id, subjectid, topic_id, "testing save data");
+    }
 
 
   }
 
-  private void submitClassPlan(String user_id, String role_id, String plan_date, String class_id,
-                               String section_id, String subject_id, String topic_id, String remarks)
+  private void submitClassPlan(String user_id, String role_id, String log_date, String plan_id,
+                               String plan_date, String class_id, String section_id, String subject_id,
+                               String topic_id, String remarks)
   {
+    String wsLink="";
     showProgressUI(AppConstants.Loading);
-    String wsLink = AppConstants.BaseURL+"SaveClassPlan";
+    if(type.equals("ClassPlan")){
+      wsLink = AppConstants.BaseURL+"SaveClassPlan";
+    }else if(type.equals("ClassLog")){
+      wsLink = AppConstants.BaseURL+"SaveClassLog";
+    }
+
     //web method call
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
       loginJson.put("user_id", user_id);
       loginJson.put("role_id", role_id);
-      loginJson.put("plan_date", plan_date);
-      loginJson.put("class_id", class_id);
-      loginJson.put("section_id", section_id);
-      loginJson.put("subject_id", subject_id);
+      if(type.equals("ClassPlan")){
+        loginJson.put("plan_date", plan_date);
+        loginJson.put("class_id", class_id);
+        loginJson.put("section_id", section_id);
+        loginJson.put("subject_id", subject_id);
+      }
+      if(type.equals("ClassLog")){
+        loginJson.put("log_date", log_date);
+        loginJson.put("plan_id", plan_id);
+
+      }
       loginJson.put("topic_id", topic_id);
       loginJson.put("remarks", remarks);
 
@@ -327,7 +348,12 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject ws_dataObj = new JSONObject();
     try {
       ws_dataObj.put("WS_DATA", jsonArray);
-      ws_dataObj.put("WS_CODE", "161");
+      if(type.equals("ClassPlan")){
+        ws_dataObj.put("WS_CODE", "161");
+      }else if(type.equals("ClassLog")){
+        ws_dataObj.put("WS_CODE", "166");
+      }
+
     } catch (JSONException e) {
       e.printStackTrace();
     }

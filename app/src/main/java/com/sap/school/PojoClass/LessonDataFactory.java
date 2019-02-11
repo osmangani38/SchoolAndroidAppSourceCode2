@@ -67,7 +67,34 @@ public class LessonDataFactory {
 ///here
           //  Object intervention = jsonObjItmSection.get("lesson");
           Object aObj = jsonObjItmSection.get("lesson");
-          if(aObj instanceof JSONObject){
+          if (aObj instanceof String){
+            String lessonName = jsonObjItmSection.getString("lesson");
+            String chapterName = jsonObjItmSection.getString("topic");
+            JSONArray chaptersArray = new JSONArray() ;
+            chaptersArray.put(chapterName);
+            list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
+          }
+          else {
+            JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
+            for (int j = 0; j < lessonArray.length(); j++) {
+              JSONObject jsonObj = lessonArray.getJSONObject(j);
+
+              getArrayOfLessons.add(jsonObj.getString("name"));
+              String lesson_name = jsonObj.getString("name");
+
+              ArrayList getArrayOfChapters = new ArrayList<>();
+
+              JSONArray chaptersArray = jsonObj.getJSONArray("topic");
+              for (int q = 0; q < chaptersArray.length(); q++) {
+                JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
+
+                getArrayOfChapters.add(jsonObjCh.getString("name"));
+              }
+              JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
+              list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
+            }
+          }
+          /*if(aObj instanceof JSONObject){
             JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
           for (int j = 0;j<lessonArray.length();j++) {
             JSONObject jsonObj = lessonArray.getJSONObject(j);
@@ -93,7 +120,7 @@ public class LessonDataFactory {
             JSONArray chaptersArray = new JSONArray() ;
             chaptersArray.put(chapterName);
             list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
-          }
+          }*/
 
         }
       }
@@ -106,6 +133,10 @@ public class LessonDataFactory {
     }
     return list;
   }
+
+
+
+
 
   public LessonDataFactory(Context context){
     this.context=context;
