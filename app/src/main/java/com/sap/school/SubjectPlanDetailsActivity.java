@@ -47,6 +47,7 @@ import static com.sap.school.PojoClass.LessonDataFactory.makeMultiCheckGenres;
 
 public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnClickListener{
   RelativeLayout backButton,submitClassButton;
+  TextView submitClassTextView;
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
   TextView subjectName;
@@ -84,13 +85,17 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (roll_id.equals("4")){
       submitClassButton.setVisibility(View.GONE);
     }
-  }
+    else if (roll_id.equals("2") && type.equals("ClassLog")) {
+      submitClassTextView.setText("Submit Class Log");
+    }
+    }
 
   private void initView() {
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     backButton=(RelativeLayout)findViewById(R.id.backButton);
     submitClassButton=(RelativeLayout)findViewById(R.id.submitClassButton);
     subjectName = (TextView)findViewById(R.id.subjectName);
+    submitClassTextView = (TextView)findViewById(R.id.submitClassTextView);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(SubjectPlanDetailsActivity.this);
     adapter = new MultiCheckLessonAdapter(makeMultiCheckGenres());
