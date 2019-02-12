@@ -59,6 +59,8 @@
         android:layout_marginTop="10dp">
         <EditText
             android:id="@+id/password"
+            android:ellipsize="start"
+            android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColorHint="@color/silverColor"
@@ -75,6 +77,7 @@
         android:textSize="17dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="3dp"
+        android:visibility="gone"
         android:background="@android:color/transparent"
         android:text="@string/forgetPasswordText"/>
     <Button

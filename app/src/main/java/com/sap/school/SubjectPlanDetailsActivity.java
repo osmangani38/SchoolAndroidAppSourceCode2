@@ -83,7 +83,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     }
     getClassAndSection(user_id,roll_id,classid, subjectid);
     if (!StringUtils.isEmpty(subject_name)){
-        subjectName.setText("Subject :"+subject_name);
+      subjectName.setText("Subject :"+subject_name);
     }
     if (roll_id.equals("4")){
       submitClassButton.setVisibility(View.GONE);
@@ -91,7 +91,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     else if (roll_id.equals("2") && type.equals("ClassLog")) {
       submitClassTextView.setText("Submit Class Log");
     }
-    }
+  }
 
   private void initView() {
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -149,7 +149,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       if (type.equals("StudentClassPlan")) {
         wsLink = AppConstants.BaseURL + "ClassPlan";
       } else if (type.equals("StudentClassLog"))
-        {
+      {
         wsLink = AppConstants.BaseURL + "ClassLog";
       }
     }
@@ -160,26 +160,26 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     JSONObject loginJson = new JSONObject();
     JSONArray jsonArray = new JSONArray();
     try {
-      loginJson.put("user_id", "11");
-           //loginJson.put("user_id", "11");
+      loginJson.put("user_id", user_id);
+      //loginJson.put("user_id", "11");
 
       loginJson.put("role_id", role_id);
 //      loginJson.put("class_id", classid);
 //      loginJson.put("section_id", section_id);
-           if (roll_id.equals("2")) {
+      if (roll_id.equals("2")) {
         loginJson.put("class_id", "0");
         loginJson.put("section_id", "0");
       }
       //if (!StringUtils.isEmpty(subject_id)) {
-         loginJson.put("subject_id", "0");
+      loginJson.put("subject_id", "0");
       //}
-           if (roll_id.equals("2") && type.equals("ClassLog")) {
+      if (roll_id.equals("2") && type.equals("ClassLog")) {
 //             loginJson.put("date_from", fromDate);
 //             loginJson.put("date_to", toDate);
-             loginJson.put("date_from", "2019-02-11");
-             loginJson.put("date_to", "2019-02-11");
-           }
-      } catch (JSONException e) {
+        loginJson.put("date_from", fromDate);
+        loginJson.put("date_to", toDate);
+      }
+    } catch (JSONException e) {
       e.printStackTrace();
     }
     jsonArray.put(loginJson);
@@ -191,8 +191,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
 //             loginJson.put("date_from", fromDate);
 //             loginJson.put("date_to", toDate);
           ws_dataObj.put("WS_CODE", "260");
-          loginJson.put("date_from", "2019-01-01");
-          loginJson.put("date_to", "2019-01-12");
+          loginJson.put("date_from", fromDate);
+          loginJson.put("date_to", toDate);
         }
         else {
           ws_dataObj.put("WS_CODE", "265");
@@ -204,7 +204,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       else {
         ws_dataObj.put("WS_CODE", "10");
       }
-      } catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
     }
     String json = ws_dataObj.toString();

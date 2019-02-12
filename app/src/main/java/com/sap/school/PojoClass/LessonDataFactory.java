@@ -26,17 +26,17 @@ public class LessonDataFactory {
 
 
   public static List<MultiCheckLesson> makeMultiCheckGenres() {
-     ArrayList<MultiCheckLesson> list = new ArrayList<MultiCheckLesson>();
+    ArrayList<MultiCheckLesson> list = new ArrayList<MultiCheckLesson>();
     JSONArray savedArray;
-     try{
-       savedArray = JSONSharedPreferences.loadJSONArray(ApplicationContextProvider.getContext(), "teacherJSON", "subjectChapters");
-       Log.d("","try'");
+    try{
+      savedArray = JSONSharedPreferences.loadJSONArray(ApplicationContextProvider.getContext(), "teacherJSON", "subjectChapters");
+      Log.d("","try'");
     }
-     catch (Exception e) {
-       // This will catch any exception, because they are all descended from Exception
-       System.out.println("Error " + e.getMessage());
-       return null;
-     }
+    catch (Exception e) {
+      // This will catch any exception, because they are all descended from Exception
+      System.out.println("Error " + e.getMessage());
+      return null;
+    }
     int count = savedArray.length();
 
     for(int i =0; i<count; i++)
@@ -59,7 +59,7 @@ public class LessonDataFactory {
           //chapters.put(jsonObjItmSection.getString("topic"));
         }
         if (roll_id.equals("2") && jsonObjItmSection.has("topic")) {
-            list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+          list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
 
         }
         else {
@@ -155,28 +155,28 @@ public class LessonDataFactory {
     {
       try{
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
-       String roll_id = sharedPref.getString("roll_id", null); // getting String
+        String roll_id = sharedPref.getString("roll_id", null); // getting String
         String lesson;
         if (roll_id.equals("2") && chapters.length()>1) {
           Object intervention = chapters.get(i);
-     if (intervention instanceof JSONObject) {
+          if (intervention instanceof JSONObject) {
 
-       JSONObject jsonObjItmSection = chapters.getJSONObject(i);
-       Log.d("", "try'");
-       ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
-       list.add(queen);
-     }
-     else {
-       String id = String.valueOf(i);
-       String chapterName = chapters.getString(i);
-       ChapterPOJO queen = new ChapterPOJO(id, chapterName);
-       list.add(queen);
-     }
+            JSONObject jsonObjItmSection = chapters.getJSONObject(i);
+            Log.d("", "try'");
+            ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+            list.add(queen);
+          }
+          else {
+            String id = String.valueOf(i);
+            String chapterName = chapters.getString(i);
+            ChapterPOJO queen = new ChapterPOJO(id, chapterName);
+            list.add(queen);
+          }
         }
         else {
           String  stringChapters = chapters.getString(i);
           Log.d("","try'");
-         // ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
+          // ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
           ChapterPOJO queen = new ChapterPOJO("id", stringChapters);
 
           list.add(queen);
@@ -247,4 +247,3 @@ public class LessonDataFactory {
 
 
 }
-

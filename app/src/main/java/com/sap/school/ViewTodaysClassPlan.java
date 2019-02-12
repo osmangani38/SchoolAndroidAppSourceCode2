@@ -68,7 +68,8 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = df.format(c);
-        croutinInfo("11", roll_id, "6", "1", "2019-02-11", "2019-02-11");
+
+        croutinInfo(user_id, roll_id, "0", "0", formattedDate, formattedDate);
         setListner();
     }
 
@@ -153,6 +154,8 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
             loginJson.put("section_id", section_id);
             loginJson.put("date_from", date_from);
             loginJson.put("date_to", date_to);
+            loginJson.put("subject_id", "0");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

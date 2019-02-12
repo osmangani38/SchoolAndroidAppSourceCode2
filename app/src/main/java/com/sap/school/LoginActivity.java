@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void initView() {
         loginButton=(Button)findViewById(R.id.loginButton);
         emailTF=(EditText) findViewById(R.id.email);
-        passwordTF=(EditText) findViewById(R.id.password);
+        passwordTF = (EditText) findViewById(R.id.password);
         closeButton=(Button)findViewById(R.id.closeButton);
         valueType=getIntent().getStringExtra("valueType");
         emailTF.setText("282521");

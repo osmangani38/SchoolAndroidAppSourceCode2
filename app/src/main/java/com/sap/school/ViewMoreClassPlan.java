@@ -113,7 +113,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                     roll_id = "2";
                 }
 
-                croutinInfo("11", roll_id, "6", sectionId, fromTextView.getText().toString(), toDateTV.getText().toString());
+                croutinInfo(user_id, roll_id, "0", "0", fromTextView.getText().toString(), toDateTV.getText().toString());
                 break;
         }
     }
@@ -223,6 +223,8 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
             loginJson.put("section_id", section_id);
             loginJson.put("date_from", date_from);
             loginJson.put("date_to", date_to);
+            loginJson.put("subject_id", "0");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
