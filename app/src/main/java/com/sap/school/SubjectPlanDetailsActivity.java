@@ -1,6 +1,7 @@
 package com.sap.school;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -47,6 +51,9 @@ import static com.sap.school.PojoClass.LessonDataFactory.makeMultiCheckGenres;
 
 public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnClickListener{
   RelativeLayout backButton,submitClassButton;
+  LinearLayout selectDateLayout;
+  TextView fromTextView, toDateTV;
+  Button btnGo;
   TextView submitClassTextView;
   private MultiCheckLessonAdapter adapter;
   RecyclerView recyclerView;
@@ -90,6 +97,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     }
     else if (roll_id.equals("2") && type.equals("ClassLog")) {
       submitClassTextView.setText("Submit Class Log");
+      selectDateLayout.setVisibility(View.VISIBLE);
+
     }
   }
 
@@ -99,11 +108,66 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     submitClassButton=(RelativeLayout)findViewById(R.id.submitClassButton);
     subjectName = (TextView)findViewById(R.id.subjectName);
     submitClassTextView = (TextView)findViewById(R.id.submitClassTextView);
+    selectDateLayout =(LinearLayout) findViewById(R.id.selectDate);
+    fromTextView = (TextView)findViewById(R.id.fromTextView);
+    toDateTV = (TextView) findViewById(R.id.toDateTV);
+    btnGo = (Button) findViewById(R.id.goButton);
 
     LinearLayoutManager layoutManager = new LinearLayoutManager(SubjectPlanDetailsActivity.this);
     adapter = new MultiCheckLessonAdapter(makeMultiCheckGenres());
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(adapter);
+    final Calendar myCalendar = Calendar.getInstance();
+    final DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
+
+      @Override
+      public void onDateSet(DatePicker view, int year, int monthOfYear,
+                            int dayOfMonth) {
+        // TODO Auto-generated method stub
+        myCalendar.set(Calendar.YEAR, year);
+        myCalendar.set(Calendar.MONTH, monthOfYear);
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+        fromTextView.setText(sdf.format(myCalendar.getTime()));
+      }
+
+    };
+
+    final DatePickerDialog.OnDateSetListener todate = new DatePickerDialog.OnDateSetListener() {
+
+      @Override
+      public void onDateSet(DatePicker view, int year, int monthOfYear,
+                            int dayOfMonth) {
+        // TODO Auto-generated method stub
+        myCalendar.set(Calendar.YEAR, year);
+        myCalendar.set(Calendar.MONTH, monthOfYear);
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+        toDateTV.setText(sdf.format(myCalendar.getTime()));
+      }
+
+    };
+    fromTextView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        new DatePickerDialog(SubjectPlanDetailsActivity.this, fromdate, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+      }
+    });
+
+    toDateTV.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        new DatePickerDialog(SubjectPlanDetailsActivity.this, todate, myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+      }
+    });
 
   }
 
@@ -122,6 +186,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   private void setListner() {
     backButton.setOnClickListener(this);
     submitClassButton.setOnClickListener(this);
+    btnGo.setOnClickListener(this);
   }
 
   @Override
@@ -134,6 +199,17 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
 
       case R.id.submitClassButton:
         SubmitInfo();
+        break;
+
+      case R.id.goButton:
+        if (StringUtils.isEmpty(toDateTV.getText().toString()) && StringUtils.isEmpty(fromTextView.getText().toString())){
+          ToastUtils.showShort("Please Enter Dates.");
+      }
+      else {
+          fromDate = fromTextView.getText().toString();
+          toDate = toDateTV.getText().toString();
+          getClassAndSection(user_id,roll_id,classid, subjectid);
+        }
         break;
     }
   }
@@ -167,11 +243,27 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
 //      loginJson.put("class_id", classid);
 //      loginJson.put("section_id", section_id);
       if (roll_id.equals("2")) {
-        loginJson.put("class_id", "0");
-        loginJson.put("section_id", "0");
+        if (wsLink.contains("Syllabus")||wsLink.contains("ClassLog")) {
+          loginJson.put("class_id", class_id);
+          loginJson.put("section_id", section_id);
+        }
+        else {
+          loginJson.put("class_id", "");
+          loginJson.put("section_id", "");
+        }
       }
       //if (!StringUtils.isEmpty(subject_id)) {
-      loginJson.put("subject_id", "0");
+      if (wsLink.contains("Syllabus")) {
+        loginJson.put("subject_id", subject_id);
+      }
+      else {
+        if (StringUtils.isEmpty(subject_id)){
+          loginJson.put("subject_id", "0");
+        }
+        else {
+          loginJson.put("subject_id", subject_id);
+        }
+      }
       //}
       if (roll_id.equals("2") && type.equals("ClassLog")) {
 //             loginJson.put("date_from", fromDate);
@@ -220,7 +312,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               final ArrayList<ChapterPOJO> mArrayList=new ArrayList<>();
               JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
               JSONObject jsonObject = jsonArray.getJSONObject(0);
-              stringSubjectName = jsonObject.getString("subject");
+              if (jsonObject.has("subject") && !jsonObject.isNull("subject")) {
+                stringSubjectName = jsonObject.getString("subject");
+              }
               JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters", jsonArray);
               JSONArray savedArray = JSONSharedPreferences.loadJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters");
               Log.d("gg","aaa");

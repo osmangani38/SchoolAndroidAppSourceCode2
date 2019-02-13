@@ -88,6 +88,74 @@
       </RelativeLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/selectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+      <TextView
+          android:id="@+id/fromTextView"
+          android:layout_width="100dp"
+          android:layout_height="40dp"
+          android:padding="10dp"
+          android:textColor="#A8A8A8"
+          android:layout_marginLeft="8dp"
+          android:layout_marginTop="0dp"
+
+          android:textAlignment="center"
+
+          android:layout_gravity="center"
+          android:textSize="14dp"
+          android:background="@drawable/text_view_border"
+          android:hint="@string/selectDate"/>
+      <TextView
+          android:id="@+id/toTV"
+          android:layout_width="wrap_content"
+          android:layout_height="40dp"
+          android:padding="10dp"
+          android:textColor="#A8A8A8"
+          android:layout_marginLeft="0dp"
+          android:layout_marginTop="0dp"
+
+          android:textAlignment="center"
+
+          android:layout_gravity="center"
+          android:textSize="14dp"
+          android:text="To"/>
+      <TextView
+          android:id="@+id/toDateTV"
+          android:layout_width="100dp"
+          android:layout_height="40dp"
+          android:padding="10dp"
+          android:textColor="#A8A8A8"
+          android:layout_marginLeft="0dp"
+          android:layout_marginTop="0dp"
+
+          android:textAlignment="center"
+
+          android:layout_gravity="center"
+          android:textSize="14dp"
+          android:background="@drawable/text_view_border"
+          android:hint="@string/selectDate"/>
+      <Button
+          android:id="@+id/goButton"
+          android:layout_width="50dp"
+          android:layout_height="40dp"
+          android:padding="3dp"
+          android:textColor="#FFFFFF"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="0dp"
+
+          android:textAlignment="center"
+
+          android:layout_gravity="center"
+          android:textSize="14dp"
+          android:background="#1ba249"
+          android:text="@string/btnGo"/>
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

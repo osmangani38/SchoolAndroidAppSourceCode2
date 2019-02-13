@@ -214,8 +214,9 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
                 public void onClick(View v) {
                     if(type.equals("ClassLog"))
                     {
-                        Intent j = new Intent(SelectClassActivity.this, SubjectPlanDetailsActivity.class);
-                       j.putExtra("type","ClassLog");
+                       // Intent j = new Intent(SelectClassActivity.this, SubjectPlanDetailsActivity.class);
+                        Intent j = new Intent(SelectClassActivity.this, ClassPlanRelatedToSubjectScreenActivity.class);
+                        j.putExtra("type","ClassLog");
                         j.putExtra("class_id",selectPojoClassArrayList.get(i).getId());
                         j.putExtra("section_id",selectPojoClassArrayList.get(i).getSectionId());
 

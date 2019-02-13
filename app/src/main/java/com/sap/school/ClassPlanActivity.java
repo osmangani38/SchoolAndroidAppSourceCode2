@@ -209,23 +209,26 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                             final ArrayList mArrayList=new ArrayList<>();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
                             JSONSharedPreferences.saveJSONArray(ClassPlanActivity.this, "teacherJSON", "classPlanList", jsonArray);
-                            /*int count = jsonArray.length();
+                            int count = jsonArray.length();
+
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                JSONArray jsonArraySection = jsonObjItm.getJSONArray("section");
+                                //JSONObject subjects = jsonObjItm.getJSONObject("subject");
+                                Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
+                                JSONArray jsonArraySection = jsonObjItm.getJSONArray("subject");
                                 int countSection = jsonArraySection.length();
-                                mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")*//*jsonObjItm.getString("curclass"*//*);
-                                SelectPojoClass selectPojoClass = new SelectPojoClass();
+//                                mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")*//*jsonObjItm.getString("curclass"*//*);
+//                                SelectPojoClass selectPojoClass = new SelectPojoClass();
                                 for (int j = 0; j < countSection; j++) {
-                                    JSONObject jsonObjItmSection = jsonArraySection.getJSONObject(j);
-                                    mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class",jsonObjItmSection.getString("section_id"),jsonObjItmSection.getString("section_name"))*//*jsonObjItm.getString("curclass"*//*);
-
-                                 SelectPojoClass selectPojoClass = new SelectPojoClass();
+                                     JSONObject jsonObjItmSubjects = jsonArraySection.getJSONObject(j);
+                                    //mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class",jsonObjItmSection.getString("section_id"),jsonObjItmSection.getString("section_name"))*//*jsonObjItm.getString("curclass"*//*);
+//
+//                                 SelectPojoClass selectPojoClass = new SelectPojoClass();
+//
+//                                }
 
                                 }
-
-                            }*/
+                            }
                             ClassPlanActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
