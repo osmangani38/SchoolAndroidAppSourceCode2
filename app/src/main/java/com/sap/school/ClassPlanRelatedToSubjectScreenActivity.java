@@ -54,7 +54,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
         String user_id = SPUtils.getInstance().getString("user_id");
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ClassPlanRelatedToSubjectScreenActivity.this);
         String roll_id = sharedPref.getString("roll_id", null); // getting String
-        if (roll_id.equals("2")) {
+        if (roll_id.equals("2")||roll_id.equals("4")) {
             getClassAndSection(user_id, roll_id);
         }
     }
@@ -76,6 +76,9 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
     {
         showProgressUI(AppConstants.Loading);
         String wsLink = AppConstants.BaseURL+"TeacherMasterList";
+        if (role_id.equals("4")){
+             wsLink = AppConstants.BaseURL+"Studentmasterlist";
+        }
         //web method call
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -89,7 +92,12 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "120");
+            if (role_id.equals("2")) {
+                ws_dataObj.put("WS_CODE", "120");
+            }
+            if (role_id.equals("4")) {
+                ws_dataObj.put("WS_CODE", "220");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -104,27 +112,30 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
                             final ArrayList mArrayList=new ArrayList<>();
-                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
-                            JSONSharedPreferences.saveJSONArray(ClassPlanRelatedToSubjectScreenActivity.this, "teacherJSON", "classPlanList", jsonArray);
-                            int count = jsonArray.length();
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ClassPlanRelatedToSubjectScreenActivity.this);
+                            String roll_id = sharedPref.getString("roll_id", null); // getting String
+                            if (roll_id.equals("4")) {
+                                JSONObject jsonObjectStudent = responseStatus.jsonObject.getJSONObject("result");
 
-                            for (int i = 0; i < count; i++) {
-                                JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                //JSONObject subjects = jsonObjItm.getJSONObject("subject");
-                                Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
-                                JSONArray jsonArraySection = jsonObjItm.getJSONArray("subject");
+                                JSONArray jsonArraySection = jsonObjectStudent.getJSONArray("subject");
                                 int countSection = jsonArraySection.length();
-//                                mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")*//*jsonObjItm.getString("curclass"*//*);
-//                                SelectPojoClass selectPojoClass = new SelectPojoClass();
                                 for (int j = 0; j < countSection; j++) {
                                     JSONObject jsonObjItmSubjects = jsonArraySection.getJSONObject(j);
-
-                                    mArrayList.add(new ClassPlanSubjectPojoClass(jsonObjItmSubjects.getString("subject_id"),jsonObjItmSubjects.getString("subject_name")));//*jsonObjItm.getString("curclass"*//*);
-//
-//                                 SelectPojoClass selectPojoClass = new SelectPojoClass();
-//
-//                                }
-
+                                    mArrayList.add(new ClassPlanSubjectPojoClass(jsonObjItmSubjects.getString("subject_id"), jsonObjItmSubjects.getString("subject_name")));//*jsonObjItm.getString("curclass"*//*)
+                                }
+                            }
+                            else {
+                                JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                                JSONSharedPreferences.saveJSONArray(ClassPlanRelatedToSubjectScreenActivity.this, "teacherJSON", "classPlanList", jsonArray);
+                                int count = jsonArray.length();
+                                for (int i = 0; i < count; i++) {
+                                    JSONObject jsonObjItm = jsonArray.getJSONObject(i);
+                                    JSONArray jsonArraySection = jsonObjItm.getJSONArray("subject");
+                                    int countSection = jsonArraySection.length();
+                                    for (int j = 0; j < countSection; j++) {
+                                        JSONObject jsonObjItmSubjects = jsonArraySection.getJSONObject(j);
+                                        mArrayList.add(new ClassPlanSubjectPojoClass(jsonObjItmSubjects.getString("subject_id"), jsonObjItmSubjects.getString("subject_name")));//*jsonObjItm.getString("curclass"*//*)
+                                    }
                                 }
                             }
                             ClassPlanRelatedToSubjectScreenActivity.this.runOnUiThread(new Runnable() {
@@ -253,6 +264,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
                         }
                         if (goToClassPlan) {
                             Intent goNext = new Intent(getApplication(), SubjectPlanDetailsActivity.class);
+                            goNext.putExtra("subject_id",classPlanSubjectPojoClassArrayList.get(i).getId());
                             goNext.putExtra("type", type);
                             startActivity(goNext);
                         }

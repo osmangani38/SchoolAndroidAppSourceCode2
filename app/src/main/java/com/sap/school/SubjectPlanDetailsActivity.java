@@ -92,7 +92,11 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (!StringUtils.isEmpty(subject_name)){
       subjectName.setText("Subject :"+subject_name);
     }
-    if (roll_id.equals("4")){
+    if (roll_id.equals("4") && type.equals("StudentClassPlan")) {
+      selectDateLayout.setVisibility(View.VISIBLE);
+      submitClassButton.setVisibility(View.GONE);
+    }
+    else  if (roll_id.equals("4")){
       submitClassButton.setVisibility(View.GONE);
     }
     else if (roll_id.equals("2") && type.equals("ClassLog")) {
