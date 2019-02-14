@@ -1,6 +1,7 @@
 package com.sap.school.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.sap.school.PojoClass.TodaysClassPlanPOJO;
 import com.sap.school.R;
+import com.sap.school.SubjectPlanDetailsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,11 +31,27 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
         return new TodaysPlanRecyclerAdapter.MyViewHolderClass(itemView);
     }
     @Override
-    public void onBindViewHolder(TodaysPlanRecyclerAdapter.MyViewHolderClass holder, int position) {
+    public void onBindViewHolder(TodaysPlanRecyclerAdapter.MyViewHolderClass holder, final int position) {
         holder.subjectTextView.setText(todaysClassPlanPOJOArrayList.get(position).getSubject());
         holder.lessonNameTV.setText(todaysClassPlanPOJOArrayList.get(position).getLesson_name());
         holder.timingTextView.setText(todaysClassPlanPOJOArrayList.get(position).getTopic_name());
+        holder.sectionTextView.setText("Class - "+todaysClassPlanPOJOArrayList.get(position).getClass_name()+ " | Section - "+
+        todaysClassPlanPOJOArrayList.get(position).getSection_name());
 
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goNext = new Intent(context, SubjectPlanDetailsActivity.class);
+                goNext.putExtra("type","TodaysClassPlan");
+                goNext.putExtra("class_id", todaysClassPlanPOJOArrayList.get(position).getClass_id());
+                goNext.putExtra("subject_id", todaysClassPlanPOJOArrayList.get(position).getSubject_id());
+                goNext.putExtra("subject_name", todaysClassPlanPOJOArrayList.get(position).getSubject());
+                goNext.putExtra("plan_date", todaysClassPlanPOJOArrayList.get(position).getClass_date());
+                goNext.putExtra("section_id", todaysClassPlanPOJOArrayList.get(position).getSection_id());
+                goNext.putExtra("plan_id", todaysClassPlanPOJOArrayList.get(position).getPlan_id());
+                context.startActivity(goNext);
+            }
+        });
     }
     @Override
     public int getItemCount() {
@@ -41,7 +59,7 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
     }
     public class MyViewHolderClass extends RecyclerView.ViewHolder {
 
-        TextView subjectTextView,timingTextView, lessonNameTV;
+        TextView subjectTextView,timingTextView, lessonNameTV, sectionTextView;
         LinearLayout linearLayout;
         public MyViewHolderClass(View itemView) {
             super(itemView);
@@ -49,7 +67,7 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
             subjectTextView=(TextView)itemView.findViewById(R.id.subjectTextView);
             timingTextView=(TextView)itemView.findViewById(R.id.timingTextView);
             linearLayout=(LinearLayout)itemView.findViewById(R.id.linearLayout);
-
+            sectionTextView = (TextView) itemView.findViewById(R.id.sectionTextView);
 
         }
     }

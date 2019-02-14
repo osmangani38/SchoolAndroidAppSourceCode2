@@ -88,7 +88,7 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.btnMore:
-                Intent i = new Intent(getApplicationContext(), SelectClassActivity.class);
+                Intent i = new Intent(getApplicationContext(), ViewMoreClassPlan.class);
 //                i.putExtra("page", "1");
                 i.putExtra("type","classPlan");
                 startActivity(i);
@@ -137,6 +137,7 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
         btnAdd = (Button)findViewById(R.id.btnAdd);
         classRoutinePojoClassArrayList=new ArrayList<>();
         routinRecyclerView.setHasFixedSize(true);
+
     }
 
     private void croutinInfo(String user_id, String role_id, String class_id, String section_id,
@@ -185,9 +186,15 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 TodaysClassPlanPOJO todaysClassPlanPOJO = new TodaysClassPlanPOJO();
 
+                                todaysClassPlanPOJO.setPlan_id(jsonObjItm.getString("id"));
                                 todaysClassPlanPOJO.setClass_date(jsonObjItm.getString("date"));
                                 todaysClassPlanPOJO.setSubject(jsonObjItm.getString("subject"));
                                 todaysClassPlanPOJO.setRemarks(jsonObjItm.getString("remarks"));
+                                todaysClassPlanPOJO.setClass_name(jsonObjItm.getString("class"));
+                                todaysClassPlanPOJO.setSection_name(jsonObjItm.getString("section"));
+                                todaysClassPlanPOJO.setClass_id(jsonObjItm.getString("class_id"));
+                                todaysClassPlanPOJO.setSection_id(jsonObjItm.getString("section_id"));
+                                todaysClassPlanPOJO.setSubject_id(jsonObjItm.getString("subject_id"));
 
                                 JSONArray jsonArraySection = jsonObjItm.getJSONArray("lesson");
                                 int countSection = jsonArraySection.length();

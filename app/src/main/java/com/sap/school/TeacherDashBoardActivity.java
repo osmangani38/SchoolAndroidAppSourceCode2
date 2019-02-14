@@ -408,7 +408,7 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                        // startActivity(new Intent(getApplication(),ClassPlanActivity.class));
                     }else if(position==3)
                     {
-                        Intent gonext=new Intent(getApplication(),SelectClassActivity.class);
+                        Intent gonext=new Intent(getApplication(),ViewMoreClassPlan.class);
                         gonext.putExtra("type","ClassLog");
                         startActivity(new Intent(gonext));
 

@@ -58,11 +58,11 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
     RecyclerView routinRecyclerView;
     RelativeLayout backButton;
     Button btnAdd, btnGo;
-    TextView fromTextView, toDateTV;
+    TextView fromTextView, toDateTV, tvHeader;
     ArrayList<ExamSchedulePOJO> classRoutinePojoClassArrayList;
     private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
     List<ListItem> consolidatedList = new ArrayList<>();
-    String classId, sectionId;
+    String type, sectionId = "1", class_id = "6";
     private TodaysPlanRecyclerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +71,13 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         initView();
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            classId= getIntent().getStringExtra("classId");
-            sectionId= getIntent().getStringExtra("sectionId");
+            type= getIntent().getStringExtra("type");
+            sectionId= getIntent().getStringExtra("section_id");
+            class_id = getIntent().getStringExtra("class_id");
+        }
+
+        if(type.equals("ClassLog")){
+            tvHeader.setText(R.string.classLogText);
         }
         setListner();
     }
@@ -99,10 +104,18 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                 startActivity(i);
                 break;
             case R.id.btnAdd:
-                Intent j = new Intent(getApplicationContext(), ClassPlanActivity.class);
+                if(type.equals("ClassLog")){
+                    Intent j = new Intent(getApplicationContext(), SelectClassActivity.class);
 //                i.putExtra("page", "1");
-                j.putExtra("type","classPlan");
-                startActivity(j);
+                    j.putExtra("type","ClassLog");
+                    startActivity(j);
+                }else{
+                    Intent j = new Intent(getApplicationContext(), ClassPlanActivity.class);
+//                i.putExtra("page", "1");
+                    j.putExtra("type","classPlan");
+                    startActivity(j);
+                }
+
                 break;
             case R.id.btnGo:
                 String user_id = SPUtils.getInstance().getString("user_id");
@@ -113,7 +126,17 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                     roll_id = "2";
                 }
 
-                croutinInfo(user_id, roll_id, "0", "0", fromTextView.getText().toString(), toDateTV.getText().toString());
+                if(type.equals("ClassLog")){
+                    if(StringUtils.isEmpty(class_id) && StringUtils.isEmpty(sectionId)){
+                        class_id = "6";
+                        sectionId = "1";
+                    }
+                    croutinInfo(user_id, roll_id, class_id, sectionId, fromTextView.getText().toString(), toDateTV.getText().toString());
+                }else{
+                    croutinInfo(user_id, roll_id, "0", "0", fromTextView.getText().toString(), toDateTV.getText().toString());
+                }
+
+
                 break;
         }
     }
@@ -151,6 +174,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
        // btnMore = (Button)findViewById(R.id.btnMore);
         btnAdd = (Button)findViewById(R.id.btnAdd);
         btnGo = (Button) findViewById(R.id.btnGo);
+        tvHeader = (TextView)findViewById(R.id.tvHeader);
         fromTextView = (TextView)findViewById(R.id.fromTextView);
         toDateTV = (TextView) findViewById(R.id.toDateTV);
         classRoutinePojoClassArrayList=new ArrayList<>();
@@ -211,8 +235,13 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
     private void croutinInfo(String user_id, String role_id, String class_id, String section_id,
                              String date_from, String date_to )
     {
+        final ArrayList<TodaysClassPlanPOJO> mArrayList=new ArrayList<>();
         showProgressUI(AppConstants.Loading);
         String wsLink = AppConstants.BaseURL+"ClassPlan";
+
+        if(type.equals("ClassLog")){
+            wsLink = AppConstants.BaseURL+"ClassLog";
+        }
         //web method call
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -232,7 +261,12 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "160");
+            if(type.equals("ClassLog")){
+                ws_dataObj.put("WS_CODE", "165");
+            }else{
+                ws_dataObj.put("WS_CODE", "160");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -246,17 +280,28 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
-                            final ArrayList<TodaysClassPlanPOJO> mArrayList=new ArrayList<>();
+                            mArrayList.clear();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 TodaysClassPlanPOJO todaysClassPlanPOJO = new TodaysClassPlanPOJO();
+                                if(type.equals("ClassLog")){
+                                    todaysClassPlanPOJO.setPlan_id(jsonObjItm.getString("plan_id"));
+                                    todaysClassPlanPOJO.setClass_id("6");
+                                }else{
+                                    todaysClassPlanPOJO.setPlan_id(jsonObjItm.getString("id"));
+                                    todaysClassPlanPOJO.setClass_id(jsonObjItm.getString("class_id"));
+                                    todaysClassPlanPOJO.setSection_id(jsonObjItm.getString("section_id"));
+                                }
 
                                 todaysClassPlanPOJO.setClass_date(jsonObjItm.getString("date"));
                                 todaysClassPlanPOJO.setSubject(jsonObjItm.getString("subject"));
                                 todaysClassPlanPOJO.setRemarks(jsonObjItm.getString("remarks"));
+                                todaysClassPlanPOJO.setClass_name(jsonObjItm.getString("class"));
+                                todaysClassPlanPOJO.setSection_name(jsonObjItm.getString("section"));
+                                todaysClassPlanPOJO.setSubject_id(jsonObjItm.getString("subject_id"));
 
                                 JSONArray jsonArraySection = jsonObjItm.getJSONArray("lesson");
                                 int countSection = jsonArraySection.length();
@@ -290,6 +335,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                                     routinRecyclerView.setLayoutManager(layoutManager);
                                     routinRecyclerView.setItemAnimator(new DefaultItemAnimator());
                                     routinRecyclerView.setAdapter(adapter);
+                                    ToastUtils.showShort(mArrayList.size());
                                 }
                             });
                         }

@@ -62,7 +62,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   String fromDate;
   String toDate;
   String user_id, roll_id, classid="", subjectid="0",subject_name = "",type = "",section_id = "0",
-          plan_date, log_date, plan_id;
+          plan_date, log_date, plan_id = "";
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -78,10 +78,15 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
     user_id = SPUtils.getInstance().getString("user_id");
-    plan_id = "62";
+
     log_date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     toDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
+
+    if(type.equals("TodaysClassPlan")){
+      plan_id = intent.getStringExtra("plan_id");
+      log_date = plan_date;
+    }
 
     SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SubjectPlanDetailsActivity.this);
     roll_id = sharedPref.getString("roll_id", null); // getting String
@@ -90,7 +95,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     }
     getClassAndSection(user_id,roll_id,classid, subjectid);
     if (!StringUtils.isEmpty(subject_name)){
-      subjectName.setText("Subject :"+subject_name);
+      subjectName.setText("Subject : "+subject_name);
     }
     if (roll_id.equals("4") && type.equals("StudentClassPlan")) {
       selectDateLayout.setVisibility(View.VISIBLE);
@@ -101,8 +106,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     }
     else if (roll_id.equals("2") && type.equals("ClassLog")) {
       submitClassTextView.setText("Submit Class Log");
-      selectDateLayout.setVisibility(View.VISIBLE);
+      selectDateLayout.setVisibility(View.INVISIBLE);
 
+    }else if (roll_id.equals("2") && type.equals("TodaysClassPlan")) {
+      submitClassTextView.setText("Submit Class Log");
     }
   }
 
@@ -344,7 +351,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
                 public void run() {
                   recyclerView.setVisibility(View.VISIBLE);
                   dismissProgressUI();
-                  subjectName.setText(stringSubjectName);
+                  if(type.equals("ClassPlan") || type.equals("TodaysClassPlan") ){
+                    subjectName.setText("Subject : "+subject_name);
+                  }else{
+                  subjectName.setText(stringSubjectName);}
                   recyclerView.setAdapter(null);
                   recyclerView.setLayoutManager(null);
                   recyclerView.removeAllViewsInLayout();
@@ -403,6 +413,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
     }else if(type.equals("ClassLog")){
       submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date,classid, section_id, subjectid, topic_id, "testing save data");
+    }else if(type.equals("TodaysClassPlan")){
+      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date,classid, section_id, subjectid, topic_id, "testing save data");
     }
 
 
@@ -417,6 +429,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if(type.equals("ClassPlan")){
       wsLink = AppConstants.BaseURL+"SaveClassPlan";
     }else if(type.equals("ClassLog")){
+      wsLink = AppConstants.BaseURL+"SaveClassLog";
+    }else if(type.equals("TodaysClassPlan")){
       wsLink = AppConstants.BaseURL+"SaveClassLog";
     }
 
@@ -437,6 +451,11 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
         loginJson.put("plan_id", plan_id);
 
       }
+      if(type.equals("TodaysClassPlan")){
+        loginJson.put("log_date", log_date);
+        loginJson.put("plan_id", plan_id);
+
+      }
       loginJson.put("topic_id", topic_id);
       loginJson.put("remarks", remarks);
 
@@ -450,6 +469,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       if(type.equals("ClassPlan")){
         ws_dataObj.put("WS_CODE", "161");
       }else if(type.equals("ClassLog")){
+        ws_dataObj.put("WS_CODE", "166");
+      }else if(type.equals("TodaysClassPlan")){
         ws_dataObj.put("WS_CODE", "166");
       }
 
@@ -510,6 +531,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
             }
             else {
               ToastUtils.showShort(responseStatus.response_message);
+              finish();
               dismissProgressUI();
             }
             SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
