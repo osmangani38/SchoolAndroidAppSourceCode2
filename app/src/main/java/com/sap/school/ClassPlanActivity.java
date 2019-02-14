@@ -269,7 +269,7 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
             case R.id.makePlanButton://Salman
                 if (!edtSelectSubject.getText().toString().isEmpty()) {
                     Intent goNext = new Intent(getApplication(), SubjectPlanDetailsActivity.class);
-                    goNext.putExtra("type","Teacher");
+                    goNext.putExtra("type","ClassPlan");
                     goNext.putExtra("class_id", class_id);
                     goNext.putExtra("subject_id", subject_id);
                     goNext.putExtra("subject_name", subject_name);

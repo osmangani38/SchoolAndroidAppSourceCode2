@@ -265,7 +265,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
           loginJson.put("subject_id", "0");
         }
         else {
-          loginJson.put("subject_id", subject_id);
+          loginJson.put("subject_id", "0");
         }
       }
       //}
@@ -342,6 +342,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                  recyclerView.setVisibility(View.VISIBLE);
                   dismissProgressUI();
                   subjectName.setText(stringSubjectName);
                   recyclerView.setAdapter(null);
