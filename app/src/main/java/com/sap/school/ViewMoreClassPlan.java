@@ -335,7 +335,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                                     routinRecyclerView.setLayoutManager(layoutManager);
                                     routinRecyclerView.setItemAnimator(new DefaultItemAnimator());
                                     routinRecyclerView.setAdapter(adapter);
-                                    ToastUtils.showShort(mArrayList.size());
+                                   // ToastUtils.showShort(mArrayList.size());
                                 }
                             });
                         }

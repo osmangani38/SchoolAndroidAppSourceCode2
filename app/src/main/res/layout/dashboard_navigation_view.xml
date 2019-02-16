@@ -71,6 +71,7 @@
                         android:textSize="16dp" />
                 </RelativeLayout>
                 <RelativeLayout
+                    android:id="@+id/studentRelativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:visibility="visible">
@@ -80,7 +81,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:text="@string/studentText"
-                        android:textColor="#019ae8"
+                        android:textColor="#000000"
                         android:textSize="16dp" />
                 </RelativeLayout>
                 <RelativeLayout

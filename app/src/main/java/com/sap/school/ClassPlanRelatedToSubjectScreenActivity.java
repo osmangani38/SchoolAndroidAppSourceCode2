@@ -121,7 +121,7 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
                                 int countSection = jsonArraySection.length();
                                 for (int j = 0; j < countSection; j++) {
                                     JSONObject jsonObjItmSubjects = jsonArraySection.getJSONObject(j);
-                                    mArrayList.add(new ClassPlanSubjectPojoClass(jsonObjItmSubjects.getString("subject_id"), jsonObjItmSubjects.getString("subject_name")));//*jsonObjItm.getString("curclass"*//*)
+                                    mArrayList.add(new ClassPlanSubjectPojoClass(jsonObjItmSubjects.getString("id"), jsonObjItmSubjects.getString("name")));//*jsonObjItm.getString("curclass"*//*)
                                 }
                             }
                             else {

@@ -58,6 +58,7 @@
     <string name="routineText">Routine</string>
     <string name="examText">Exam Schedule</string>
     <string name="todaysClassPlanText">Todays Class Plan</string>
+    <string name="moreClassPlan">More Class Plan</string>
 
     <string name="markAttendencetext">Mark Attendence</string>
     <string name="rollNoText">Roll No</string>

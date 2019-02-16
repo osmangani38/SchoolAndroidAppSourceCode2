@@ -29,6 +29,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
+import com.sap.school.Fragment.RoutinFragment;
 import com.sap.school.PojoClass.ClassOverViewPojoClass;
 import com.sap.school.PojoClass.ClassRoutinePojoClass;
 import com.sap.school.PojoClass.InfoPojoClass;
@@ -39,7 +40,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TeacherDashBoardActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView infoRecyclerView,classOverviewRecyclerView,classRoutineRecyclerView;
@@ -53,13 +56,14 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
     TextView fullName;
     private DrawerLayout drawer;
     RelativeLayout toggleButton;
-    RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,myProfile,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton,ralativeLayoutStudent,relativeAcademic;
+    RelativeLayout dahboardRelativeLayout,studentNavigationButton,attendenceNavigationButton,healthInfoNavigationButton,myProfile,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton,ralativeLayoutStudent,relativeAcademic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_dashboard);
         initView();
         setListener();
+        getDayId();
         Information();
         ClassOverView();
         ClassRoutinMethod();
@@ -68,6 +72,8 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
     private void setListener() {
         toggleButton.setOnClickListener(this);
         attendenceNavigationButton.setOnClickListener(this);
+        studentNavigationButton.setOnClickListener(this);
+        dahboardRelativeLayout.setOnClickListener(this);
         healthInfoNavigationButton.setOnClickListener(this);
         myProfile.setOnClickListener(this);
         gameAndSportsNavigationButton.setOnClickListener(this);
@@ -136,6 +142,8 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         toggleButton=(RelativeLayout)findViewById(R.id.toggleButton);
 
         attendenceNavigationButton=(RelativeLayout)findViewById(R.id.attendenceNavigationButton);
+        studentNavigationButton=(RelativeLayout)findViewById(R.id.studentRelativeLayout);
+        dahboardRelativeLayout=(RelativeLayout)findViewById(R.id.dashboardRelativeLayout);
         healthInfoNavigationButton=(RelativeLayout)findViewById(R.id.healthInfoNavigationButton);
         healthInfoNavigationButton.setVisibility(View.GONE);
        // ralativeLayoutStudent = (RelativeLayout) findViewById(R.id.student2);
@@ -182,6 +190,17 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         {
             case R.id.toggleButton:
                 openDrawer();
+                break;
+            case R.id.dashboardRelativeLayout:
+                Intent gonext2=new Intent(getApplication(),TeacherDashBoardActivity.class);
+                startActivity(new Intent(gonext2));
+                closeDrawer();
+                break;
+            case R.id.studentRelativeLayout:
+                Intent gonext1=new Intent(getApplication(),SelectClassActivity.class);
+                gonext1.putExtra("type","Student");
+                startActivity(new Intent(gonext1));
+                closeDrawer();
                 break;
             case R.id.attendenceNavigationButton:
                 Intent gonext=new Intent(getApplication(),SelectClassActivity.class);
@@ -308,11 +327,11 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                                     Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = SPUtils.getInstance().getString("day");
-                                    //if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
+                                    if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
                                         //classRoutinePojoClassArrayList.add(new ClassRoutinePojoClass("MatheMatices","Class - V | Section - B","11am - 11:45am"));
 
                                         mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
-                                    //}
+                                    }
                                 }
 
                             }
@@ -349,6 +368,33 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         });
 
     }
+    private void getDayId(){
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        Date d = new Date();
+        String dayOfTheWeek = sdf.format(d);
+        if(dayOfTheWeek.equals("Sunday")){
+            SPUtils.getInstance().put("day","0");
+        }
+        else  if(dayOfTheWeek.equals("Monday")){
+            SPUtils.getInstance().put("day","1");
+        }
+        else  if(dayOfTheWeek.equals("Tuesday")){
+            SPUtils.getInstance().put("day","2");
+        }
+        else  if(dayOfTheWeek.equals("Wednesday")){
+            SPUtils.getInstance().put("day","3");
+        }
+        else  if(dayOfTheWeek.equals("Thursday")){
+            SPUtils.getInstance().put("day","4");
+        }
+        else  if(dayOfTheWeek.equals("Friday")){
+            SPUtils.getInstance().put("day","5");
+        }
+        else  if(dayOfTheWeek.equals("Saturday")){
+            SPUtils.getInstance().put("day","6");
+        }
+    }
+
     public void update(ArrayList<ClassRoutinePojoClass> data) {
         classRoutinePojoClassArrayList.clear();
         classRoutinePojoClassArrayList.addAll(data);

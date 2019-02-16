@@ -97,7 +97,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     if (!StringUtils.isEmpty(subject_name)){
       subjectName.setText("Subject : "+subject_name);
     }
-    if (roll_id.equals("4") && type.equals("StudentClassPlan")) {
+    if ((roll_id.equals("4") && type.equals("StudentClassPlan")||(roll_id.equals("4") && type.equals("StudentClassLog")))) {
       selectDateLayout.setVisibility(View.VISIBLE);
       submitClassButton.setVisibility(View.GONE);
     }
@@ -272,7 +272,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
           loginJson.put("subject_id", "0");
         }
         else {
-          loginJson.put("subject_id", "0");
+          loginJson.put("subject_id", subject_id);
         }
       }
       //}
@@ -298,6 +298,8 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
           loginJson.put("date_to", toDate);
         }
         else {
+          loginJson.put("date_from", fromDate);
+          loginJson.put("date_to", toDate);
           ws_dataObj.put("WS_CODE", "265");
         }
       }
@@ -392,23 +394,12 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
         }
       }
     });
-
-    /*adapter.setChildClickListener(new OnCheckChildClickListener() {
-      @Override
-      public void onCheckChildCLick(View v, boolean checked, CheckedExpandableGroup group, int childIndex) {
-
-        //Toast.makeText(SubjectPlanDetailsActivity.this, "child", Toast.LENGTH_SHORT).show();
-      }
-    });*/
-
   }
 
   private void SubmitInfo() {
 
     String topic_id = AppConstants.GLOBAL_TOPIC_ID;
     topic_id = topic_id.replaceAll(",$", "");
-    //ToastUtils.showShort(topic_id);
-
     if(type.equals("ClassPlan")){
       submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
     }else if(type.equals("ClassLog")){

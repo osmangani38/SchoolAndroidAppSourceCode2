@@ -72,8 +72,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         passwordTF = (EditText) findViewById(R.id.password);
         closeButton=(Button)findViewById(R.id.closeButton);
         valueType=getIntent().getStringExtra("valueType");
-       emailTF.setText("300313");
-        //emailTF.setText("191701043131611169");
+        emailTF.setText("300313");
+       //emailTF.setText("191701043131611169");
         passwordTF.setText("password");
     }
     private void navigate(){
@@ -84,7 +84,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         {
             startActivity(new Intent(getApplicationContext(),StudentDashboardActivity.class));
-        }else if(StringUtils.equalsIgnoreCase(roll_id,"3"))
+        }
+        else if(StringUtils.equalsIgnoreCase(roll_id,"3"))
 
         {
             startActivity(new Intent(getApplicationContext(),ParentDashBoardActivity.class));
@@ -258,6 +259,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 @Override
                                 public void run() {
                                    // dismissProgressUI();
+
                                     getProfileData();
                                 }
                             });

@@ -71,6 +71,7 @@
                         android:textSize="16dp" />
                 </RelativeLayout>
                 <RelativeLayout
+                    android:id="@+id/studentRelativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:visibility="visible">
@@ -84,7 +85,6 @@
                         android:textSize="16dp" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:id="@+id/gameAndSportsNavigationButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:visibility="visible">

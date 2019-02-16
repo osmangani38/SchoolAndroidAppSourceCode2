@@ -39,6 +39,7 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
     RecyclerView selectInfoRecyclerView;
     SelectInfoReyclerViewAdapter selectInfoReyclerViewAdapter;
     RelativeLayout backButton;
+    TextView textViewHeading;
     ArrayList<SelectPojoClass>selectPojoClassArrayList;
     String type;
     @Override
@@ -55,18 +56,11 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";
         }
+
         getClassAndSection(user_id,roll_id);
     }
 
     private void SelectClassInfo() {
-//        selectPojoClassArrayList.add(new SelectPojoClass("01","V","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("02","VI","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("03","VII","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("04","VIII","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("05","IX","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("06","X","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("07","XI","Class","01","A"));
-//        selectPojoClassArrayList.add(new SelectPojoClass("08","XII","Class","01","A"));
         selectInfoReyclerViewAdapter = new SelectInfoReyclerViewAdapter(getApplication(), selectPojoClassArrayList);
         selectInfoRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 3));
         selectInfoRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -176,8 +170,15 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
         selectInfoRecyclerView=(RecyclerView)findViewById(R.id.selectInfoRecyclerView);
         backButton=(RelativeLayout)findViewById(R.id.backButton);
         selectPojoClassArrayList=new ArrayList<SelectPojoClass>();
+        textViewHeading = (TextView)findViewById(R.id.textViewClass);
 
         type = getIntent().getStringExtra("type");
+        if (type.equals("Student")){
+            textViewHeading.setText("Student");
+        }
+        else if(type.equals("Attendence")){
+            textViewHeading.setText("Attendence");
+        }
     }
 
     @Override
