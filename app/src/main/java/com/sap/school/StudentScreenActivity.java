@@ -14,9 +14,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,6 +57,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.searchEditText) EditText searchEditText;
     RelativeLayout backButton;
     ArrayList<StudentInfoPojoClass>studentInfoPojoClassArrayList;
+    ArrayList<StudentInfoPojoClass>mArrayFromJSON;
     StudentInfoRecyclerViewAdapter studentInfoRecyclerViewAdapter;
     LinearLayout selectClassButton,selectSectionButton;
     @Override
@@ -91,6 +95,57 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         studentRecyclerView.setItemAnimator(new DefaultItemAnimator());
         studentInfoRecyclerViewAdapter.notifyDataSetChanged();
         studentRecyclerView.setAdapter(studentInfoRecyclerViewAdapter);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+    private void performSearch() {
+
+        String searchText = searchEditText.getText().toString().toUpperCase();
+        if (searchText.length() > 0) {
+            final ArrayList mArrayList = new ArrayList<>();
+        for (StudentInfoPojoClass d : mArrayFromJSON) {
+            if (searchText!= null) {
+                if (d.getName().contains(searchText)||d.getClassInfo().contains(searchText)) {
+                    //something here
+                    mArrayList.add(d);
+                }
+            }
+        }
+            StudentScreenActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgressUI();
+                    update(mArrayList);
+
+                }
+            });
+        }
+        else{
+            StudentScreenActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgressUI();
+                    update(mArrayFromJSON);
+
+                }
+            });
+        }
+        InputMethodManager inputManager =
+                (InputMethodManager) this.getCurrentContext().
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(
+                this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+
     }
     private void updateData(ArrayList array) {
 
@@ -109,6 +164,7 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
         studentRecyclerView=(RecyclerView)findViewById(R.id.studentRecyclerView);
         backButton=(RelativeLayout)findViewById(R.id.backButton);
         studentInfoPojoClassArrayList=new ArrayList<>();
+        mArrayFromJSON=new ArrayList<>();
         selectClassButton=(LinearLayout)findViewById(R.id.selectClassButton);
         selectSectionButton=(LinearLayout)findViewById(R.id.selectSectionButton);
 
@@ -155,20 +211,19 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
-                            final ArrayList mArrayList=new ArrayList<>();
-
+                            mArrayFromJSON=new ArrayList<>();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("student_list");
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                mArrayList.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("studentname"),jsonObjItm.getString("curclass")/*jsonObjItm.getString("curclass"*/));
+                                mArrayFromJSON.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("studentname"),jsonObjItm.getString("curclass")/*jsonObjItm.getString("curclass"*/));
                             }
                             StudentScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     dismissProgressUI();
-                                update(mArrayList);
+                                update(mArrayFromJSON);
 
                                 }
                             });
@@ -213,23 +268,24 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
             public void responseStatus(final int status, final Object data) {
                 if (status == 200) {
                     // List<NotificationItem> arrTmp = new ArrayList<>();
-                    try{
+                    try{// salman
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
-                            final ArrayList mArrayList=new ArrayList<>();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
                             int count = jsonArray.length();
+                            mArrayFromJSON=new ArrayList<>();
+
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                mArrayList.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),className/*jsonObjItm.getString("curclass"*/));
+                                mArrayFromJSON.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),className/*jsonObjItm.getString("curclass"*/));
                             }
                             StudentScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     dismissProgressUI();
-                                    update(mArrayList);
+                                    update(mArrayFromJSON);
 
                                 }
                             });

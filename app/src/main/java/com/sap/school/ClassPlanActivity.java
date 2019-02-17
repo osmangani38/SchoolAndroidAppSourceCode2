@@ -31,7 +31,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ClassPlanActivity extends BaseActivity implements View.OnClickListener{
 
@@ -273,7 +277,17 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                     goNext.putExtra("class_id", class_id);
                     goNext.putExtra("subject_id", subject_id);
                     goNext.putExtra("subject_name", subject_name);
-                    goNext.putExtra("plan_date", edtSelectDate.getText().toString());
+                    String start_dt = edtSelectDate.getText().toString();
+                    DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = null;
+                    try {
+                        date = (Date)formatter.parse(start_dt);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String finalString = newFormat.format(date);
+                    goNext.putExtra("plan_date", finalString);
                     goNext.putExtra("section_id", section_id);
                     startActivity(goNext);
                 }else{

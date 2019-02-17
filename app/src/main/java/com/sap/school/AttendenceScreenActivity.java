@@ -12,9 +12,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,13 +41,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AttendenceScreenActivity extends BaseActivity implements View.OnClickListener {
     RecyclerView attendenceRecyclerView;
     String className,classId,sectionId;
+    @BindView(R.id.searchEditText)
+    EditText searchEditText;
+
     AttendenceRecyclerViewAdapter attendenceRecyclerViewAdapter;
     ArrayList<AttendancePogoClass> attendencePojoClasses;
+    ArrayList<AttendancePogoClass>mArrayFromJSON;
+
     RelativeLayout backButton, attendenceButton;
     LinearLayout selectClassButton,selectSectionButton;
 
@@ -103,20 +113,20 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
-                            final ArrayList mArrayList=new ArrayList<>();
+                              mArrayFromJSON=new ArrayList<>();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                mArrayList.add(new AttendancePogoClass(jsonObjItm.getString("id"), jsonObjItm.getString("name"), R.drawable.student1, R.drawable.cross_btn)/*jsonObjItm.getString("curclass"*/);
+                                mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("id"), jsonObjItm.getString("name"), R.drawable.student1, R.drawable.cross_btn)/*jsonObjItm.getString("curclass"*/);
                             }
                             AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     dismissProgressUI();
                                     attendenceButton.setVisibility(View.VISIBLE);
-                                    update(mArrayList);
+                                    update(mArrayFromJSON);
 
                                 }
                             });
@@ -165,7 +175,59 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         attendenceRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         attendenceRecyclerView.setItemAnimator(new DefaultItemAnimator());
         attendenceRecyclerView.setAdapter(attendenceRecyclerViewAdapter);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
+    private void performSearch() {
+
+        String searchText = searchEditText.getText().toString().toUpperCase();
+        if (searchText.length() > 0 || !searchText.equals(className)) {
+            final ArrayList mArrayList = new ArrayList<>();
+            for (AttendancePogoClass d : mArrayFromJSON) {
+                if (searchText!= null) {
+                    if (d.getName().contains(searchText)) {
+                        //something here
+                        mArrayList.add(d);
+                    }
+                }
+            }
+            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgressUI();
+                    update(mArrayList);
+
+                }
+            });
+        }
+        else{
+            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissProgressUI();
+                    update(mArrayFromJSON);
+
+                }
+            });
+        }
+        InputMethodManager inputManager =
+                (InputMethodManager) this.getCurrentContext().
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(
+                this.getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+
+    }
+
 
     private void setListner() {
         backButton.setOnClickListener(this);
@@ -176,6 +238,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         attendenceRecyclerView = (RecyclerView) findViewById(R.id.attendenceRecyclerView);
         backButton = (RelativeLayout) findViewById(R.id.backButton);
         attendenceButton = (RelativeLayout) findViewById(R.id.attendenceButton);
+        searchEditText = (EditText)findViewById(R.id.searchEditText);
         attendencePojoClasses = new ArrayList<AttendancePogoClass>();
     }
 
