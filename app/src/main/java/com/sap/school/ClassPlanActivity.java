@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -262,12 +263,22 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
         });
 
     }
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("hasBackPressed",true);
+        setResult(this.RESULT_OK,returnIntent);
+        finish();
+    }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.backButton:
+                Intent returnIntent = new Intent();
+                setResult(this.RESULT_CANCELED, returnIntent);
                 finish();
                 break;
             case R.id.makePlanButton://Salman
@@ -286,10 +297,17 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                     SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    String finalString = newFormat.format(date);
+                    Date now = new Date();
+                    Date todayDate = new Date(now.getYear(), now.getMonth(), now.getDate());
+                                        String finalString = newFormat.format(date);
                     goNext.putExtra("plan_date", finalString);
                     goNext.putExtra("section_id", section_id);
-                    startActivity(goNext);
+                    if (date.compareTo(todayDate) >=0) {
+                        startActivity(goNext);
+                    }
+                    else {
+                        ToastUtils.showShort("Please select another day.");
+                    }
                 }else{
                     Toast.makeText(ClassPlanActivity.this,"Please Select Class and Subject", Toast.LENGTH_SHORT).show();
                 }

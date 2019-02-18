@@ -72,6 +72,24 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
         croutinInfo(user_id, roll_id, "0", "0", formattedDate, formattedDate);
         setListner();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String formattedDate = df.format(c);
+            String user_id = SPUtils.getInstance().getString("user_id");
+            String roll_id;
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ViewTodaysClassPlan.this);
+            roll_id = sharedPref.getString("roll_id", null); // getting String
+            if (StringUtils.isEmpty(roll_id)){
+                roll_id = "2";
+            }
+            croutinInfo(user_id, roll_id, "0", "0", formattedDate, formattedDate);
+
+        }
+    }//onActivityResult
 
     private void setListner() {
         backButton.setOnClickListener(this);
@@ -97,7 +115,7 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
                 Intent j = new Intent(getApplicationContext(), ClassPlanActivity.class);
 //                i.putExtra("page", "1");
                 j.putExtra("type","classPlan");
-                startActivity(j);
+                startActivityForResult(j,1);
                 break;
 
         }

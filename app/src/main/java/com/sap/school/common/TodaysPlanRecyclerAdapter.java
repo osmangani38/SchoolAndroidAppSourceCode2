@@ -36,7 +36,7 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
         holder.lessonNameTV.setText(todaysClassPlanPOJOArrayList.get(position).getLesson_name());
         holder.timingTextView.setText(todaysClassPlanPOJOArrayList.get(position).getTopic_name());
         holder.sectionTextView.setText("Class - "+todaysClassPlanPOJOArrayList.get(position).getClass_name()+ " | Section - "+
-        todaysClassPlanPOJOArrayList.get(position).getSection_name());
+        todaysClassPlanPOJOArrayList.get(position).getSection_name()+" | "+ todaysClassPlanPOJOArrayList.get(position).getClass_date());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

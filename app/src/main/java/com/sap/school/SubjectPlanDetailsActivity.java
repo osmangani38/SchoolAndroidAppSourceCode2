@@ -399,16 +399,20 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   private void SubmitInfo() {
 
     String topic_id = AppConstants.GLOBAL_TOPIC_ID;
-    topic_id = topic_id.replaceAll(",$", "");
-    if(type.equals("ClassPlan")){
-      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
-    }else if(type.equals("ClassLog")){
-      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date,classid, section_id, subjectid, topic_id, "testing save data");
-    }else if(type.equals("TodaysClassPlan")){
-      submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date,classid, section_id, subjectid, topic_id, "testing save data");
+    if (StringUtils.isTrimEmpty(topic_id)){
+      ToastUtils.showShort("Please select topics");
     }
+    else {
+      topic_id = topic_id.replaceAll(",$", "");
+      if (type.equals("ClassPlan")) {
+        submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
+      } else if (type.equals("ClassLog")) {
+        submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
+      } else if (type.equals("TodaysClassPlan")) {
+        submitClassPlan(user_id, roll_id, log_date, plan_id, plan_date, classid, section_id, subjectid, topic_id, "testing save data");
+      }
 
-
+    }
   }
 
   private void submitClassPlan(String user_id, String role_id, String log_date, String plan_id,

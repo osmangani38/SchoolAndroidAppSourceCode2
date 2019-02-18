@@ -44,6 +44,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -125,15 +127,33 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                 if (StringUtils.isEmpty(roll_id)){
                     roll_id = "2";
                 }
+                String start_dt = fromTextView.getText().toString();
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = null;
+                try {
+                    date = (Date)formatter.parse(start_dt);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String finalFromString = newFormat.format(date);
+                String to_dt = toDateTV.getText().toString();
+                try {
+                    date = (Date)formatter.parse(to_dt);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String finalToString = newFormat.format(date);
 
+                croutinInfo(user_id, roll_id, class_id, sectionId, finalFromString,finalToString.toString());
                 if(type.equals("ClassLog")){
                     if(StringUtils.isEmpty(class_id) && StringUtils.isEmpty(sectionId)){
                         class_id = "6";
                         sectionId = "1";
                     }
-                    croutinInfo(user_id, roll_id, class_id, sectionId, fromTextView.getText().toString(), toDateTV.getText().toString());
+
                 }else{
-                    croutinInfo(user_id, roll_id, "0", "0", fromTextView.getText().toString(), toDateTV.getText().toString());
+                    croutinInfo(user_id, roll_id, "0", "0", finalFromString, finalToString);
                 }
 
 
@@ -189,7 +209,8 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                String myFormat = "dd-MM-yyyy"; //In which you need put here
+
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
                 fromTextView.setText(sdf.format(myCalendar.getTime()));
@@ -206,7 +227,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                String myFormat = "yyyy-MM-dd"; //In which you need put here
+                String myFormat = "dd-MM-yyyy"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
                 toDateTV.setText(sdf.format(myCalendar.getTime()));
