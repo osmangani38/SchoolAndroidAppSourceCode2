@@ -255,7 +255,7 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                 closeDrawer();
                 break;
             case R.id.logOutNavigationButton:
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 finish();
                 closeDrawer();
                 break;

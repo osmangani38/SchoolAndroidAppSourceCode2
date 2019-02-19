@@ -11,12 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.blankj.utilcode.util.SPUtils;
 import com.sap.school.PojoClass.TodaysClassPlanPOJO;
 import com.sap.school.R;
 import com.sap.school.SubjectPlanDetailsActivity;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRecyclerAdapter.MyViewHolderClass>{
     Context context;
@@ -35,14 +40,30 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
         holder.subjectTextView.setText(todaysClassPlanPOJOArrayList.get(position).getSubject());
         holder.lessonNameTV.setText(todaysClassPlanPOJOArrayList.get(position).getLesson_name());
         holder.timingTextView.setText(todaysClassPlanPOJOArrayList.get(position).getTopic_name());
+        String start_dt = todaysClassPlanPOJOArrayList.get(position).getClass_date();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = (Date)formatter.parse(start_dt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat newFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String finalFromString = newFormat.format(date);
         holder.sectionTextView.setText("Class - "+todaysClassPlanPOJOArrayList.get(position).getClass_name()+ " | Section - "+
-        todaysClassPlanPOJOArrayList.get(position).getSection_name()+" | "+ todaysClassPlanPOJOArrayList.get(position).getClass_date());
+        todaysClassPlanPOJOArrayList.get(position).getSection_name()+" | "+ finalFromString);
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent goNext = new Intent(context, SubjectPlanDetailsActivity.class);
-                goNext.putExtra("type","TodaysClassPlan");
+                if (SPUtils.getInstance().getString("type").equals("ClassLog")){
+                    goNext.putExtra("type","ClassLog");
+                   // SPUtils.getInstance().remove("type");
+                }
+                else{
+                    goNext.putExtra("type","TodaysClassPlan");
+                }
                 goNext.putExtra("class_id", todaysClassPlanPOJOArrayList.get(position).getClass_id());
                 goNext.putExtra("subject_id", todaysClassPlanPOJOArrayList.get(position).getSubject_id());
                 goNext.putExtra("subject_name", todaysClassPlanPOJOArrayList.get(position).getSubject());

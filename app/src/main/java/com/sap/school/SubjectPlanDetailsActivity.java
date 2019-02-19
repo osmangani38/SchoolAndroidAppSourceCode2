@@ -279,8 +279,15 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       if (roll_id.equals("2") && type.equals("ClassLog")) {
 //             loginJson.put("date_from", fromDate);
 //             loginJson.put("date_to", toDate);
-        loginJson.put("date_from", fromDate);
-        loginJson.put("date_to", toDate);
+
+        if (plan_date.length()>0){
+          loginJson.put("date_from", plan_date);
+          loginJson.put("date_to", plan_date);
+        }
+        else {
+          loginJson.put("date_from", fromDate);
+          loginJson.put("date_to", toDate);
+        }
       }
     } catch (JSONException e) {
       e.printStackTrace();

@@ -81,6 +81,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         if(type.equals("ClassLog")){
             tvHeader.setText(R.string.classLogText);
         }
+
         setListner();
     }
 
@@ -263,6 +264,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         if(type.equals("ClassLog")){
             wsLink = AppConstants.BaseURL+"ClassLog";
         }
+        SPUtils.getInstance().put("type",type);
         //web method call
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
