@@ -7,19 +7,42 @@
     android:background="@color/whiteColor"
     android:orientation="vertical"
     tools:context=".LoginActivity">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent" >
+
+    <com.github.barteksc.pdfviewer.PDFView
+        android:id="@+id/pdfView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <Button
+        android:id="@+id/closeButton1"
+        android:layout_width="22dp"
+        android:visibility="visible"
+        android:layout_height="22dp"
+        android:backgroundTint="@color/blackColor"
+        android:background="@drawable/close_ic"/>
+    </RelativeLayout>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <LinearLayout
+        android:id="@+id/linnearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <RelativeLayout
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:background="@drawable/banner"
         android:orientation="vertical">
-        <Button
+
+            <Button
             android:id="@+id/closeButton"
             android:layout_width="22dp"
             android:layout_height="22dp"
@@ -91,6 +114,20 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="8dp">
     </Button>
+        <TextView
+            android:id="@+id/btnDownloadManual"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:autoLink="all"
+            android:background="@color/whiteColor"
+            android:textColor="@color/emailTextColor"
+            android:text="@string/downloadText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp">
+        </TextView>
+
     </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

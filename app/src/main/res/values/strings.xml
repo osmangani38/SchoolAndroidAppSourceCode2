@@ -9,6 +9,7 @@
     <string name="userName">UserName</string>
     <string name="userId">userId</string>
     <string name="passwordText">Password</string>
+    <string name="downloadText">Download Manual</string>
     <string name="loginText">Login</string>
     <string name="forgetPasswordText">Forget Password?</string>
     <string name="shareText">Share</string>

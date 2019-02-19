@@ -1,20 +1,31 @@
 package com.sap.school;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.ObjectUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.github.barteksc.pdfviewer.PDFView;
 import com.google.gson.Gson;
 import com.itheima.retrofitutils.ItheimaHttp;
 import com.itheima.retrofitutils.Request;
@@ -36,13 +47,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener,Validator.ValidationListener{
-    Button loginButton,closeButton;
+    Button loginButton,closeButton,closeButton1;
+    RelativeLayout relativeLayout;
+    PDFView pdfView;
+    WebView webView;
+    TextView btnTextDownload;
     @NotEmpty
     EditText emailTF;
     @NotEmpty
@@ -64,13 +84,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void setListner() {
         loginButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
+        closeButton1.setOnClickListener(this);
+        btnTextDownload.setOnClickListener(this);
     }
 
     private void initView() {
         loginButton=(Button)findViewById(R.id.loginButton);
+        pdfView = (PDFView)findViewById(R.id.pdfView);
+        btnTextDownload=(TextView) findViewById(R.id.btnDownloadManual);
         emailTF=(EditText) findViewById(R.id.email);
         passwordTF = (EditText) findViewById(R.id.password);
-        closeButton=(Button)findViewById(R.id.closeButton);
+        closeButton = (Button)findViewById(R.id.closeButton);
+        closeButton1 = (Button)findViewById(R.id.closeButton1);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+
         valueType=getIntent().getStringExtra("valueType");
         emailTF.setText("300313");
        //emailTF.setText("191701043131611169");
@@ -97,13 +124,43 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         {
             case R.id.loginButton:
                 validator.validate();
-
-            break;
+                break;
+            case R.id.btnDownloadManual:
+                downloadManual();
+                break;
+            case R.id.closeButton1:
+                relativeLayout.setVisibility(View.GONE);
+                closeButton1.setVisibility(View.GONE);
+                pdfView.setVisibility(View.GONE);
             case R.id.closeButton:
                 finish();
                 break;
         }
 
+    }
+    private void downloadManual(){
+        File fileBrochure = new File(Environment.getExternalStorageDirectory() + "/" + "AppManual.pdf");
+        if (!fileBrochure.exists())
+        {
+            CopyAssetsbrochure();
+        }
+        closeButton1.setVisibility(View.VISIBLE);
+        relativeLayout.setVisibility(View.VISIBLE);
+        /** PDF reader code */
+        pdfView.setVisibility(View.VISIBLE);
+        Uri uri =  Uri.parse( "https://www.dropbox.com/s/8yz3zq0y6619n99/AppManual.pdf?dl=0" );
+
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + "AppManual.pdf");
+        pdfView.fromAsset("AppManual.pdf").load();
+
+        //ToastUtils.showShort("download btn pressed");
+    }
+    @Override
+    public void onBackPressed() {
+        // your code.
+        relativeLayout.setVisibility(View.GONE);
+        closeButton1.setVisibility(View.GONE);
+        pdfView.setVisibility(View.GONE);
     }
     @Override
     public void onValidationSucceeded() {
@@ -126,6 +183,53 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             } else {
                 ToastUtils.showShort(message);
             }
+        }
+    }
+
+    //method to write the PDFs file to sd card
+    private void CopyAssetsbrochure() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try
+        {
+            files = assetManager.list("");
+        }
+        catch (IOException e)
+        {
+            Log.e("tag", e.getMessage());
+        }
+        for(int i=0; i<files.length; i++)
+        {
+            String fStr = files[i];
+            if(fStr.equalsIgnoreCase("AppManual.pdf"))
+            {
+                InputStream in = null;
+                OutputStream out = null;
+                try
+                {
+                    in = assetManager.open(files[i]);
+                    out = new FileOutputStream(Environment.getExternalStorageDirectory() + "/" + files[i]);
+                    copyFile(in, out);
+                    in.close();
+                    in = null;
+                    out.flush();
+                    out.close();
+                    out = null;
+                    break;
+                }
+                catch(Exception e)
+                {
+                    Log.e("tag", e.getMessage());
+                }
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
         }
     }
     private void getProfileData(){
