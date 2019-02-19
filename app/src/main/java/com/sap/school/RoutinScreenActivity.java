@@ -269,42 +269,61 @@ public class RoutinScreenActivity extends BaseActivity implements View.OnClickLi
         @Override
         public Fragment getItem(int position) {
             Fragment frag=null;
+            Bundle bundle;
             switch (position){
                 case 0:
-                    selectedDay = "0";
-                    SPUtils.getInstance().put("day",selectedDay);
-                    frag=new RoutinFragment();
-                    break;
-                case 1:
                     selectedDay = "1";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
-                case 2:
+                case 1:
                     selectedDay = "2";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
-                case 3:
+                case 2:
                     selectedDay = "3";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
-                case 4:
+                case 3:
                     selectedDay = "4";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
-                case 5:
+                case 4:
                     selectedDay = "5";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
-                case 6:
+                case 5:
                     selectedDay = "6";
                     SPUtils.getInstance().put("day",selectedDay);
                     frag=new RoutinFragment();
+                    bundle = new Bundle();
+                    bundle.putInt("day", Integer.parseInt(selectedDay));
+                    frag.setArguments(bundle);
                     break;
+                /*case 6:
+                    selectedDay = "6";
+                    SPUtils.getInstance().put("day",selectedDay);
+                    frag=new RoutinFragment();
+                    break;*/
             }
 
             return frag;
@@ -326,7 +345,7 @@ public class RoutinScreenActivity extends BaseActivity implements View.OnClickLi
                 case 1:
                     selectedDay = "2";
                     SPUtils.getInstance().put("day",selectedDay);
-                    title="Tueday";
+                    title="Tuesday";
                     break;
                 case 2:
                     selectedDay = "3";

@@ -51,7 +51,7 @@ import java.util.ArrayList;
 public class RoutinFragment extends Fragment {
     View view;
     private ProgressDialog progressDialog;
-
+    int selectedDays;
     RecyclerView routinRecyclerView;
     RoutineRecyclerViewAdapter routineRecyclerViewAdapter;
     ArrayList<ClassRoutinePojoClass> classRoutinePojoClassArrayList;
@@ -69,6 +69,7 @@ public class RoutinFragment extends Fragment {
         this.progressDialog.setCancelable(false);
         initView();
         croutinInfo();
+        selectedDays = getArguments().getInt("day", 0);
         String user_id = SPUtils.getInstance().getString("user_id");
         String roll_id;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity());
@@ -118,8 +119,8 @@ public class RoutinFragment extends Fragment {
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", role_id);
             if (role_id.equals("2")) {
-                loginJson.put("class_id", "");
-                loginJson.put("section_id", "");
+                loginJson.put("class_id", classId);
+                loginJson.put("section_id", sectionId);
             }
 
         } catch (JSONException e) {
@@ -156,8 +157,9 @@ public class RoutinFragment extends Fragment {
                                     JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                     Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
-                                    String day = SPUtils.getInstance().getString("day");
-                                    if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
+                                    String day = String.valueOf(selectedDays);//SPUtils.getInstance().getString("day");
+                                    Log.d("day is ", "day is " + day);
+                                    if (day.equals(jsonObjItm.getString("day_id"))) {
                                         mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
                                     }
                                 }
