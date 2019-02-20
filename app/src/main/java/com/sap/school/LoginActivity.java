@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -99,9 +100,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         valueType=getIntent().getStringExtra("valueType");
-        emailTF.setText("300313");
+       // emailTF.setText("300313");
        //emailTF.setText("191701043131611169");
-        passwordTF.setText("password");
+        //passwordTF.setText("password");
+        btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+
     }
     private void navigate(){
         if(StringUtils.equalsIgnoreCase(roll_id,"2"))

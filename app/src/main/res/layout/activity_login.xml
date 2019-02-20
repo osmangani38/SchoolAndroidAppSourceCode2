@@ -117,7 +117,7 @@
         <TextView
             android:id="@+id/btnDownloadManual"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="30dp"
             android:textAlignment="center"
             android:autoLink="all"
             android:background="@color/whiteColor"
@@ -125,7 +125,7 @@
             android:text="@string/downloadText"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="20dp">
         </TextView>
 
     </LinearLayout>
