@@ -15,15 +15,19 @@ public class AttendancePogoClass {
     public String getStudentDailyAttenceId() {
         return studentDailyAttenceId;
     }
+    public String getStudentRollNumber() {
+        return roll_number;
+    }
 
     public String getId() {
         return id;
     }
 
     int student_image,attendence_info;
-    String name,id,studentDailyAttenceId;
-    public AttendancePogoClass(String id, String name, int student_image, int attendence_info,String studentDailyAttenceId) {
+    String name,id,studentDailyAttenceId,roll_number;
+    public AttendancePogoClass(String id, String name, int student_image, int attendence_info,String studentDailyAttenceId,String roll_number) {
         this.id=id;this.name=name;this.student_image=student_image;this.attendence_info=attendence_info;
         this.studentDailyAttenceId = studentDailyAttenceId;
+        this.roll_number = roll_number;
     }
 }

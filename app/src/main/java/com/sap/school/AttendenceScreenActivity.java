@@ -128,7 +128,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                                 else {
                                     mArrayNotSelectedStudents.add(jsonObjItm.getString("student_id"));
                                 }
-                                    mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("student_id"), jsonObjItm.getString("name"), R.drawable.student1,jsonObjItm.getInt("attendance"),jsonObjItm.getString("student_attendance_daily_id"))/*jsonObjItm.getString("curclass"*/);
+                                    mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("student_id"), jsonObjItm.getString("name"), R.drawable.student1,jsonObjItm.getInt("attendance"),jsonObjItm.getString("student_attendance_daily_id"),jsonObjItm.getString("roll_no"))/*jsonObjItm.getString("curclass"*/);
                             }
                             AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
@@ -387,7 +387,13 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 
         @Override
         public void onBindViewHolder(@NonNull AttendenceRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
-            myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getId());
+            String roll_number = attendencePojoClasses.get(i).getStudentRollNumber();
+            if (roll_number.length()>0){
+                myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getStudentRollNumber());
+            }
+            else {
+                myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getId());
+            }
             myViewHolderClass.nameTextView.setText(attendencePojoClasses.get(i).getName());
             myViewHolderClass.classTextView.setText("Class - "+className);
 
