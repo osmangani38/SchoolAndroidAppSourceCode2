@@ -100,9 +100,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         valueType=getIntent().getStringExtra("valueType");
-       // emailTF.setText("300313");
+       emailTF.setText("300313");
        //emailTF.setText("191701043131611169");
-        //passwordTF.setText("password");
+        passwordTF.setText("password");
         btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 
     }

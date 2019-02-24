@@ -53,7 +53,8 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
     AttendenceRecyclerViewAdapter attendenceRecyclerViewAdapter;
     ArrayList<AttendancePogoClass> attendencePojoClasses;
     ArrayList<AttendancePogoClass>mArrayFromJSON;
-
+    ArrayList mArraySelectedStudents;
+    ArrayList mArrayNotSelectedStudents;
     RelativeLayout backButton, attendenceButton;
     LinearLayout selectClassButton,selectSectionButton;
 
@@ -82,7 +83,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
     private void getAllStudentsDetails(String user_id, String role_id)
     {
         showProgressUI(AppConstants.Loading);
-        String wsLink = AppConstants.BaseURL+"StudentList";
+        String wsLink = AppConstants.BaseURL+"StudentAttendanceDaily";
         //web method call
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -99,7 +100,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "150");
+            ws_dataObj.put("WS_CODE", "170");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -114,12 +115,20 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
                               mArrayFromJSON=new ArrayList<>();
+                            mArraySelectedStudents = new ArrayList();
+                            mArrayNotSelectedStudents = new ArrayList();
                             JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 Log.d("Json is ","jsonObjItm is"+jsonObjItm);
-                                mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("id"), jsonObjItm.getString("name"), R.drawable.student1, R.drawable.cross_btn)/*jsonObjItm.getString("curclass"*/);
+                                if (jsonObjItm.getInt("attendance") == 1){
+                                    mArraySelectedStudents.add(jsonObjItm.getString("student_id"));
+                                }
+                                else {
+                                    mArrayNotSelectedStudents.add(jsonObjItm.getString("student_id"));
+                                }
+                                    mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("student_id"), jsonObjItm.getString("name"), R.drawable.student1,jsonObjItm.getInt("attendance"),jsonObjItm.getString("student_attendance_daily_id"))/*jsonObjItm.getString("curclass"*/);
                             }
                             AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
@@ -158,6 +167,103 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         });
 
     }
+    private void submitAttendence(String user_id, String role_id)
+    {
+        showProgressUI(AppConstants.Loading);
+        String wsLink = AppConstants.BaseURL+"SaveStudentDailyAttendance";
+        //web method call
+        JSONObject loginJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            loginJson.put("user_id", user_id);
+            loginJson.put("role_id", role_id);
+            loginJson.put("class_id", classId);
+            loginJson.put("section_id", sectionId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray studentList = new JSONArray();
+        for (int i = 0;i<mArrayFromJSON.size();i++){
+           String student_id = mArrayFromJSON.get(i).getId();
+           String student_attendance_daily_id = mArrayFromJSON.get(i).getStudentDailyAttenceId();
+            JSONObject studentAttenceObject = new JSONObject();
+            try {
+                studentAttenceObject.put("student_id", student_id);
+                studentAttenceObject.put("student_attendance_daily_id", student_attendance_daily_id);
+                if (mArraySelectedStudents.contains(student_id)) {
+                    studentAttenceObject.put("attendance", "1");
+                }
+                else {
+                    studentAttenceObject.put("attendance", "0");
+                }
+                studentList.put(studentAttenceObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        jsonArray.put(loginJson);
+        if (studentList.length()>0){
+            try {
+                loginJson.put("student", studentList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray);
+            ws_dataObj.put("WS_CODE", "171");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+            @Override
+            public void responseStatus(final int status, final Object data) {
+                if (status == 200) {
+                    // List<NotificationItem> arrTmp = new ArrayList<>();
+                    try{
+                        final ResponseStatus responseStatus = new ResponseStatus((String)data);
+                        if (responseStatus.isSuccess()) {
+                            dismissProgressUI();
+
+                            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dismissProgressUI();
+                                    ToastUtils.showShort("Attendence Submitted Successfully.");
+                                }
+                            });
+                        }
+                        else {
+                            AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //attendenceButton.setVisibility(View.GONE);
+                                    dismissProgressUI();
+                                    ToastUtils.showShort(responseStatus.response_message);                                }
+                            });
+
+                        }
+                        AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismissProgressUI();
+                            }
+                        });
+                    }catch (Exception ex){ex.printStackTrace();}
+
+
+                }else{
+                    Log.d("Webservice","failed");
+                    dismissProgressUI();
+                }
+            }
+        });
+
+    }
+
     public void update(ArrayList<AttendancePogoClass> data) {
         attendencePojoClasses.clear();
         attendencePojoClasses.addAll(data);
@@ -249,7 +355,15 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.attendenceButton:
-                startActivity(new Intent(getApplication(), MarkAttendenceActivity.class));
+                String user_id = SPUtils.getInstance().getString("user_id");
+                String roll_id;
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( AttendenceScreenActivity.this);
+                roll_id = sharedPref.getString("roll_id", null); // getting String
+                if (StringUtils.isEmpty(roll_id)){
+                    roll_id = "2";
+                }
+                submitAttendence(user_id,roll_id);
+                // startActivity(new Intent(getApplication(), MarkAttendenceActivity.class));
                 break;
         }
 
@@ -280,7 +394,15 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
             myViewHolderClass.imageView.setTag(i);
             // myViewHolderClass.classTextView.setText(attendencePojoClasses.get(i).getId());
             Picasso.with(getApplication()).load(R.drawable.avatar_student).into(myViewHolderClass.cirleImageView);
-            Picasso.with(getApplication()).load(attendencePojoClasses.get(i).getAttendence_info()).into(myViewHolderClass.imageView);
+            if (attendencePojoClasses.get(i).getAttendence_info() == 1){
+                myViewHolderClass.imageView.setSelected(true);
+                Picasso.with(getApplication()).load(R.drawable.tick_ic).into(myViewHolderClass.imageView);
+            }
+            else{
+                myViewHolderClass.imageView.setSelected(false);
+                  Picasso.with(getApplication()).load(R.drawable.cross_btn).into(myViewHolderClass.imageView);
+            }
+
         }
 
         @Override
@@ -292,18 +414,31 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
             TextView rollNoTextView, nameTextView, classTextView;
             CircleImageView cirleImageView;
             ImageView imageView;
-
-            public MyViewHolderClass(@NonNull View itemView) {
+            public MyViewHolderClass(@NonNull final View itemView) {
                 super(itemView);
                 rollNoTextView = (TextView) itemView.findViewById(R.id.rollNoTextView);
                 nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
                 classTextView = (TextView) itemView.findViewById(R.id.classTextView);
                 cirleImageView = (CircleImageView) itemView.findViewById(R.id.cirleImageView);
                 imageView = (ImageView) itemView.findViewById(R.id.imageView);
+                if (imageView.isSelected()){
+                    imageView.setSelected(false);
+                    imageView.setImageResource(R.drawable.tick_ic);
+                }
+                else {
+                    imageView.setSelected(true);
+                    imageView.setImageResource(R.drawable.cross_btn);
+                }
                 imageView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        //v.getId() will give you the image id
-                       // ToastUtils.showShort("clicked on" + v.getTag());
+                        int i = (int) v.getTag();
+                      String student_id = attendencePojoClasses.get(i).getId();
+                      if (mArraySelectedStudents.contains(student_id)){
+                          mArraySelectedStudents.remove(student_id);
+                      }
+                      else {
+                          mArraySelectedStudents.add(student_id);
+                      }
                         if (v.isSelected()){
                             v.setSelected(false);
                             imageView.setImageResource(R.drawable.cross_btn);
