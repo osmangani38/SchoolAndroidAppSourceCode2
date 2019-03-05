@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -121,10 +122,15 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.btnGo:
-                String user_id = SPUtils.getInstance().getString("user_id");
+                String user_id = SecurePrefManager.with(this)
+                        .get("user_id")
+                        .defaultValue("unknown")
+                        .go();;
                 String roll_id;
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ViewMoreClassPlan.this);
-                roll_id = sharedPref.getString("roll_id", null); // getting String
+                roll_id = SecurePrefManager.with(this)
+                        .get("roll_id")
+                        .defaultValue("unknown")
+                        .go();; // getting String
                 if (StringUtils.isEmpty(roll_id)){
                     roll_id = "2";
                 }

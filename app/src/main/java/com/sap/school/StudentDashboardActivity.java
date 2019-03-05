@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -111,15 +112,19 @@ public class StudentDashboardActivity extends BaseActivity implements View.OnCli
     private void getClassRoutine()
     {
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( StudentDashboardActivity.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go(); // getting String
         String wsLink = AppConstants.BaseURL+"TeacherRoutine";
         //web method call
         if (roll_id.equals("4")) {
             wsLink = AppConstants.BaseURL+"ClassRoutine";
         }
-        String user_id = SPUtils.getInstance().getString("user_id");
-
+        String user_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();
         showProgressUI("Loading...");
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -348,8 +353,8 @@ public class StudentDashboardActivity extends BaseActivity implements View.OnCli
                 SharedPreferences.Editor editorpref = spreferences.edit();
                 editor.clear();
                 editor.commit();
-                SPUtils.getInstance().remove("user_id");
-                SPUtils.getInstance().remove("role_id");
+                SecurePrefManager.with(this).remove("user_id");
+                SecurePrefManager.with(this).remove("role_id");
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 finish();
                 closeDrawer();

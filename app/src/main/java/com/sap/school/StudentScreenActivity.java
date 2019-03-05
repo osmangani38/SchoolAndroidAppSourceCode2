@@ -31,6 +31,7 @@ import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.GenWSHandler;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
@@ -74,10 +75,15 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
             classId= getIntent().getStringExtra("classId");
             sectionId= getIntent().getStringExtra("sectionId");
         }
-        String user_id = SPUtils.getInstance().getString("user_id");
+        String user_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(StudentScreenActivity.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go();; // getting String
 
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";

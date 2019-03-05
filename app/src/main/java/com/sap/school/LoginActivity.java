@@ -36,6 +36,8 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
+import com.prashantsolanki.secureprefmanager.SecurePrefManagerInit;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -53,8 +55,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.NoSuchPaddingException;
 
 import retrofit2.Call;
 
@@ -80,6 +91,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         setListner();
         validator = new Validator(this);
         validator.setValidationListener(LoginActivity.this);
+        //not mandatory, can be null too
+        String storeFileName = "securedStore";
+//not mandatory, can be null too
+        String keyPrefix = "vss";
+//it's better to provide one, and you need to provide the same key each time after the first time
+        byte[] seedKey = "SecuredSeedData".getBytes();
+        new SecurePrefManagerInit.Initializer(getApplicationContext())
+                .useEncryption(true)
+                .initialize();
+
     }
 
     private void setListner() {
@@ -242,11 +263,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             //web method call
             JSONObject loginJson = new JSONObject();
             JSONArray jsonArray = new JSONArray();
-            String roll_id;
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            roll_id = sharedPref.getString("roll_id", null); // getting String
-
-            String user_id = SPUtils.getInstance().getString("user_id");
+            String user_id = SecurePrefManager.with(this)
+                    .get("user_id")
+                    .defaultValue("unknown")
+                    .go();
+            String roll_id = SecurePrefManager.with(this)
+                    .get("roll_id")
+                    .defaultValue("unknown")
+                    .go();
             try {
                 loginJson.put("role_id",roll_id );
                 loginJson.put("user_id", user_id);
@@ -276,10 +300,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 Gson gson = new Gson();
                                 String userJson = gson.toJson(jsonObjItm);
                                 final ProfilePojoClass profileObject = new ProfilePojoClass();
-                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("username", responseStatus.parseName());
-                                editor.commit();
+//                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+//                                SharedPreferences.Editor editor = sharedPref.edit();
+//                                editor.putString("username", responseStatus.parseName());
+//                                editor.commit();
+
+                                SecurePrefManager.with(LoginActivity.this)
+                                        .set("username")
+                                        .value(responseStatus.parseName())
+                                        .go();
+
                                 profileObject.setName(responseStatus.parseName());
                                 profileObject.setDob(responseStatus.parseDOB());
                                 profileObject.setGender(responseStatus.parseGender());
@@ -356,11 +386,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                  roll_id = responseStatus.parseRollId();
                                  designation = responseStatus.parseUserType();
                                  SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                 editor.putString("roll_id", roll_id);
-                                 editor.commit();
-                                 String roll = sharedPref.getString("roll_id", null); // getting String
-                                 Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
+                               SecurePrefManager.with(LoginActivity.this)
+                                         .set("roll_id")
+                                         .value(roll_id)
+                                         .go();
+                                 SecurePrefManager.with(LoginActivity.this)
+                                         .set("user_id")
+                                         .value(user_id)
+                                         .go();
+
                              }
                             LoginActivity.this.runOnUiThread(new Runnable() {
                                 @Override

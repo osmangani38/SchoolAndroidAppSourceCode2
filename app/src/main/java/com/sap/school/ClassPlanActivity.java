@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -54,13 +55,15 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_create_plan);
         initView();
         setListner();
-        String user_id = SPUtils.getInstance().getString("user_id");
+        String user_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ClassPlanActivity.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
-        if (StringUtils.isEmpty(roll_id)){
-            roll_id = "2";
-        }
+        roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go();
         getClassAndSection(user_id,roll_id);
     }
     private void setListner() {

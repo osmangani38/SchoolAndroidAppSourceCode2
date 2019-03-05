@@ -3,6 +3,8 @@ package com.sap.handler;
 import android.content.SharedPreferences;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
+import com.sap.school.ApplicationContextProvider;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -78,7 +80,6 @@ public class ResponseStatus {
         try {
             JSONObject jsonResult = getFirstJsonObject();
             if(jsonResult.has("user_id")) {
-                SPUtils.getInstance().put("user_id",jsonResult.getString("user_id"));
                 return jsonResult.getString("user_id");
             }
 
@@ -113,7 +114,11 @@ public class ResponseStatus {
             JSONObject jsonResult = getFirstJsonObject();
 
             if(jsonResult.has("designation")) {
-                SPUtils.getInstance().put("designation",jsonResult.getString("designation"));
+                SecurePrefManager.with(ApplicationContextProvider.getContext())
+                        .set("designation")
+                        .value(jsonResult.getString("designation"))
+                        .go();
+
                 return jsonResult.getString("designation");
             }
 
@@ -130,7 +135,11 @@ public class ResponseStatus {
             JSONObject jsonResult = getFirstJsonObject();
 
             if(jsonResult.has("name")) {
-                SPUtils.getInstance().put("name",jsonResult.getString("name"));
+                SecurePrefManager.with(ApplicationContextProvider.getContext())
+                        .set("name")
+                        .value(jsonResult.getString("name"))
+                        .go();
+
                 return jsonResult.getString("name");
             }
 
@@ -147,7 +156,11 @@ public class ResponseStatus {
             JSONObject jsonResult = getFirstJsonObject();
 
             if(jsonResult.has("dob")) {
-                SPUtils.getInstance().put("dob",jsonResult.getString("dob"));
+                SecurePrefManager.with(ApplicationContextProvider.getContext())
+                        .set("dob")
+                        .value(jsonResult.getString("dob"))
+                        .go();
+
                 return jsonResult.getString("dob");
             }
 

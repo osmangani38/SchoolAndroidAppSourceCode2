@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -57,10 +58,15 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_todays_classplan_screen);
         initView();
 
-        String user_id = SPUtils.getInstance().getString("user_id");
+        String user_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();;
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ViewTodaysClassPlan.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go();; // getting String
         if (StringUtils.isEmpty(roll_id)){
             roll_id = "2";
         }
@@ -79,10 +85,15 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String formattedDate = df.format(c);
-            String user_id = SPUtils.getInstance().getString("user_id");
+            String user_id = SecurePrefManager.with(this)
+                    .get("user_id")
+                    .defaultValue("unknown")
+                    .go();;
             String roll_id;
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ViewTodaysClassPlan.this);
-            roll_id = sharedPref.getString("roll_id", null); // getting String
+            roll_id = SecurePrefManager.with(this)
+                    .get("roll_id")
+                    .defaultValue("unknown")
+                    .go(); // getting String
             if (StringUtils.isEmpty(roll_id)){
                 roll_id = "2";
             }

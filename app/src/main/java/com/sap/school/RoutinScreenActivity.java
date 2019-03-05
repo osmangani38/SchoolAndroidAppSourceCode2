@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.school.Fragment.RoutinFragment;
 import com.sap.utils.AppConstants;
 
@@ -44,6 +45,11 @@ public class RoutinScreenActivity extends BaseActivity implements View.OnClickLi
         initView();
         selectedDay = "1";
         setListner();
+        SecurePrefManager.with(this)
+                .set("day")
+                .value(selectedDay)
+                .go();
+
         SPUtils.getInstance().put("day",selectedDay);
     }
     private void SelectSection() {
@@ -236,8 +242,10 @@ public class RoutinScreenActivity extends BaseActivity implements View.OnClickLi
         classTextView = (TextView) findViewById(R.id.classTextView);
         sectionTextView = (TextView) findViewById(R.id.sectionTextV);
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( RoutinScreenActivity.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go(); // getting String
         if (roll_id.equals("4")) {
             selectClassButton.setVisibility(View.GONE);
             selectSectionButton.setVisibility(View.GONE);

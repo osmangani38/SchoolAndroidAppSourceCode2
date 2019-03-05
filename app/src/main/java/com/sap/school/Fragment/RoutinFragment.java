@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -70,10 +71,15 @@ public class RoutinFragment extends Fragment {
         initView();
         croutinInfo();
         selectedDays = getArguments().getInt("day", 0);
-        String user_id = SPUtils.getInstance().getString("user_id");
+        String user_id = SecurePrefManager.with(getActivity())
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();;
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity());
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(getActivity())
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();; // getting String
         getClassRoutine(user_id,roll_id);
         return view;
     }
@@ -97,8 +103,10 @@ public class RoutinFragment extends Fragment {
     private void getClassRoutine(String user_id, String role_id)
     {
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( getActivity());
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(getActivity())
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go();// getting String
         String wsLink = AppConstants.BaseURL+"TeacherRoutine";
         //web method call
         if (role_id.equals("4")) {

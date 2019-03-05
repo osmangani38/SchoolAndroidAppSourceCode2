@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.school.ApplicationContextProvider;
 import com.sap.school.R;
 import com.sap.school.RoutinScreenActivity;
@@ -47,11 +48,13 @@ public class LessonDataFactory {
         Log.d("","try'");
         JSONArray chapters = new JSONArray() ;
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go(); // getting String
         String lesson;
         if (roll_id.equals("2")) {
-          if (jsonObjItmSection.has("topic")) {
+          if (jsonObjItmSection.has("topic")) {// salman 123
             chapters = jsonObjItmSection.getJSONArray("topic");
           }
         }
@@ -153,9 +156,11 @@ public class LessonDataFactory {
     for(int i =0; i<count; i++)
 
     {
-      try{
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ApplicationContextProvider.getContext());
-        String roll_id = sharedPref.getString("roll_id", null); // getting String
+      try{//salman 1234
+        String roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go(); // getting String
         String lesson;
         if (roll_id.equals("2") && chapters.length()>1) {
           Object intervention = chapters.get(i);

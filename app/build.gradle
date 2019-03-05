@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sap.school"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -12,8 +12,17 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            debuggable true
+            //minifyEnabled true
+            //shrinkResources true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -22,6 +31,7 @@ dependencies {
     implementation 'com.thoughtbot:expandablecheckrecyclerview:1.4'
     compile 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
+    compile 'com.github.prashantsolanki3:Secure-Pref-Manager:0.25'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.jakewharton:butterknife:8.8.1'

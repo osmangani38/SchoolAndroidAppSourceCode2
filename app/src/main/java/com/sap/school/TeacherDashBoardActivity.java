@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -124,8 +125,11 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         infoRecyclerView.setItemAnimator(new DefaultItemAnimator());
         infoRecyclerView.setAdapter(infoRecyclerViewAdapter);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( TeacherDashBoardActivity.this);
-        String name = sharedPref.getString("username", null); // getting String
-        fullName.setText(name);
+        String userName = SecurePrefManager.with(this)
+                .get("username")
+                .defaultValue("unknown")
+                .go();
+        fullName.setText(userName);
     }
 
     private void initView() {
@@ -264,15 +268,19 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
     private void getClassRoutine()
     {
         String roll_id;
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( TeacherDashBoardActivity.this);
-        roll_id = sharedPref.getString("roll_id", null); // getting String
+        roll_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();; // getting String
         String wsLink = AppConstants.BaseURL+"TeacherRoutine";
         //web method call
         if (roll_id.equals("4")) {
             wsLink = AppConstants.BaseURL+"ClassRoutine";
         }
-        String user_id = SPUtils.getInstance().getString("user_id");
-
+        String user_id = SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();
         showProgressUI("Loading...");
         JSONObject loginJson = new JSONObject();
         JSONArray jsonArray = new JSONArray();

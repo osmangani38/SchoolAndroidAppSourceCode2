@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -77,7 +78,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     section_id = intent.getStringExtra("section_id");
     plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
-    user_id = SPUtils.getInstance().getString("user_id");
+    user_id = SecurePrefManager.with(this)
+            .get("user_id")
+            .defaultValue("unknown")
+            .go();;
 
     log_date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
@@ -88,8 +92,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
       log_date = plan_date;
     }
 
-    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(SubjectPlanDetailsActivity.this);
-    roll_id = sharedPref.getString("roll_id", null); // getting String
+    roll_id = SecurePrefManager.with(this)
+            .get("roll_id")
+            .defaultValue("unknown")
+            .go();; // getting String
     if (StringUtils.isEmpty(roll_id)){
       roll_id = "2";
     }
@@ -230,8 +236,10 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     showProgressUI(AppConstants.Loading);
     String wsLink = AppConstants.BaseURL+"Syllabus";
     String roll_id;
-    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences( SubjectPlanDetailsActivity.this);
-    roll_id = sharedPref.getString("roll_id", null); // getting String
+    roll_id = SecurePrefManager.with(this)
+            .get("roll_id")
+            .defaultValue("unknown")
+            .go();; // getting String
     if (roll_id.equals("4")) {
       if (type.equals("StudentClassPlan")) {
         wsLink = AppConstants.BaseURL + "ClassPlan";

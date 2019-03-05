@@ -19,6 +19,7 @@ import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -63,7 +64,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         fullName.setText("");
         dobText.setText("");
         genderDetails.setText("");
-        String userTypeString = SPUtils.getInstance().getString("designation");
+        String userTypeString = SecurePrefManager.with(this)
+                .get("designation")
+                .defaultValue("unknown")
+                .go();
         if (StringUtils.isEmpty(userTypeString)) {
             userType.setText("");
         }
@@ -92,10 +96,15 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             JSONObject loginJson = new JSONObject();
             JSONArray jsonArray = new JSONArray();
             String roll_id;
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MyProfileActivity.this);
-            roll_id = sharedPref.getString("roll_id", null); // getting String
+            roll_id = SecurePrefManager.with(this)
+                    .get("roll_id")
+                    .defaultValue("unknown")
+                    .go(); // getting String
 
-            String user_id = SPUtils.getInstance().getString("user_id");
+            String user_id = SecurePrefManager.with(this)
+                    .get("user_id")
+                    .defaultValue("unknown")
+                    .go();;
             try {
                 loginJson.put("role_id",roll_id );
                 loginJson.put("user_id", user_id);

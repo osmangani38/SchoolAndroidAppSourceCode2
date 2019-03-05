@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
@@ -51,9 +52,14 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
         initView();
         setListenr();
         SubjectInfo();
-        String user_id = SPUtils.getInstance().getString("user_id");
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ClassPlanRelatedToSubjectScreenActivity.this);
-        String roll_id = sharedPref.getString("roll_id", null); // getting String
+        String user_id =  SecurePrefManager.with(this)
+                .get("user_id")
+                .defaultValue("unknown")
+                .go();
+        String roll_id = SecurePrefManager.with(this)
+                .get("roll_id")
+                .defaultValue("unknown")
+                .go(); // getting String
         if (roll_id.equals("2")||roll_id.equals("4")) {
             getClassAndSection(user_id, roll_id);
         }
@@ -112,8 +118,10 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
                             final ArrayList mArrayList=new ArrayList<>();
-                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(ClassPlanRelatedToSubjectScreenActivity.this);
-                            String roll_id = sharedPref.getString("roll_id", null); // getting String
+                            String roll_id = SecurePrefManager.with(ClassPlanRelatedToSubjectScreenActivity.this)
+                                    .get("roll_id")
+                                    .defaultValue("unknown")
+                                    .go();; // getting String
                             if (roll_id.equals("4")) {
                                 JSONObject jsonObjectStudent = responseStatus.jsonObject.getJSONObject("result");
 
