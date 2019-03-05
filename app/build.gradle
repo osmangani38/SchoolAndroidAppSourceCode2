@@ -29,9 +29,9 @@ android {
 
 dependencies {
     implementation 'com.thoughtbot:expandablecheckrecyclerview:1.4'
-    compile 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
-    compile 'com.github.prashantsolanki3:Secure-Pref-Manager:0.25'
+    implementation 'com.github.prashantsolanki3:Secure-Pref-Manager:0.25'
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.jakewharton:butterknife:8.8.1'
