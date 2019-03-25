@@ -9,8 +9,10 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -55,15 +57,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.NoSuchPaddingException;
 
@@ -82,7 +88,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     EditText passwordTF;
     Validator validator;
     String valueType = "";
-    String user_id,roll_id, designation;
+    String user_id,roll_id, designation, authtoken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +127,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         valueType=getIntent().getStringExtra("valueType");
-       emailTF.setText("300313");
+        emailTF.setText("300313");
        //emailTF.setText("191701043131611169");
         passwordTF.setText("password");
         btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
@@ -190,9 +196,50 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onValidationSucceeded() {
         String username = emailTF.getText().toString();
         String password = passwordTF.getText().toString();
-        loginWS(username,password);
+
+        String salt = "f1nd1ngd0ry";
+
+        String final_pwd="";
+
+        try{
+
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            byte[] digest = md.digest(password.getBytes("UTF-8"));
+
+            String digest_str = bytesToHex(digest);
+
+            digest_str = digest_str + salt;
+
+            byte[] digest_final = md.digest(digest_str.getBytes("UTF-8"));
+
+            final_pwd = bytesToHex(digest_final);
+
+        }catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }catch (UnsupportedEncodingException f){
+            f.printStackTrace();
+        }
+
+        String imei = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        SecurePrefManager.with(LoginActivity.this)
+                .set("imei")
+                .value(imei)
+                .go();
+
+        loginWS(username, final_pwd, imei);
         //ToastUtils.showShort("Validation Successful");
 
+    }
+
+    public static String bytesToHex(byte[] in) {
+        final StringBuilder builder = new StringBuilder();
+        for(byte b : in) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
     }
 
     @Override
@@ -271,9 +318,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     .get("roll_id")
                     .defaultValue("unknown")
                     .go();
+            String authtoken = SecurePrefManager.with(this)
+                    .get("authtoken")
+                    .defaultValue("unknown")
+                    .go();
+            String imei = SecurePrefManager.with(this)
+                    .get("imei")
+                    .defaultValue("unknown")
+                    .go();
             try {
                 loginJson.put("role_id",roll_id );
                 loginJson.put("user_id", user_id);
+               // loginJson.put("authtoken", authtoken);
+                //loginJson.put("imei", imei);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -347,7 +404,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    private void loginWS(String username, String password)
+    private void loginWS(String username, String password, String imei)
     {
         showProgressUI(AppConstants.Loading);
         String wsLink = AppConstants.BaseURL+"Login";
@@ -357,6 +414,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         try {
         loginJson.put("username", username);
         loginJson.put("password", password);
+        loginJson.put("imei", imei);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -369,7 +427,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             e.printStackTrace();
         }
         String json = ws_dataObj.toString();
-        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+        ServerComHandler.getInstance().wsCallJsonByLogin(wsLink,json, new IWSCallHandler() {
             @Override
             public void responseStatus(final int status, final Object data) {
                 if (status == 200) {
@@ -378,13 +436,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
-                            JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
-                             if (jsonArray != null) {
-                                 int count = jsonArray.length();
-                                 JSONObject jsonObjItm = jsonArray.getJSONObject(0);
+                            //JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
+                            JSONObject jsonObject = responseStatus.jsonObject.getJSONObject("result");
+                             if (jsonObject != null) {
+                                // int count = jsonArray.length();
+                                 ///JSONObject jsonObjItm = jsonArray.getJSONObject(0);
                                  user_id = responseStatus.parseUserId();
                                  roll_id = responseStatus.parseRollId();
                                  designation = responseStatus.parseUserType();
+                                 authtoken = responseStatus.parseAuthToken();
                                  SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                SecurePrefManager.with(LoginActivity.this)
                                          .set("roll_id")

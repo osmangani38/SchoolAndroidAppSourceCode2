@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,7 +62,8 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
     RecyclerView routinRecyclerView;
     RelativeLayout backButton;
     Button btnAdd, btnGo;
-    TextView fromTextView, toDateTV, tvHeader;
+    EditText fromTextView, toDateTV;
+    TextView tvHeader;
     ArrayList<ExamSchedulePOJO> classRoutinePojoClassArrayList;
     private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
     List<ListItem> consolidatedList = new ArrayList<>();
@@ -135,33 +137,41 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                     roll_id = "2";
                 }
                 String start_dt = fromTextView.getText().toString();
-                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                Date date = null;
-                try {
-                    date = (Date)formatter.parse(start_dt);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String finalFromString = newFormat.format(date);
+
                 String to_dt = toDateTV.getText().toString();
-                try {
-                    date = (Date)formatter.parse(to_dt);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String finalToString = newFormat.format(date);
 
-                croutinInfo(user_id, roll_id, class_id, sectionId, finalFromString,finalToString.toString());
-                if(type.equals("ClassLog")){
-                    if(StringUtils.isEmpty(class_id) && StringUtils.isEmpty(sectionId)){
-                        class_id = "6";
-                        sectionId = "1";
-                    }
-
+                if(StringUtils.isEmpty(start_dt) || StringUtils.isEmpty(to_dt)){
+                    ToastUtils.showShort("Please Select Valid Date range");
                 }else{
-                    croutinInfo(user_id, roll_id, "0", "0", finalFromString, finalToString);
+                    DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = null;
+                    try {
+                        date = (Date)formatter.parse(start_dt);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String finalFromString = newFormat.format(date);
+
+                    try {
+                        date = (Date)formatter.parse(to_dt);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String finalToString = newFormat.format(date);
+
+                    croutinInfo(user_id, roll_id, class_id, sectionId, finalFromString,finalToString);
+                    if(type.equals("ClassLog")){
+                        if(StringUtils.isEmpty(class_id) && StringUtils.isEmpty(sectionId)){
+                            class_id = "6";
+                            sectionId = "1";
+                        }
+
+                    }else{
+                        croutinInfo(user_id, roll_id, "0", "0", finalFromString, finalToString);
+                    }
                 }
+
 
 
                 break;
@@ -202,8 +212,8 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         btnAdd = (Button)findViewById(R.id.btnAdd);
         btnGo = (Button) findViewById(R.id.btnGo);
         tvHeader = (TextView)findViewById(R.id.tvHeader);
-        fromTextView = (TextView)findViewById(R.id.fromTextView);
-        toDateTV = (TextView) findViewById(R.id.toDateTV);
+        fromTextView = findViewById(R.id.fromTextView);
+        toDateTV =  findViewById(R.id.toDateTV);
         classRoutinePojoClassArrayList=new ArrayList<>();
         routinRecyclerView.setHasFixedSize(true);
         final Calendar myCalendar = Calendar.getInstance();

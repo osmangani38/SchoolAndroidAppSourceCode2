@@ -269,9 +269,9 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
     {
         String roll_id;
         roll_id = SecurePrefManager.with(this)
-                .get("user_id")
+                .get("roll_id")
                 .defaultValue("unknown")
-                .go();; // getting String
+                .go(); // getting String
         String wsLink = AppConstants.BaseURL+"TeacherRoutine";
         //web method call
         if (roll_id.equals("4")) {
@@ -296,8 +296,8 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", roll_id);
             if (roll_id.equals("2")) {
-                loginJson.put("class_id", "");
-                loginJson.put("section_id", "");
+                loginJson.put("class_id", "0");
+                loginJson.put("section_id", "0");
             }
 
         } catch (JSONException e) {
@@ -310,14 +310,16 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
             if (roll_id.equals("4")) {
                 ws_dataObj.put("WS_CODE", "230");
             }
-            else {
+            else if (roll_id.equals("2")){
+
                 ws_dataObj.put("WS_CODE", "130");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String json = ws_dataObj.toString();
-        ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
+
+        ServerComHandler.getInstance().wsCallJsonBy(wsLink, json, new IWSCallHandler() {
             @Override
             public void responseStatus(final int status, final Object data) {
                 if (status == 200) {

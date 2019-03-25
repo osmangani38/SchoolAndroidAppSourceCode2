@@ -98,7 +98,7 @@
                     android:layout_height="45dp"
                     android:layout_marginRight="0dp"
                     android:orientation="horizontal">
-                    <TextView
+                    <EditText
                         android:id="@+id/fromTextView"
                         android:layout_width="100dp"
                         android:layout_height="40dp"
@@ -108,25 +108,11 @@
                         android:layout_marginTop="0dp"
 
                         android:textAlignment="center"
-
+                        android:focusable="false"
                         android:layout_gravity="center"
                         android:textSize="14dp"
                         android:background="@drawable/text_view_border"
-                        android:text="@string/selectDate"/>
-                    <TextView
-                        android:id="@+id/toTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:padding="10dp"
-                        android:textColor="#A8A8A8"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginTop="0dp"
-
-                        android:textAlignment="center"
-
-                        android:layout_gravity="center"
-                        android:textSize="14dp"
-                        android:text="To"/>
+                        android:hint="@string/selectDate"/>
 
                 </LinearLayout>
 
@@ -138,7 +124,23 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="0dp"
                     android:orientation="horizontal">
+
                     <TextView
+                        android:id="@+id/toTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="0dp"
+                        android:padding="10dp"
+
+                        android:text="To"
+
+                        android:textAlignment="center"
+                        android:textColor="#A8A8A8"
+                        android:textSize="14dp" />
+
+                    <EditText
                         android:id="@+id/toDateTV"
                         android:layout_width="100dp"
                         android:layout_height="40dp"
@@ -148,11 +150,11 @@
                         android:layout_marginTop="0dp"
 
                         android:textAlignment="center"
-
+                        android:focusable="false"
                         android:layout_gravity="center"
                         android:textSize="14dp"
                         android:background="@drawable/text_view_border"
-                        android:text="@string/selectDate"/>
+                        android:hint="@string/selectDate"/>
                     <Button
                         android:id="@+id/btnGo"
                         android:layout_width="50dp"

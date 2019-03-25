@@ -78,7 +78,7 @@ public class ResponseStatus {
     public String parseUserId()
     {
         try {
-            JSONObject jsonResult = getFirstJsonObject();
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
             if(jsonResult.has("user_id")) {
                 return jsonResult.getString("user_id");
             }
@@ -94,7 +94,7 @@ public class ResponseStatus {
     public String parseRollId()
     {
         try {
-            JSONObject jsonResult = getFirstJsonObject();
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
 
             if(jsonResult.has("role_id")) {
                 SPUtils.getInstance().put("role_id",jsonResult.getString("role_id"));
@@ -111,7 +111,7 @@ public class ResponseStatus {
     public String parseUserType()
     {
         try {
-            JSONObject jsonResult = getFirstJsonObject();
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
 
             if(jsonResult.has("designation")) {
                 SecurePrefManager.with(ApplicationContextProvider.getContext())
@@ -129,6 +129,29 @@ public class ResponseStatus {
 
         return "";
     }
+
+    public String parseAuthToken()
+    {
+        try {
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
+
+            if(jsonResult.has("authtoken")) {
+                SecurePrefManager.with(ApplicationContextProvider.getContext())
+                        .set("authtoken")
+                        .value(jsonResult.getString("authtoken"))
+                        .go();
+
+                return jsonResult.getString("authtoken");
+            }
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return "";
+    }
+
     public String parseName()
     {
         try {

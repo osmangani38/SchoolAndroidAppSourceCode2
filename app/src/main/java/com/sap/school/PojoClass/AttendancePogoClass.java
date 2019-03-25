@@ -30,4 +30,16 @@ public class AttendancePogoClass {
         this.studentDailyAttenceId = studentDailyAttenceId;
         this.roll_number = roll_number;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null)
+            return false;
+
+        AttendancePogoClass itemCompare = (AttendancePogoClass) obj;
+        if(itemCompare.getName().equals(this.getName()))
+            return true;
+
+        return false;
+    }
 }

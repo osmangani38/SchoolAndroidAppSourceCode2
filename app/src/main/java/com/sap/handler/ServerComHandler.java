@@ -1,8 +1,14 @@
 package com.sap.handler;
 
 
+import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.handler.IWSCallHandler;
+import com.sap.school.ApplicationContextProvider;
 import com.sap.utils.AppConstants;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -141,6 +147,67 @@ public class ServerComHandler {
 
 
     public void wsCallJsonBy(String webServiceLink, String jsonString, final IWSCallHandler listener) {
+        JSONObject jsonObject = new JSONObject();
+        String ws_code = "";
+        //System.out.println("wsCallJsonBy request " + jsonString);
+        String authtoken = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                .get("authtoken")
+                .defaultValue("unknown")
+                .go();
+        String imei = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                .get("imei")
+                .defaultValue("unknown")
+                .go();
+        try {
+            JSONObject obj = new JSONObject(jsonString);
+            ws_code = obj.getString("WS_CODE");
+            JSONArray jsonArray = obj.getJSONArray("WS_DATA");
+            jsonObject = jsonArray.getJSONObject(0);
+
+            jsonObject.put("authtoken", authtoken);
+            jsonObject.put("imei", imei);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        JSONArray jsonArray1 = new JSONArray();
+        jsonArray1.put(jsonObject);
+        JSONObject ws_dataObj = new JSONObject();
+        try {
+            ws_dataObj.put("WS_DATA", jsonArray1);
+            ws_dataObj.put("WS_CODE", ws_code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String json = ws_dataObj.toString();
+        System.out.println("wsCallJsonBy request 2  " + json);
+        new OkHttpClient().newCall(new Builder().url(webServiceLink).post(RequestBody.create(JSON, json)).build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                System.out.println("onFailure " + e.getMessage());
+                String errMsg = e.getLocalizedMessage();
+                if(errMsg == null){
+                    errMsg = "" + e;
+                }
+                listener.responseStatus(202, errMsg);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println("onResponse " + response);
+                if (response.isSuccessful()) {
+                    String responseStr = response.body().string();
+                    System.out.println("Response Data: " + responseStr);
+                    listener.responseStatus(response.code(), responseStr);
+                    return;
+                }
+                listener.responseStatus(response.code(), "Server not found");
+            }
+        });
+    }
+
+    public void wsCallJsonByLogin(String webServiceLink, String jsonString, final IWSCallHandler listener) {
 
         System.out.println("wsCallJsonBy request " + jsonString);
 

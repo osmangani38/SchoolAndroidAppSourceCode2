@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,7 +34,10 @@ import com.sap.handler.IWSCallHandler;
 import com.sap.handler.ResponseStatus;
 import com.sap.handler.ServerComHandler;
 import com.sap.school.PojoClass.AttendancePogoClass;
+import com.sap.school.PojoClass.SelectableItem;
 import com.sap.school.PojoClass.StudentInfoPojoClass;
+import com.sap.school.common.SelectableAdapter;
+import com.sap.school.common.SelectableViewHolder;
 import com.sap.utils.AppConstants;
 import com.squareup.picasso.Picasso;
 
@@ -41,17 +46,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AttendenceScreenActivity extends BaseActivity implements View.OnClickListener {
+public class AttendenceScreenActivity extends BaseActivity implements View.OnClickListener, SelectableViewHolder.OnItemSelectedListener  {
     RecyclerView attendenceRecyclerView;
     String className,classId,sectionId;
     @BindView(R.id.searchEditText)
     EditText searchEditText;
 
-    AttendenceRecyclerViewAdapter attendenceRecyclerViewAdapter;
+    SelectableAdapter selectableAdapter;
     ArrayList<AttendancePogoClass> attendencePojoClasses;
     ArrayList<AttendancePogoClass>mArrayFromJSON;
     ArrayList mArraySelectedStudents;
@@ -65,7 +71,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_attendence_screen);
         initView();
         setListner();
-        studentInfo();
+
         String user_id = SecurePrefManager.with(this)
                 .get("user_id")
                 .defaultValue("unknown")
@@ -85,6 +91,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
             roll_id = "2";
         }
         getAllStudentsDetails(user_id,roll_id);
+
     }
     private void getAllStudentsDetails(String user_id, String role_id)
     {
@@ -141,7 +148,9 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                                 public void run() {
                                     dismissProgressUI();
                                     attendenceButton.setVisibility(View.VISIBLE);
+                                    System.out.println("Attnd"+mArrayFromJSON.size());
                                     update(mArrayFromJSON);
+                                    studentInfo();
 
                                 }
                             });
@@ -283,10 +292,11 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 //        attendencePojoClasses.add(new AttendancePogoClass("04", "Nivedita Roy", R.drawable.student4, R.drawable.cross_btn));
 //        attendencePojoClasses.add(new AttendancePogoClass("05", "Sumit Kar", R.drawable.student6, R.drawable.cross_btn));
 //        attendencePojoClasses.add(new AttendancePogoClass("06", "Arijit Ghosh", R.drawable.student3, R.drawable.cross_btn));
-        attendenceRecyclerViewAdapter = new AttendenceRecyclerViewAdapter(getApplication(), attendencePojoClasses);
+
+        selectableAdapter = new SelectableAdapter(AttendenceScreenActivity.this, attendencePojoClasses, className);
         attendenceRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         attendenceRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        attendenceRecyclerView.setAdapter(attendenceRecyclerViewAdapter);
+        attendenceRecyclerView.setAdapter(selectableAdapter);
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -317,6 +327,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                 public void run() {
                     dismissProgressUI();
                     update(mArrayList);
+                    studentInfo();
 
                 }
             });
@@ -327,6 +338,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                 public void run() {
                     dismissProgressUI();
                     update(mArrayFromJSON);
+                    studentInfo();
 
                 }
             });
@@ -379,11 +391,25 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         }
 
     }
+    @Override
+    public void onItemSelected(SelectableItem selectableItem) {
 
-    private class AttendenceRecyclerViewAdapter extends RecyclerView.Adapter<AttendenceRecyclerViewAdapter.MyViewHolderClass> {
+        List<AttendancePogoClass> selectedItems = selectableAdapter.getSelectedItems();
+
+        String student_id = selectableItem.getId();
+        if (mArraySelectedStudents.contains(student_id)){
+            mArraySelectedStudents.remove(student_id);
+        }
+        else {
+            mArraySelectedStudents.add(student_id);
+        }
+        /*Snackbar.make(attendenceRecyclerView,"Selected item is "+selectableItem.getName()+
+                ", Totally  selectem item count is "+mArraySelectedStudents.size(),Snackbar.LENGTH_LONG).show();*/
+    }
+   /* private class AttendenceRecyclerViewAdapter extends RecyclerView.Adapter implements MyViewHolderClass.OnItemSelectedListener {
         Context context;
         ArrayList<AttendancePogoClass> attendencePojoClasses;
-
+        MyViewHolderClass.OnItemSelectedListener listener;
         public AttendenceRecyclerViewAdapter(Context context, ArrayList<AttendancePogoClass> attendencePojoClasses) {
             this.context = context;
             this.attendencePojoClasses = attendencePojoClasses;
@@ -391,13 +417,13 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 
         @NonNull
         @Override
-        public AttendenceRecyclerViewAdapter.MyViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        public MyViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_attendence_page_item, parent, false);
             return new AttendenceRecyclerViewAdapter.MyViewHolderClass(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull AttendenceRecyclerViewAdapter.MyViewHolderClass myViewHolderClass, int i) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolderClass, int i) {
             String roll_number = attendencePojoClasses.get(i).getStudentRollNumber();
             if (roll_number.length()>0){
                 myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getStudentRollNumber());
@@ -430,25 +456,37 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         public class MyViewHolderClass extends RecyclerView.ViewHolder {
             TextView rollNoTextView, nameTextView, classTextView;
             CircleImageView cirleImageView;
-            ImageView imageView;
-            public MyViewHolderClass(@NonNull final View itemView) {
+            CheckedTextView imageView;
+            SelectableItem mItem;
+            OnItemSelectedListener itemSelectedListener;
+            public MyViewHolderClass(@NonNull final View itemView, OnItemSelectedListener listener) {
                 super(itemView);
+                itemSelectedListener = listener;
                 rollNoTextView = (TextView) itemView.findViewById(R.id.rollNoTextView);
                 nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
                 classTextView = (TextView) itemView.findViewById(R.id.classTextView);
                 cirleImageView = (CircleImageView) itemView.findViewById(R.id.cirleImageView);
-                imageView = (ImageView) itemView.findViewById(R.id.imageView);
-                if (imageView.isSelected()){
+                imageView = itemView.findViewById(R.id.imageView);
+                *//*if (imageView.isSelected()){
                     imageView.setSelected(false);
                     imageView.setImageResource(R.drawable.tick_ic);
                 }
                 else {
                     imageView.setSelected(true);
                     imageView.setImageResource(R.drawable.cross_btn);
-                }
+                }*//*
                 imageView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        int i = (int) v.getTag();
+
+                        if (mItem.isSelected()) {
+                            setChecked(false);
+                        } else {
+                            setChecked(true);
+                        }
+                        itemSelectedListener.onItemSelected(mItem);
+
+
+                        *//*int i = (int) v.getTag();
                       String student_id = attendencePojoClasses.get(i).getId();
                       if (mArraySelectedStudents.contains(student_id)){
                           mArraySelectedStudents.remove(student_id);
@@ -463,10 +501,28 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                         else {
                             v.setSelected(true);
                             imageView.setImageResource(R.drawable.tick_ic);
-                        }
+                        }*//*
                     }
                 });
             }
+
+            public void setChecked(boolean value) {
+                if (value) {
+                    imageView.setCheckMarkDrawable(R.drawable.cross_btn);
+                } else {
+                    imageView.setCheckMarkDrawable(R.drawable.tick_ic);
+                }
+                mItem.setSelected(value);
+                imageView.setChecked(value);
+            }
+
+
         }
+
     }
+
+    public interface OnItemSelectedListener {
+
+        void onItemSelected(SelectableItem item);
+    }*/
 }
