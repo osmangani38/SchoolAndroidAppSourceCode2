@@ -38,6 +38,8 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
     private DrawerLayout drawer;
     RelativeLayout toggleButton;
     RelativeLayout attendenceNavigationButton,healthInfoNavigationButton,gameAndSportsNavigationButton,eventsNavigationButton,coCurricularNavigationButton,classPlanNavigationButton,markSheetEntryNavigationButton,classLogNavigationButton,questionBankNavigationButton,reportIncidentNavigationButton,leaveOfAbsenseNavigationButton,schemesNavigationButton,feedbackNavigationButton,logOutNavigationButton;
+    private RelativeLayout classLogNavigationButton1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +60,13 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
         coCurricularNavigationButton.setOnClickListener(this);
         classPlanNavigationButton.setOnClickListener(this);
         markSheetEntryNavigationButton.setOnClickListener(this);
-        classLogNavigationButton.setOnClickListener(this);
+        classLogNavigationButton1.setOnClickListener(this);
         questionBankNavigationButton.setOnClickListener(this);
         reportIncidentNavigationButton.setOnClickListener(this);
         leaveOfAbsenseNavigationButton.setOnClickListener(this);
         schemesNavigationButton.setOnClickListener(this);
         feedbackNavigationButton.setOnClickListener(this);
+        logOutNavigationButton.setOnClickListener(this);
         logOutNavigationButton.setOnClickListener(this);
     }
 

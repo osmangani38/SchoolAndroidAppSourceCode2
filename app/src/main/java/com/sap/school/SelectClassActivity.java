@@ -116,7 +116,6 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 JSONArray jsonArraySection = jsonObjItm.getJSONArray("section");
                                 int countSection = jsonArraySection.length();
                                 //mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")/*jsonObjItm.getString("curclass"*/);
@@ -160,7 +159,6 @@ public class SelectClassActivity extends BaseActivity implements View.OnClickLis
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

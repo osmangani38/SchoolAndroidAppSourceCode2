@@ -345,11 +345,9 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               }
               JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters", jsonArray);
               JSONArray savedArray = JSONSharedPreferences.loadJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters");
-              Log.d("gg","aaa");
               /*int count = jsonArray.length();
               for (int i = 0; i < count; i++) {
                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                 JSONArray jsonArraySection = jsonObjItm.getJSONArray("topic");
                 int countSection = jsonArraySection.length();
 
@@ -404,7 +402,6 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
 
 
         }else{
-          Log.d("Webservice","failed");
           dismissProgressUI();
         }
       }
@@ -554,7 +551,6 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
 
 
         }else{
-          Log.d("Webservice","failed");
           dismissProgressUI();
         }
       }

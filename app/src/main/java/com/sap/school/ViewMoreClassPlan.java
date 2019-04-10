@@ -324,7 +324,6 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 TodaysClassPlanPOJO todaysClassPlanPOJO = new TodaysClassPlanPOJO();
                                 if(type.equals("ClassLog")){
                                     todaysClassPlanPOJO.setPlan_id(jsonObjItm.getString("plan_id"));
@@ -392,7 +391,6 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

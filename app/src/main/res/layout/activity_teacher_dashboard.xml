@@ -73,6 +73,7 @@ android:scrollbarAlwaysDrawVerticalTrack="false">
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/schoolName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"

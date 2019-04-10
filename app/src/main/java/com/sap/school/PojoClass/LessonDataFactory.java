@@ -31,7 +31,6 @@ public class LessonDataFactory {
     JSONArray savedArray;
     try{
       savedArray = JSONSharedPreferences.loadJSONArray(ApplicationContextProvider.getContext(), "teacherJSON", "subjectChapters");
-      Log.d("","try'");
     }
     catch (Exception e) {
       // This will catch any exception, because they are all descended from Exception
@@ -45,7 +44,6 @@ public class LessonDataFactory {
     {
       try{
         JSONObject jsonObjItmSection = savedArray.getJSONObject(i);
-        Log.d("","try'");
         JSONArray chapters = new JSONArray() ;
         String roll_id;
         roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
@@ -167,7 +165,6 @@ public class LessonDataFactory {
           if (intervention instanceof JSONObject) {
 
             JSONObject jsonObjItmSection = chapters.getJSONObject(i);
-            Log.d("", "try'");
             ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
             list.add(queen);
           }
@@ -180,7 +177,6 @@ public class LessonDataFactory {
         }
         else {
           String  stringChapters = chapters.getString(i);
-          Log.d("","try'");
           // ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
           ChapterPOJO queen = new ChapterPOJO("id", stringChapters);
 

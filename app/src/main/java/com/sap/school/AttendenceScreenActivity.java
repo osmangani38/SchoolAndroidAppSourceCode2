@@ -134,7 +134,6 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 if (jsonObjItm.getInt("attendance") == 1){
                                     mArraySelectedStudents.add(jsonObjItm.getString("student_id"));
                                 }
@@ -175,7 +174,6 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }
@@ -271,7 +269,6 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

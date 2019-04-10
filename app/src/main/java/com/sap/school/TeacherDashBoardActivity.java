@@ -48,6 +48,7 @@ import java.util.Date;
 public class TeacherDashBoardActivity extends BaseActivity implements View.OnClickListener{
     RecyclerView infoRecyclerView,classOverviewRecyclerView,classRoutineRecyclerView;
     InfoRecyclerViewAdapter infoRecyclerViewAdapter;
+    TextView schoolName;
     ClassOverviewRecyclerviewAdapter classOverviewRecyclerviewAdapter;
     ClassRoutineRecyclerViewAdapter classRoutineRecyclerViewAdapter;
     RelativeLayout student2TV;
@@ -154,7 +155,7 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
         //ralativeLayoutStudent.setVisibility(View.GONE);
 
         myProfile=(RelativeLayout)findViewById(R.id.myProfile);
-
+        schoolName = (TextView)findViewById(R.id.schoolName);
         gameAndSportsNavigationButton=(RelativeLayout)findViewById(R.id.gameAndSportsNavigationButton);
         healthInfoNavigationButton.setVisibility(View.GONE);
 
@@ -334,7 +335,6 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                             if (jsonArray !=null) {
                                 for (int i = 0; i < count; i++) {
                                     JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                    Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = SPUtils.getInstance().getString("day");
                                     if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
@@ -371,7 +371,6 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     // dismissProgressUI();
                 }
             }

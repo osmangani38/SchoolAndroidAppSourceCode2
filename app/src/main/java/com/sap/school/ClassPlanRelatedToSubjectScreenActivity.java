@@ -169,7 +169,6 @@ public class ClassPlanRelatedToSubjectScreenActivity extends BaseActivity implem
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

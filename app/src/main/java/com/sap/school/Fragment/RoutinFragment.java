@@ -163,10 +163,8 @@ public class RoutinFragment extends Fragment {
                             if (jsonArray !=null) {
                                 for (int i = 0; i < count; i++) {
                                     JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                    Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = String.valueOf(selectedDays);//SPUtils.getInstance().getString("day");
-                                    Log.d("day is ", "day is " + day);
                                     if (day.equals(jsonObjItm.getString("day_id"))) {
                                         mArrayList.add(new ClassRoutinePojoClass(jsonObjItm.getString("subject"), classSection, jsonObjItm.getString("period_time")));
                                     }
@@ -204,7 +202,6 @@ public class RoutinFragment extends Fragment {
 
 
                 }else{
-                    Log.d("Webservice","failed");
                    // dismissProgressUI();
                 }
             }

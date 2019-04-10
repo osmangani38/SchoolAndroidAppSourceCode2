@@ -176,7 +176,6 @@ public class StudentDashboardActivity extends BaseActivity implements View.OnCli
                             if (jsonArray !=null) {
                                 for (int i = 0; i < count; i++) {
                                     JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                    Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                     String classSection = "Class - " + jsonObjItm.getString("class") + " | " + "Section - " + jsonObjItm.getString("section");
                                     String day = SPUtils.getInstance().getString("day");
                                     if (StringUtils.equalsIgnoreCase(day, jsonObjItm.getString("day_id"))) {
@@ -217,7 +216,6 @@ public class StudentDashboardActivity extends BaseActivity implements View.OnCli
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     // dismissProgressUI();
                 }
             }

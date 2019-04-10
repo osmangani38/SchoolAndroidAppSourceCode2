@@ -222,7 +222,6 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 mArrayFromJSON.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("studentname"),jsonObjItm.getString("curclass")/*jsonObjItm.getString("curclass"*/));
                             }
                             StudentScreenActivity.this.runOnUiThread(new Runnable() {
@@ -238,7 +237,6 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }
@@ -284,7 +282,6 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
 
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 mArrayFromJSON.add(new StudentInfoPojoClass(R.drawable.student1,jsonObjItm.getString("name"),className/*jsonObjItm.getString("curclass"*/));
                             }
                             StudentScreenActivity.this.runOnUiThread(new Runnable() {
@@ -310,7 +307,6 @@ public class StudentScreenActivity extends BaseActivity implements View.OnClickL
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

@@ -127,9 +127,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         valueType=getIntent().getStringExtra("valueType");
-        emailTF.setText("300313");
+       //emailTF.setText("300313");
        //emailTF.setText("191701043131611169");
-        passwordTF.setText("password");
+        //passwordTF.setText("password");
         btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 
     }
@@ -231,7 +231,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         loginWS(username, final_pwd, imei);
         //ToastUtils.showShort("Validation Successful");
-
     }
 
     public static String bytesToHex(byte[] in) {
@@ -371,7 +370,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 profileObject.setDob(responseStatus.parseDOB());
                                 profileObject.setGender(responseStatus.parseGender());
 
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 LoginActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -395,7 +393,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
                     }else{
-                        Log.d("Webservice","failed");
                         dismissProgressUI();
                     }
                 }
@@ -434,6 +431,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     // List<NotificationItem> arrTmp = new ArrayList<>();
                     try{
                         ResponseStatus responseStatus = new ResponseStatus((String)data);
+
                         if (responseStatus.isSuccess()) {
                             dismissProgressUI();
                             //JSONArray jsonArray = responseStatus.jsonObject.getJSONArray("result");
@@ -480,7 +478,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 }else{
 
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

@@ -138,7 +138,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                                 profileObject.setDob(responseStatus.parseDOB());
                                 profileObject.setGender(responseStatus.parseGender());
 
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 MyProfileActivity.this.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -161,7 +160,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 
                     }else{
-                        Log.d("Webservice","failed");
                         dismissProgressUI();
                     }
                 }

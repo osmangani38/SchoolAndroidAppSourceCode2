@@ -212,7 +212,6 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                Log.d("Json is ","jsonObjItm is"+jsonObjItm);
                                 TodaysClassPlanPOJO todaysClassPlanPOJO = new TodaysClassPlanPOJO();
 
                                 todaysClassPlanPOJO.setPlan_id(jsonObjItm.getString("id"));
@@ -274,7 +273,6 @@ public class ViewTodaysClassPlan extends BaseActivity implements View.OnClickLis
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }

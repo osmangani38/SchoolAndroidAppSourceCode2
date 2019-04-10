@@ -15,7 +15,7 @@
     <string name="shareText">Share</string>
     <string name="aboutUsText">About US</string>
     <string name="selectClasstext">Select Class</string>
-    <string name="welcomeHinduSchoolText">Welcome to Hindu School</string>
+    <string name="welcomeHinduSchoolText"></string>
     <string name="classOverflowText">Class Overview</string>
     <string name="todayClassText">Todays Class Routine</string>
     <string name="classRoutineText">Class Routine</string>

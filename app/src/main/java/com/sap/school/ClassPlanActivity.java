@@ -222,7 +222,6 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
                                 //JSONObject subjects = jsonObjItm.getJSONObject("subject");
-                                Log.d("Json is ", "jsonObjItm is" + jsonObjItm);
                                 JSONArray jsonArraySection = jsonObjItm.getJSONArray("subject");
                                 int countSection = jsonArraySection.length();
 //                                mArrayList.add(new SelectPojoClass(jsonObjItm.getString("class_id"),jsonObjItm.getString("class_name"),"Class","01","A")*//*jsonObjItm.getString("curclass"*//*);
@@ -259,7 +258,6 @@ public class ClassPlanActivity extends BaseActivity implements View.OnClickListe
 
 
                 }else{
-                    Log.d("Webservice","failed");
                     dismissProgressUI();
                 }
             }
