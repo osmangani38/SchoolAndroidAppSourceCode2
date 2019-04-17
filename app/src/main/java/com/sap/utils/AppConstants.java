@@ -28,8 +28,8 @@ public final class AppConstants {
 
     public static final String WS_METHOD_SIGNUP = "http";
     public static final String WS_METHOD_SIGNIN = "http";
-   public static final String BaseURL = "http://banglarsiksha.in/sms/ws/api/";
-    //public static final String BaseURL = "https://school.banglarshiksha.gov.in/sms/ws/api/";
+   //public static final String BaseURL = "http://banglarsiksha.in/sms/ws/api/";
+    public static final String BaseURL = "https://school.banglarshiksha.gov.in/sms/ws/api/";
 
     public static final String WS_StudentsDetails = "http://ehrms.wbsed.gov.in/sims_new/Web_service/student_all_details?token=ba0b38a250289cc85a5ad60ca7712954&school_code=112317";
     public static final int API_STATUS_CODE_LOCAL_ERROR = 0;

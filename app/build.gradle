@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
+    /*signingConfigs {
         schoolAppKey {
             keyAlias 'schoolAppKey'
             keyPassword 'Ab1953cdef'
             storeFile file('/Users/salmanmamun/Dropbox/Screenshots/schoolAppSignedApk')
             storePassword 'Ab1953cdef'
         }
-    }
+    }*/
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sap.school"
@@ -24,14 +24,14 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.schoolAppKey
+           // signingConfig signingConfigs.schoolAppKey
         }
         debug {
             debuggable true
             //minifyEnabled true
             //shrinkResources true
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.schoolAppKey
+            //signingConfig signingConfigs.schoolAppKey
         }
     }
 }

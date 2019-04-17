@@ -128,7 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         valueType=getIntent().getStringExtra("valueType");
        //emailTF.setText("300313");
-       //emailTF.setText("191701043131611169");
+      // emailTF.setText("1554184561");
         //passwordTF.setText("password");
         btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 

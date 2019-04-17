@@ -62,7 +62,7 @@ public class ServerComHandler {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                System.out.println("onFailure " + e.getMessage());
+                //System.out.println("onFailure " + e.getMessage());
                 String errMsg = e.getLocalizedMessage();
                 if(errMsg == null){
                     errMsg = "" + e;
@@ -72,10 +72,10 @@ public class ServerComHandler {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("onResponse " + response);
+                //System.out.println("onResponse " + response);
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    System.out.println("Response Data: " + responseStr);
+                    //System.out.println("Response Data: " + responseStr);
                     listener.responseStatus(response.code(), responseStr);
                     return;
                 }
@@ -85,7 +85,7 @@ public class ServerComHandler {
     }
 
     public void wsCallByGet(String webServiceLink, final IWSCallHandler listener) {
-        System.out.println("wsCallByGet " + webServiceLink);
+       // System.out.println("wsCallByGet " + webServiceLink);
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
@@ -96,16 +96,16 @@ public class ServerComHandler {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                System.out.println("onFailure " + e);
+                //System.out.println("onFailure " + e);
                 listener.responseStatus(202, e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("onResponse " + response);
+                //System.out.println("onResponse " + response);
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    System.out.println("Response Data: " + responseStr);
+                   // System.out.println("Response Data: " + responseStr);
                     listener.responseStatus(response.code(), responseStr);
                     return;
                 }
@@ -127,16 +127,16 @@ public class ServerComHandler {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                System.out.println("onFailure " + e);
+                //System.out.println("onFailure " + e);
                 listener.responseStatus(202, e);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("onResponse " + response);
+                //System.out.println("onResponse " + response);
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    System.out.println("Response Data: " + responseStr);
+                    //System.out.println("Response Data: " + responseStr);
                     listener.responseStatus(response.code(), responseStr);
                     return;
                 }
@@ -180,12 +180,12 @@ public class ServerComHandler {
             e.printStackTrace();
         }
         String json = ws_dataObj.toString();
-        System.out.println("wsCallJsonBy request 2  " + json);
+        //System.out.println("wsCallJsonBy request 2  " + json);
         new OkHttpClient().newCall(new Builder().url(webServiceLink).post(RequestBody.create(JSON, json)).build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                System.out.println("onFailure " + e.getMessage());
+                //System.out.println("onFailure " + e.getMessage());
                 String errMsg = e.getLocalizedMessage();
                 if(errMsg == null){
                     errMsg = "" + e;
@@ -195,10 +195,10 @@ public class ServerComHandler {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("onResponse " + response);
+                //System.out.println("onResponse " + response);
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    System.out.println("Response Data: " + responseStr);
+                   // System.out.println("Response Data: " + responseStr);
                     listener.responseStatus(response.code(), responseStr);
                     return;
                 }
@@ -209,13 +209,13 @@ public class ServerComHandler {
 
     public void wsCallJsonByLogin(String webServiceLink, String jsonString, final IWSCallHandler listener) {
 
-        System.out.println("wsCallJsonBy request " + jsonString);
+       // System.out.println("wsCallJsonBy request " + jsonString);
 
         new OkHttpClient().newCall(new Builder().url(webServiceLink).post(RequestBody.create(JSON, jsonString)).build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
-                System.out.println("onFailure " + e.getMessage());
+                //System.out.println("onFailure " + e.getMessage());
                 String errMsg = e.getLocalizedMessage();
                 if(errMsg == null){
                     errMsg = "" + e;
@@ -225,10 +225,10 @@ public class ServerComHandler {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("onResponse " + response);
+                //System.out.println("onResponse " + response);
                 if (response.isSuccessful()) {
                     String responseStr = response.body().string();
-                    System.out.println("Response Data: " + responseStr);
+                    //System.out.println("Response Data: " + responseStr);
                     listener.responseStatus(response.code(), responseStr);
                     return;
                 }

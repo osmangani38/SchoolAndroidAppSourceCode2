@@ -118,6 +118,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
             e.printStackTrace();
         }
         String json = ws_dataObj.toString();
+
         ServerComHandler.getInstance().wsCallJsonBy(wsLink,json, new IWSCallHandler() {
             @Override
             public void responseStatus(final int status, final Object data) {
@@ -147,7 +148,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                                 public void run() {
                                     dismissProgressUI();
                                     attendenceButton.setVisibility(View.VISIBLE);
-                                    System.out.println("Attnd"+mArrayFromJSON.size());
+                                    //System.out.println("Attnd"+mArrayFromJSON.size());
                                     update(mArrayFromJSON);
                                     studentInfo();
 
