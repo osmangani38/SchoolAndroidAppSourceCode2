@@ -130,7 +130,12 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                 .get("username")
                 .defaultValue("unknown")
                 .go();
+        String school_name = SecurePrefManager.with(this)
+                .get("school_name")
+                .defaultValue("")
+                .go();;
         fullName.setText(userName);
+        schoolName.setText(school_name);
     }
 
     private void initView() {
@@ -239,8 +244,11 @@ public class TeacherDashBoardActivity extends BaseActivity implements View.OnCli
                 closeDrawer();
                 break;
             case R.id.classLogNavigationButton:
-                //startActivity(new Intent(getApplication(),ClassPlanActivity.class));
-                startActivity(new Intent(getApplication(),ViewTodaysClassPlan.class));
+                //startActivity(new Intent(getApplication(),ClassPlanActivity.class));//Salman
+                Intent gonext4=new Intent(getApplication(),ViewMoreClassPlan.class);
+                gonext4.putExtra("type","ClassLog");
+                startActivity(new Intent(gonext4));
+               // startActivity(new Intent(getApplication(),ViewTodaysClassPlan.class));
                 closeDrawer();
                 break;
             case R.id.questionBankNavigationButton:

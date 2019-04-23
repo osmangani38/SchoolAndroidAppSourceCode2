@@ -67,7 +67,7 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
     ArrayList<ExamSchedulePOJO> classRoutinePojoClassArrayList;
     private List<ExamSchedulePOJO> myOptions = new ArrayList<>();
     List<ListItem> consolidatedList = new ArrayList<>();
-    String type, sectionId = "1", class_id = "6";
+    String type, sectionId = "0", class_id = "0";
     private TodaysPlanRecyclerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,8 +163,8 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
                     croutinInfo(user_id, roll_id, class_id, sectionId, finalFromString,finalToString);
                     if(type.equals("ClassLog")){
                         if(StringUtils.isEmpty(class_id) && StringUtils.isEmpty(sectionId)){
-                            class_id = "6";
-                            sectionId = "1";
+                            class_id = "0";
+                            sectionId = "0";
                         }
 
                     }else{
@@ -269,6 +269,11 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
             }
         });
     }
+    public static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
 
     private void croutinInfo(String user_id, String role_id, String class_id, String section_id,
                              String date_from, String date_to )
@@ -287,6 +292,12 @@ public class ViewMoreClassPlan extends BaseActivity implements View.OnClickListe
         try {
             loginJson.put("user_id", user_id);
             loginJson.put("role_id", role_id);
+            if (isNullOrEmpty(class_id)) {
+                class_id = "0";
+            }
+            if (isNullOrEmpty(section_id)) {
+                section_id = "0";
+            }
             loginJson.put("class_id", class_id);
             loginJson.put("section_id", section_id);
             loginJson.put("date_from", date_from);

@@ -113,7 +113,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         JSONObject ws_dataObj = new JSONObject();
         try {
             ws_dataObj.put("WS_DATA", jsonArray);
-            ws_dataObj.put("WS_CODE", "170");
+            ws_dataObj.put("WS_CODE", "150");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -135,13 +135,8 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                             int count = jsonArray.length();
                             for (int i = 0; i < count; i++) {
                                 JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                                if (jsonObjItm.getInt("attendance") == 1){
-                                    mArraySelectedStudents.add(jsonObjItm.getString("student_id"));
-                                }
-                                else {
-                                    mArrayNotSelectedStudents.add(jsonObjItm.getString("student_id"));
-                                }
-                                    mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("student_id"), jsonObjItm.getString("name"), R.drawable.student1,jsonObjItm.getInt("attendance"),jsonObjItm.getString("student_attendance_daily_id"),jsonObjItm.getString("roll_no"))/*jsonObjItm.getString("curclass"*/);
+                                    mArrayNotSelectedStudents.add(jsonObjItm.getString("id"));
+                                    mArrayFromJSON.add(new AttendancePogoClass(jsonObjItm.getString("id"), jsonObjItm.getString("name"), R.drawable.student1,1,"",jsonObjItm.getString("roll_no"))/*jsonObjItm.getString("curclass"*/);
                             }
                             AttendenceScreenActivity.this.runOnUiThread(new Runnable() {
                                 @Override
@@ -198,24 +193,29 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
             e.printStackTrace();
         }
         JSONArray studentList = new JSONArray();
-        for (int i = 0;i<mArrayFromJSON.size();i++){
+        for (int i = 0;i<mArraySelectedStudents.size();i++){
            String student_id = mArrayFromJSON.get(i).getId();
-           String student_attendance_daily_id = mArrayFromJSON.get(i).getStudentDailyAttenceId();
+            studentList.put(student_id);
+            String student_attendance_daily_id = mArrayFromJSON.get(i).getStudentDailyAttenceId();
             JSONObject studentAttenceObject = new JSONObject();
             try {
                 studentAttenceObject.put("student_id", student_id);
-                studentAttenceObject.put("student_attendance_daily_id", student_attendance_daily_id);
+               // studentAttenceObject.put("student_attendance_daily_id", "0");
                 if (mArraySelectedStudents.contains(student_id)) {
                     studentAttenceObject.put("attendance", "1");
                 }
                 else {
                     studentAttenceObject.put("attendance", "0");
                 }
-                studentList.put(studentAttenceObject);
+                //studentList.put(studentAttenceObject);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        //String result = TextUtils.join(",", studentList);
+        //String replaceString=result.replace("\"","");
+        //studentList.clear();
+        //studentList.add(replaceString);
         jsonArray.put(loginJson);
         if (studentList.length()>0){
             try {
@@ -284,13 +284,6 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         attendenceRecyclerView.invalidate();
     }
     private void studentInfo() {
-//        attendencePojoClasses.add(new AttendancePogoClass("01", "Rupankar Das", R.drawable.student1, R.drawable.cross_btn));
-//        attendencePojoClasses.add(new AttendancePogoClass("02", "Arpita Ghosh", R.drawable.student2, R.drawable.cross_btn));
-//        attendencePojoClasses.add(new AttendancePogoClass("03", "Rudrajit Guha", R.drawable.student3, R.drawable.cross_btn));
-//        attendencePojoClasses.add(new AttendancePogoClass("04", "Nivedita Roy", R.drawable.student4, R.drawable.cross_btn));
-//        attendencePojoClasses.add(new AttendancePogoClass("05", "Sumit Kar", R.drawable.student6, R.drawable.cross_btn));
-//        attendencePojoClasses.add(new AttendancePogoClass("06", "Arijit Ghosh", R.drawable.student3, R.drawable.cross_btn));
-
         selectableAdapter = new SelectableAdapter(AttendenceScreenActivity.this, attendencePojoClasses, className);
         attendenceRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         attendenceRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -384,7 +377,6 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
                     roll_id = "2";
                 }
                 submitAttendence(user_id,roll_id);
-                // startActivity(new Intent(getApplication(), MarkAttendenceActivity.class));
                 break;
         }
 
@@ -401,126 +393,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         else {
             mArraySelectedStudents.add(student_id);
         }
-        /*Snackbar.make(attendenceRecyclerView,"Selected item is "+selectableItem.getName()+
-                ", Totally  selectem item count is "+mArraySelectedStudents.size(),Snackbar.LENGTH_LONG).show();*/
-    }
-   /* private class AttendenceRecyclerViewAdapter extends RecyclerView.Adapter implements MyViewHolderClass.OnItemSelectedListener {
-        Context context;
-        ArrayList<AttendancePogoClass> attendencePojoClasses;
-        MyViewHolderClass.OnItemSelectedListener listener;
-        public AttendenceRecyclerViewAdapter(Context context, ArrayList<AttendancePogoClass> attendencePojoClasses) {
-            this.context = context;
-            this.attendencePojoClasses = attendencePojoClasses;
-        }
-
-        @NonNull
-        @Override
-        public MyViewHolderClass onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_attendence_page_item, parent, false);
-            return new AttendenceRecyclerViewAdapter.MyViewHolderClass(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolderClass, int i) {
-            String roll_number = attendencePojoClasses.get(i).getStudentRollNumber();
-            if (roll_number.length()>0){
-                myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getStudentRollNumber());
-            }
-            else {
-                myViewHolderClass.rollNoTextView.setText(attendencePojoClasses.get(i).getId());
-            }
-            myViewHolderClass.nameTextView.setText(attendencePojoClasses.get(i).getName());
-            myViewHolderClass.classTextView.setText("Class - "+className);
-
-            myViewHolderClass.imageView.setTag(i);
-            // myViewHolderClass.classTextView.setText(attendencePojoClasses.get(i).getId());
-            Picasso.with(getApplication()).load(R.drawable.avatar_student).into(myViewHolderClass.cirleImageView);
-            if (attendencePojoClasses.get(i).getAttendence_info() == 1){
-                myViewHolderClass.imageView.setSelected(true);
-                Picasso.with(getApplication()).load(R.drawable.tick_ic).into(myViewHolderClass.imageView);
-            }
-            else{
-                myViewHolderClass.imageView.setSelected(false);
-                  Picasso.with(getApplication()).load(R.drawable.cross_btn).into(myViewHolderClass.imageView);
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return attendencePojoClasses.size();
-        }
-
-        public class MyViewHolderClass extends RecyclerView.ViewHolder {
-            TextView rollNoTextView, nameTextView, classTextView;
-            CircleImageView cirleImageView;
-            CheckedTextView imageView;
-            SelectableItem mItem;
-            OnItemSelectedListener itemSelectedListener;
-            public MyViewHolderClass(@NonNull final View itemView, OnItemSelectedListener listener) {
-                super(itemView);
-                itemSelectedListener = listener;
-                rollNoTextView = (TextView) itemView.findViewById(R.id.rollNoTextView);
-                nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-                classTextView = (TextView) itemView.findViewById(R.id.classTextView);
-                cirleImageView = (CircleImageView) itemView.findViewById(R.id.cirleImageView);
-                imageView = itemView.findViewById(R.id.imageView);
-                *//*if (imageView.isSelected()){
-                    imageView.setSelected(false);
-                    imageView.setImageResource(R.drawable.tick_ic);
-                }
-                else {
-                    imageView.setSelected(true);
-                    imageView.setImageResource(R.drawable.cross_btn);
-                }*//*
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-
-                        if (mItem.isSelected()) {
-                            setChecked(false);
-                        } else {
-                            setChecked(true);
-                        }
-                        itemSelectedListener.onItemSelected(mItem);
-
-
-                        *//*int i = (int) v.getTag();
-                      String student_id = attendencePojoClasses.get(i).getId();
-                      if (mArraySelectedStudents.contains(student_id)){
-                          mArraySelectedStudents.remove(student_id);
-                      }
-                      else {
-                          mArraySelectedStudents.add(student_id);
-                      }
-                        if (v.isSelected()){
-                            v.setSelected(false);
-                            imageView.setImageResource(R.drawable.cross_btn);
-                        }
-                        else {
-                            v.setSelected(true);
-                            imageView.setImageResource(R.drawable.tick_ic);
-                        }*//*
-                    }
-                });
-            }
-
-            public void setChecked(boolean value) {
-                if (value) {
-                    imageView.setCheckMarkDrawable(R.drawable.cross_btn);
-                } else {
-                    imageView.setCheckMarkDrawable(R.drawable.tick_ic);
-                }
-                mItem.setSelected(value);
-                imageView.setChecked(value);
-            }
-
-
-        }
 
     }
 
-    public interface OnItemSelectedListener {
-
-        void onItemSelected(SelectableItem item);
-    }*/
 }

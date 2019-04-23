@@ -68,6 +68,9 @@ public class TodaysPlanRecyclerAdapter extends RecyclerView.Adapter<TodaysPlanRe
                 goNext.putExtra("subject_id", todaysClassPlanPOJOArrayList.get(position).getSubject_id());
                 goNext.putExtra("subject_name", todaysClassPlanPOJOArrayList.get(position).getSubject());
                 goNext.putExtra("plan_date", todaysClassPlanPOJOArrayList.get(position).getClass_date());
+                goNext.putExtra("lesson_name", todaysClassPlanPOJOArrayList.get(position).getLesson_name());
+                goNext.putExtra("topic_name", todaysClassPlanPOJOArrayList.get(position).getTopic_name());
+
                 goNext.putExtra("section_id", todaysClassPlanPOJOArrayList.get(position).getSection_id());
                 goNext.putExtra("plan_id", todaysClassPlanPOJOArrayList.get(position).getPlan_id());
                 context.startActivity(goNext);

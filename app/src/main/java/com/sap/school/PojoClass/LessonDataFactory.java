@@ -11,6 +11,7 @@ import com.sap.school.ApplicationContextProvider;
 import com.sap.school.R;
 import com.sap.school.RoutinScreenActivity;
 import com.sap.school.SubjectPlanDetailsActivity;
+import com.sap.utils.AppConstants;
 import com.sap.utils.JSONSharedPreferences;
 
 import org.json.JSONArray;
@@ -42,87 +43,108 @@ public class LessonDataFactory {
     for(int i =0; i<count; i++)
 
     {
-      try{
+      try {
         JSONObject jsonObjItmSection = savedArray.getJSONObject(i);
-        JSONArray chapters = new JSONArray() ;
-        String roll_id;
-        roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
-                .get("roll_id")
-                .defaultValue("unknown")
-                .go(); // getting String
-        String lesson;
-        if (roll_id.equals("2")) {
-          if (jsonObjItmSection.has("topic")) {// salman 123
-            chapters = jsonObjItmSection.getJSONArray("topic");
+        if (AppConstants.SUBJECT_LESSON_ID.length() > 0) {
+        if (jsonObjItmSection.getString("lesson").equals(AppConstants.SUBJECT_LESSON_ID)) {
+          JSONArray chapters = new JSONArray();
+          String roll_id;
+          roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                  .get("roll_id")
+                  .defaultValue("unknown")
+                  .go(); // getting String
+          String lesson;
+          if (roll_id.equals("2")) {
+            if (jsonObjItmSection.has("topic")) {// salman 123
+              chapters = jsonObjItmSection.getJSONArray("topic");
+            }
+          } else {
           }
-        }
-        else {
-          //chapters.put(jsonObjItmSection.getString("topic"));
-        }
-        if (roll_id.equals("2") && jsonObjItmSection.has("topic")) {
-          list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
+          if (roll_id.equals("2") && jsonObjItmSection.has("topic")) {
+            list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
 
-        }
-        else {
-          ArrayList getArrayOfLessons = new ArrayList<>();
-///here
-          //  Object intervention = jsonObjItmSection.get("lesson");
-          Object aObj = jsonObjItmSection.get("lesson");
-          if (aObj instanceof String){
-            String lessonName = jsonObjItmSection.getString("lesson");
-            String chapterName = jsonObjItmSection.getString("topic");
-            JSONArray chaptersArray = new JSONArray() ;
-            chaptersArray.put(chapterName);
-            list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
-          }
-          else {
-            JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
-            for (int j = 0; j < lessonArray.length(); j++) {
-              JSONObject jsonObj = lessonArray.getJSONObject(j);
+          } else {
+            ArrayList getArrayOfLessons = new ArrayList<>();
+            Object aObj = jsonObjItmSection.get("lesson");
+            if (aObj instanceof String) {
+              String lessonName = jsonObjItmSection.getString("lesson");
+              String chapterName = jsonObjItmSection.getString("topic");
+              JSONArray chaptersArray = new JSONArray();
+              chaptersArray.put(chapterName);
+              list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
+            } else {
+              JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
+              for (int j = 0; j < lessonArray.length(); j++) {
+                JSONObject jsonObj = lessonArray.getJSONObject(j);
 
-              getArrayOfLessons.add(jsonObj.getString("name"));
-              String lesson_name = jsonObj.getString("name");
+                getArrayOfLessons.add(jsonObj.getString("name"));
+                String lesson_name = jsonObj.getString("name");
 
-              ArrayList getArrayOfChapters = new ArrayList<>();
+                ArrayList getArrayOfChapters = new ArrayList<>();
 
-              JSONArray chaptersArray = jsonObj.getJSONArray("topic");
-              for (int q = 0; q < chaptersArray.length(); q++) {
-                JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
+                JSONArray chaptersArray = jsonObj.getJSONArray("topic");
+                for (int q = 0; q < chaptersArray.length(); q++) {
+                  JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
 
-                getArrayOfChapters.add(jsonObjCh.getString("name"));
+                  getArrayOfChapters.add(jsonObjCh.getString("name"));
+                }
+                JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
+                list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
               }
-              JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
-              list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
             }
+
           }
-          /*if(aObj instanceof JSONObject){
-            JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
-          for (int j = 0;j<lessonArray.length();j++) {
-            JSONObject jsonObj = lessonArray.getJSONObject(j);
+        }
 
-            getArrayOfLessons.add(jsonObj.getString("name"));
-            String lesson_name = jsonObj.getString("name");
-
-            ArrayList getArrayOfChapters = new ArrayList<>();
-
-            JSONArray chaptersArray = jsonObj.getJSONArray("topic");
-            for (int q = 0; q < chaptersArray.length(); q++) {
-              JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
-
-              getArrayOfChapters.add(jsonObjCh.getString("name"));
+      }
+      else {
+          JSONArray chapters = new JSONArray();
+          String roll_id;
+          roll_id = SecurePrefManager.with(ApplicationContextProvider.getContext())
+                  .get("roll_id")
+                  .defaultValue("unknown")
+                  .go(); // getting String
+          String lesson;
+          if (roll_id.equals("2")) {
+            if (jsonObjItmSection.has("topic")) {// salman 123
+              chapters = jsonObjItmSection.getJSONArray("topic");
             }
-            JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
-            list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
+          } else {
           }
-          }
-          else if (aObj instanceof String){
-            String lessonName = jsonObjItmSection.getString("lesson");
-            String chapterName = jsonObjItmSection.getString("topic");
-            JSONArray chaptersArray = new JSONArray() ;
-            chaptersArray.put(chapterName);
-            list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
-          }*/
+          if (roll_id.equals("2") && jsonObjItmSection.has("topic")) {
+            list.add(new MultiCheckLesson(jsonObjItmSection.getString("lesson"), makeRockArtists(chapters), jsonObjItmSection.getString("id")));
 
+          } else {
+            ArrayList getArrayOfLessons = new ArrayList<>();
+            Object aObj = jsonObjItmSection.get("lesson");
+            if (aObj instanceof String) {
+              String lessonName = jsonObjItmSection.getString("lesson");
+              String chapterName = jsonObjItmSection.getString("topic");
+              JSONArray chaptersArray = new JSONArray();
+              chaptersArray.put(chapterName);
+              list.add(new MultiCheckLesson(lessonName, makeRockArtists(chaptersArray), String.valueOf(1)));
+            } else {
+              JSONArray lessonArray = jsonObjItmSection.getJSONArray("lesson");
+              for (int j = 0; j < lessonArray.length(); j++) {
+                JSONObject jsonObj = lessonArray.getJSONObject(j);
+
+                getArrayOfLessons.add(jsonObj.getString("name"));
+                String lesson_name = jsonObj.getString("name");
+
+                ArrayList getArrayOfChapters = new ArrayList<>();
+
+                JSONArray chaptersArray = jsonObj.getJSONArray("topic");
+                for (int q = 0; q < chaptersArray.length(); q++) {
+                  JSONObject jsonObjCh = chaptersArray.getJSONObject(q);
+
+                  getArrayOfChapters.add(jsonObjCh.getString("name"));
+                }
+                JSONArray mJSONArray = new JSONArray(getArrayOfChapters);
+                list.add(new MultiCheckLesson(lesson_name, makeRockArtists(mJSONArray), String.valueOf(j)));
+              }
+            }
+
+          }
         }
       }
       catch (Exception e) {
@@ -177,8 +199,10 @@ public class LessonDataFactory {
         }
         else {
           String  stringChapters = chapters.getString(i);
+          JSONObject obj = new JSONObject(stringChapters);
+
           // ChapterPOJO queen = new ChapterPOJO(jsonObjItmSection.getString("id"), jsonObjItmSection.getString("topic"));
-          ChapterPOJO queen = new ChapterPOJO("id", stringChapters);
+          ChapterPOJO queen = new ChapterPOJO(obj.getString("id"), obj.getString("topic"));
 
           list.add(queen);
 

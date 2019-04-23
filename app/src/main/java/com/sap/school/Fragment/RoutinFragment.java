@@ -77,7 +77,7 @@ public class RoutinFragment extends Fragment {
                 .go();;
         String roll_id;
         roll_id = SecurePrefManager.with(getActivity())
-                .get("user_id")
+                .get("roll_id")
                 .defaultValue("unknown")
                 .go();; // getting String
         getClassRoutine(user_id,roll_id);

@@ -9,6 +9,14 @@ android {
             storePassword 'Ab1953cdef'
         }
     }*/
+    signingConfigs {
+        config {
+            keyAlias 'Ab1953cdef'
+            keyPassword 'Ab1953cdef'
+            storeFile file('/Users/salmanmamun/Dropbox/Screenshots/schoolAppSignedApk')
+            storePassword 'Ab1953cdef'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sap.school"
@@ -17,6 +25,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -24,7 +33,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-           // signingConfig signingConfigs.schoolAppKey
+            // signingConfig signingConfigs.schoolAppKey
         }
         debug {
             debuggable true
@@ -33,6 +42,8 @@ android {
             //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             //signingConfig signingConfigs.schoolAppKey
         }
+    }
+    productFlavors {
     }
 }
 

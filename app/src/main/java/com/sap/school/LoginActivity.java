@@ -127,9 +127,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         valueType=getIntent().getStringExtra("valueType");
-       //emailTF.setText("300313");
-      // emailTF.setText("1554184561");
-        //passwordTF.setText("password");
+      //emailTF.setText("300313");
+     emailTF.setText("1554184561");
+        passwordTF.setText("password");
         btnTextDownload.setPaintFlags(btnTextDownload.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 
     }
@@ -196,9 +196,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onValidationSucceeded() {
         String username = emailTF.getText().toString();
         String password = passwordTF.getText().toString();
+        String imei = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
 
         String salt = "f1nd1ngd0ry";
-
+        salt = username+imei;
+        SecurePrefManager.with(LoginActivity.this)
+                .set("salt")
+                .value(salt)
+                .go();
         String final_pwd="";
 
         try{
@@ -221,8 +227,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             f.printStackTrace();
         }
 
-        String imei = Settings.Secure.getString(getContentResolver(),
-                Settings.Secure.ANDROID_ID);
 
         SecurePrefManager.with(LoginActivity.this)
                 .set("imei")

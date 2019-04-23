@@ -45,6 +45,7 @@ public final class AppConstants {
     public static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
 
     public static String GLOBAL_TOPIC_ID = "";
+    public static String SUBJECT_LESSON_ID = "";
 
     private AppConstants() {
         // This utility class is not publicly instantiable

@@ -60,7 +60,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
   RecyclerView recyclerView;
   TextView subjectName;
   String stringSubjectName;
-  String fromDate;
+  String fromDate,topic_name,lesson_name;
   String toDate;
   String user_id, roll_id, classid="", subjectid="0",subject_name = "",type = "",section_id = "0",
           plan_date, log_date, plan_id = "";
@@ -76,12 +76,18 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     classid = intent.getStringExtra("class_id");
     subjectid = intent.getStringExtra("subject_id");
     section_id = intent.getStringExtra("section_id");
+    lesson_name = intent.getStringExtra("lesson_name");
+    if (lesson_name.length()>0) {
+      AppConstants.SUBJECT_LESSON_ID = lesson_name;
+    }
+    topic_name = intent.getStringExtra("topic_name");
+
     plan_date = intent.getStringExtra("plan_date");
     subject_name = intent.getStringExtra("subject_name");
     user_id = SecurePrefManager.with(this)
             .get("user_id")
             .defaultValue("unknown")
-            .go();;
+            .go();
 
     log_date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
     fromDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH.getDefault()).format(new Date());
@@ -95,7 +101,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
     roll_id = SecurePrefManager.with(this)
             .get("roll_id")
             .defaultValue("unknown")
-            .go();; // getting String
+            .go(); // getting String
     if (StringUtils.isEmpty(roll_id)){
       roll_id = "2";
     }
@@ -319,6 +325,7 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
         }
       }
       else if (roll_id.equals("2") && type.equals("ClassLog")){
+
         ws_dataObj.put("WS_CODE", "165");
       }
       else {
@@ -345,21 +352,6 @@ public class SubjectPlanDetailsActivity extends BaseActivity implements View.OnC
               }
               JSONSharedPreferences.saveJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters", jsonArray);
               JSONArray savedArray = JSONSharedPreferences.loadJSONArray(SubjectPlanDetailsActivity.this, "teacherJSON", "subjectChapters");
-              /*int count = jsonArray.length();
-              for (int i = 0; i < count; i++) {
-                JSONObject jsonObjItm = jsonArray.getJSONObject(i);
-                JSONArray jsonArraySection = jsonObjItm.getJSONArray("topic");
-                int countSection = jsonArraySection.length();
-
-                for (int j = 0; j < countSection; j++) {
-                  JSONObject jsonObjItmSection = jsonArraySection.getJSONObject(j);
-                  ChapterPOJO chapterPOJO = new ChapterPOJO(jsonObjItmSection.getString("id"),
-                          jsonObjItmSection.getString("topic"));
-                  mArrayList.add(chapterPOJO);
-                }
-                new MultiCheckLesson(jsonObjItm.getString("lesson"), mArrayList ,  jsonObjItm.getString("id"));
-              }
-*/
 
               SubjectPlanDetailsActivity.this.runOnUiThread(new Runnable() {
                 @Override

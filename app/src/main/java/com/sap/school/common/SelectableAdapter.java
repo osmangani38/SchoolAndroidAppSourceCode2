@@ -61,21 +61,22 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
         Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.avatar_student).into(holder.cirleImageView);
 
 
-        if (selectableItem.getAttendence_info() == 1){
+        if (selectableItem.getAttendence_info() == 1)
+        {
             TypedValue value = new TypedValue();
             holder.imageView.getContext().getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorMultiple, value, true);
             int checkMarkDrawableResId = value.resourceId;
-            holder.imageView.setCheckMarkDrawable(checkMarkDrawableResId);
-
             holder.imageView.setSelected(true);
-            //Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.tick_ic).into(holder.imageView);
+            holder.imageView.setCheckMarkDrawable( R.drawable.tick_ic);
+            selectableItem.setSelected(true);
+           // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.tick_ic).into(holder.imageView);
         }
         else{
             holder.imageView.setSelected(false);
-           // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.cross_btn).into(holder.imageView);
+            holder.imageView.setCheckMarkDrawable(R.drawable.cross_btn);
+            selectableItem.setSelected(false);
+            // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.cross_btn).into(holder.imageView);
         }
-
-
         holder.mItem = selectableItem;
         holder.setChecked(holder.mItem.isSelected());
     }
@@ -91,6 +92,7 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
         for (SelectableItem item : mValues) {
             if (item.isSelected()) {
                 selectedItems.add(item);
+                item.setSelected(false);
             }
         }
         return selectedItems;

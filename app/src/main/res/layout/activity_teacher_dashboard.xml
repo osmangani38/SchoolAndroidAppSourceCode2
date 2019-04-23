@@ -80,7 +80,7 @@ android:scrollbarAlwaysDrawVerticalTrack="false">
                             android:layout_marginLeft="20dp"
                             android:text="@string/welcomeHinduSchoolText"
                             android:textColor="@color/whiteColor"
-                            android:textSize="18dp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
                         <Button
                             android:layout_width="32dp"

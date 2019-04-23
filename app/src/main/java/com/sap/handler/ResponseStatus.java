@@ -1,10 +1,16 @@
 package com.sap.handler;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.prashantsolanki.secureprefmanager.SecurePrefManager;
 import com.sap.school.ApplicationContextProvider;
+import com.sap.school.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +40,15 @@ public class ResponseStatus {
             if(jsonObject.has("message")) {
                 response_message = jsonObject.getString("message");
             }
+            if (response_message.equals("Session expired.")){
+                ToastUtils.showShort("Your Login Session Expired, Please Login Again");
+
+                Intent i = ApplicationContextProvider.getContext().getPackageManager()
+                        .getLaunchIntentForPackage( ApplicationContextProvider.getContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ApplicationContextProvider.getContext().startActivity(i);
+
+                            }
 
         }catch (Exception ex)
         {
