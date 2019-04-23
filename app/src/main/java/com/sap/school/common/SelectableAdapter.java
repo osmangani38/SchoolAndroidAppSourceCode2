@@ -70,13 +70,12 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
             holder.imageView.setCheckMarkDrawable(checkMarkDrawableResId);
 
             holder.imageView.setSelected(true);
-            //selectableItem.setSelected(true);
+
            // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.tick_ic).into(holder.imageView);
         }
         else{
             holder.imageView.setSelected(false);
-            /*holder.imageView.setCheckMarkDrawable(R.drawable.cross_btn);
-            selectableItem.setSelected(false);*/
+
             // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.cross_btn).into(holder.imageView);
         }
         holder.mItem = selectableItem;
@@ -94,7 +93,7 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
         for (SelectableItem item : mValues) {
             if (item.isSelected()) {
                 selectedItems.add(item);
-                //item.setSelected(false);
+
             }
         }
         return selectedItems;
