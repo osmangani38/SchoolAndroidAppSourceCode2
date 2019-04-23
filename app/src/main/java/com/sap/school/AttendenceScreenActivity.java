@@ -285,7 +285,7 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
         attendenceRecyclerView.invalidate();
     }
     private void studentInfo() {
-        selectableAdapter = new SelectableAdapter(AttendenceScreenActivity.this, attendencePojoClasses, className);
+        selectableAdapter = new SelectableAdapter(AttendenceScreenActivity.this, attendencePojoClasses, className, true);
         attendenceRecyclerView.setLayoutManager(new GridLayoutManager(getApplication(), 1));
         attendenceRecyclerView.setItemAnimator(new DefaultItemAnimator());
         attendenceRecyclerView.setAdapter(selectableAdapter);
@@ -386,6 +386,8 @@ public class AttendenceScreenActivity extends BaseActivity implements View.OnCli
     public void onItemSelected(SelectableItem selectableItem) {
 
         List<AttendancePogoClass> selectedItems = selectableAdapter.getSelectedItems();
+
+
 
         String student_id = selectableItem.getId();
         if (mArraySelectedStudents.contains(student_id)){

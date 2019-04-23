@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.sap.school.ApplicationContextProvider;
 import com.sap.school.PojoClass.AttendancePogoClass;
 import com.sap.school.PojoClass.SelectableItem;
@@ -20,11 +21,13 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
     private final ArrayList<SelectableItem> mValues;
     SelectableViewHolder.OnItemSelectedListener listener;
     String className;
+    private boolean isMultiSelectionEnabled = false;
 
     public SelectableAdapter(SelectableViewHolder.OnItemSelectedListener listener,
-                              List<AttendancePogoClass> items, String className) {
+                              List<AttendancePogoClass> items, String className, boolean isMultiSelectionEnabled) {
         this.listener = listener;
         this.className = className;
+        this.isMultiSelectionEnabled = isMultiSelectionEnabled;
         mValues = new ArrayList<>();
         for (AttendancePogoClass item : items) {
             mValues.add(new SelectableItem(item, false));
@@ -60,25 +63,28 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
         // myViewHolderClass.classTextView.setText(attendencePojoClasses.get(i).getId());
         Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.avatar_student).into(holder.cirleImageView);
 
-
-        if (selectableItem.getAttendence_info() == 1)
-        {
+        if (isMultiSelectionEnabled) {
             TypedValue value = new TypedValue();
             holder.imageView.getContext().getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorMultiple, value, true);
             int checkMarkDrawableResId = value.resourceId;
-
             holder.imageView.setCheckMarkDrawable(checkMarkDrawableResId);
+            if (selectableItem.getAttendence_info() == 1){
 
-            holder.imageView.setSelected(true);
+                selectableItem.setSelected(true);
 
-           // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.tick_ic).into(holder.imageView);
+            }else {
+                selectableItem.setSelected(false);
+            }
+        } else {
+            TypedValue value = new TypedValue();
+            holder.imageView.getContext().getTheme().resolveAttribute(android.R.attr.listChoiceIndicatorSingle, value, true);
+            int checkMarkDrawableResId = value.resourceId;
+            holder.imageView.setCheckMarkDrawable(checkMarkDrawableResId);
         }
-        else{
-            holder.imageView.setSelected(false);
 
-            // Picasso.with(ApplicationContextProvider.getContext()).load(R.drawable.cross_btn).into(holder.imageView);
-        }
+
         holder.mItem = selectableItem;
+
         holder.setChecked(holder.mItem.isSelected());
     }
 
@@ -99,12 +105,22 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
         return selectedItems;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(isMultiSelectionEnabled){
+            return SelectableViewHolder.MULTI_SELECTION;
+        }
+        else{
+            return SelectableViewHolder.SINGLE_SELECTION;
+        }
+    }
+
 
     @Override
     public void onItemSelected(SelectableItem item) {
-        //if (!isMultiSelectionEnabled) {
+        if (!isMultiSelectionEnabled) {
 
-            /*for (SelectableItem selectableItem : mValues) {
+            for (SelectableItem selectableItem : mValues) {
                 if (!selectableItem.equals(item)
                         && selectableItem.isSelected()) {
                     selectableItem.setSelected(false);
@@ -112,9 +128,9 @@ public class SelectableAdapter extends RecyclerView.Adapter implements Selectabl
                         && item.isSelected()) {
                     selectableItem.setSelected(true);
                 }
-            }*/
+            }
             notifyDataSetChanged();
-       // }
+        }
         listener.onItemSelected(item);
     }
 }

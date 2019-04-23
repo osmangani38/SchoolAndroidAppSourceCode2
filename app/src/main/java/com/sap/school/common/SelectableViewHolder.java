@@ -14,6 +14,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SelectableViewHolder extends RecyclerView.ViewHolder {
 
+    public static final int MULTI_SELECTION = 2;
+    public static final int SINGLE_SELECTION = 1;
     TextView rollNoTextView, nameTextView, classTextView;
     CircleImageView cirleImageView;
     CheckedTextView imageView;
@@ -39,7 +41,7 @@ public class SelectableViewHolder extends RecyclerView.ViewHolder {
         imageView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (mItem.isSelected()) {
+                if (mItem.isSelected() && getItemViewType() == MULTI_SELECTION) {
                     setChecked(false);
                 } else {
                     setChecked(true);

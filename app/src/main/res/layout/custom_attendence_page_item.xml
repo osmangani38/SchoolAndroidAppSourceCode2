@@ -70,7 +70,7 @@
             android:textAlignment="center"
             android:gravity="center"
             android:textSize="25sp"
-            android:checkMark="@drawable/cross_btn"/>
+            android:checkMark="?android:attr/listChoiceIndicatorSingle"/>
     </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
